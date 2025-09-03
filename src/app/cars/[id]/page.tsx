@@ -3,7 +3,7 @@
 import { useEffect, useState, use, useMemo, useCallback } from "react";
 import { useRouter } from "next/navigation";
 import Header from "@/components/Header";
-import Loading from "@/components/Loading";
+import Loading from "@/components/loading";
 
 // Define interfaces for type safety
 interface Car {
