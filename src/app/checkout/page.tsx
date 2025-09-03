@@ -106,10 +106,10 @@ function CheckoutPageContent() {
   return (
     <>
       <Header />
-      <div className="container mx-auto p-6 bg-primary text-neutral-dark mb-2">
-        <h1 className="text-2xl font-bold mb-2 text-primary">Checkout</h1>
+      <div className="container mx-auto p-4 sm:p-6 bg-primary text-neutral-dark mb-2">
+        <h1 className="text-xl sm:text-2xl font-bold mb-2 text-primary">Checkout</h1>
         <div className="bg-white p-4 rounded-lg shadow-md mb-2">
-          <h2 className="text-xl font-semibold mb-2 text-primary">
+          <h2 className="text-lg sm:text-xl font-semibold mb-2 text-primary">
             Your Booking Summary
           </h2>
           <p className="text-base">
@@ -130,7 +130,7 @@ function CheckoutPageContent() {
           onSubmit={handleSubmit}
           className="bg-white p-4 rounded-lg shadow-md mb-2"
         >
-          <h2 className="text-xl font-semibold mb-2 text-primary">
+          <h2 className="text-lg sm:text-xl font-semibold mb-2 text-primary">
             Your Contact Details
           </h2>
           <div className="mb-2">

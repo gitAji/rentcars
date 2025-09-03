@@ -186,19 +186,19 @@ export default function CarDetailsPage({ params }: { params: Promise<{ id: strin
         style={{ backgroundImage: `url(${car.imageUrl || "/default-car-hero.jpg"})` }}
       >
         <div className="absolute inset-0 bg-gray-800 bg-opacity-40" />
-        <h1 className="relative z-10 text-4xl md:text-5xl text-white font-bold">
+        <h1 className="relative z-10 text-3xl sm:text-4xl md:text-5xl text-white font-bold">
           {car.make} {car.model}
         </h1>
       </section>
 
       {/* Main Content */}
       <div className="container mx-auto p-6 bg-primary text-neutral-dark rounded-lg shadow-lg flex-grow mb-2">
-        <h1 className="text-4xl font-bold mb-4 text-primary">
+        <h1 className="text-3xl sm:text-4xl font-bold mb-4 text-primary">
           {car.make} {car.model}
         </h1>
 
         <div className="grid grid-cols-1 md:grid-cols-2 gap-8 mb-6">
-          <div className="relative w-full h-80 rounded-lg shadow-md overflow-hidden">
+          <div className="relative w-full h-64 sm:h-80 md:h-96 rounded-lg shadow-md overflow-hidden">
             <img
               src={carImages[currentImageIndex]}
               alt={`Image of ${car.make} ${car.model} - ${currentImageIndex + 1}`}
@@ -256,7 +256,7 @@ export default function CarDetailsPage({ params }: { params: Promise<{ id: strin
           </div>
         </div>
 
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-8 mb-6 items-end">
+        <div className="grid grid-cols-1 sm:grid-cols-3 gap-8 mb-6 items-end">
           <div>
             <p className="text-base font-bold">Year: {car.year}</p>
             <p className="text-base font-bold text-accent">
@@ -300,7 +300,7 @@ export default function CarDetailsPage({ params }: { params: Promise<{ id: strin
         </div>
 
         <h2 className="text-2xl font-bold mb-4 text-primary">Optional Extras</h2>
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-6">
+        <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 mb-6">
           {extrasOptions.map((extra) => (
             <div key={extra.name} className="flex items-center p-4 bg-gray-50 rounded-lg">
               <input
