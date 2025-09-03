@@ -1,0 +1,54 @@
+[
+  {
+    "id": 1,
+    "make": "Toyota",
+    "model": "Yaris",
+    "year": 2020,
+    "price": 400,
+    "imageUrl": "/cars/yaris-1.png",
+    "imageUrls": ["/cars/yaris-1.png", "/cars/yaris-2.png", "/cars/yaris-3.png", "/cars/yaris-4.png", "/cars/yaris-5.png"],
+    "town": "Bergen",
+    "passengers": 5,
+    "carType": "Sedan",
+    "shortDescription": "Reliable and comfortable sedan for city and highway.",
+    "seats": 5,
+    "description": "The Toyota Yaris is a reliable and fuel-efficient sedan, perfect for navigating the city streets of Bergen. It offers a comfortable ride for up to 4 passengers and comes with modern amenities to make your journey enjoyable.",
+    "features": ["Air Conditioning", "GPS Navigation", "Automatic Transmission", "Bluetooth Connectivity"],
+    "terms": "Minimum rental age is 21. Valid driver's license required. Fuel policy: full to full."
+  },
+  
+  {
+    "id": 3,
+    "make": "Toyota",
+    "model": "Aygo",
+    "year": 2011,
+    "price": 400,
+    "imageUrl": "/cars/aygo-1.png",
+    "imageUrls": ["/cars/aygo-1.png", "/cars/aygo-2.png", "/cars/aygo-3.png", "/cars/aygo-4.png"],
+    "town": "Bergen",
+    "passengers": 4,
+    "carType": "Hatchback",
+    "shortDescription": "Compact and fuel-efficient, ideal for urban driving.",
+    "seats": 4,
+    "description": "The Toyota Aygo is the perfect companion for zipping around Stavanger. Its compact size makes parking a breeze, while its excellent fuel economy will save you money on your travels. Ideal for solo travelers or couples.",
+    "features": ["Apple CarPlay", "Android Auto", "Rearview Camera", "Lane Assist"],
+    "terms": "Minimum rental age is 19. Perfect for young drivers. Low insurance excess."
+  },
+  {
+    "id": 4,
+    "make": "Tesla",
+    "model": "Model Y",
+    "year": 2022,
+    "price": 1500,
+    "imageUrl": "/cars/tesla-1.png",
+    "imageUrls": ["/cars/tesla-1.png", "/cars/tesla-2.png", "/cars/tesla-3.png"],
+    "town": "Bergen",
+    "passengers": 5,
+    "carType": "Electric",
+    "shortDescription": "Experience the future with this sleek electric vehicle.",
+    "seats": 5,
+    "description": "Drive the future today with the Tesla Model Y. This all-electric sedan offers instant acceleration, a minimalist interior, and cutting-edge technology. Enjoy a silent and smooth ride while exploring Oslo and its surroundings.",
+    "features": ["Autopilot", "15-inch Touchscreen Display", "Glass Roof", "Supercharging Access"],
+    "terms": "Charging costs are not included. Familiarity with electric vehicles is beneficial. Premium car terms apply."
+  }
+]

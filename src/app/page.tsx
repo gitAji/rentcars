@@ -1,103 +1,176 @@
-import Image from "next/image";
+"use client";
 
-export default function Home() {
+import { useRouter } from "next/navigation";
+import { useState, useEffect } from "react";
+import Header from "../components/Header";
+import Footer from "../components/Footer";
+import SearchForm from "../components/SearchForm";
+import Loading from "../components/loading"; // Added import
+
+export default function HomePage() {
+  const router = useRouter();
+
+  const [isLoading, setIsLoading] = useState(true); // Added loading state
+  const [currentTestimonialIndex, setCurrentTestimonialIndex] = useState(0); // Moved here
+
+  const testimonials = [
+    {
+      quote: "We rented the car for four days and had a very smooth and pleasent experience. The car was in perfect condition and the owner was very kind, responsive and not least flexible when we needed to change the return time of the car. Can highly recommend! ",
+      author: "Laura B",
+    },
+    {
+      quote: "Everything went well ! The car was conform to the description.Thank you very much for your flexibility :)",
+      author: "Gwendoline R",
+    },
+    {
+      quote: "Very nice rental experience, the car worked perfectly fine, and the owner was always available when needed.",
+      author: "Rachele S",
+    },
+  ];
+
+  useEffect(() => { // Added useEffect for loading simulation
+    const timer = setTimeout(() => {
+      setIsLoading(false);
+    }, 1000); // Simulate 1 second loading time
+    return () => clearTimeout(timer);
+  }, []);
+
+  useEffect(() => {
+    const interval = setInterval(() => {
+      setCurrentTestimonialIndex(
+        (prevIndex) => (prevIndex + 1) % testimonials.length
+      );
+    }, 5000); // Change testimonial every 5 seconds
+    return () => clearInterval(interval);
+  }, [testimonials.length]);
+
+  if (isLoading) { // Conditional rendering for loading
+    return (
+      <div className="flex justify-center items-center min-h-screen">
+        <Loading />
+      </div>
+    );
+  }
+
+  type SearchFilters = {
+    town?: string;
+    passengers?: string;
+    carType?: string;
+    startDate?: string;
+    endDate?: string;
+  };
+
+  const handleSearch = (filters: SearchFilters) => {
+    const query = new URLSearchParams({
+      ...(filters.town && { town: filters.town }),
+      ...(filters.passengers && { passengers: filters.passengers }),
+      ...(filters.carType && { carType: filters.carType }),
+      ...(filters.startDate && { startDate: filters.startDate }),
+      ...(filters.endDate && { endDate: filters.endDate }),
+    }).toString();
+    router.push(`/cars?${query}`);
+  };
+
   return (
-    <div className="font-sans grid grid-rows-[20px_1fr_20px] items-center justify-items-center min-h-screen p-8 pb-20 gap-16 sm:p-20">
-      <main className="flex flex-col gap-[32px] row-start-2 items-center sm:items-start">
-        <Image
-          className="dark:invert"
-          src="/next.svg"
-          alt="Next.js logo"
-          width={180}
-          height={38}
-          priority
-        />
-        <ol className="font-mono list-inside list-decimal text-sm/6 text-center sm:text-left">
-          <li className="mb-2 tracking-[-.01em]">
-            Get started by editing{" "}
-            <code className="bg-black/[.05] dark:bg-white/[.06] font-mono font-semibold px-1 py-0.5 rounded">
-              src/app/page.tsx
-            </code>
-            .
-          </li>
-          <li className="tracking-[-.01em]">
-            Save and see your changes instantly.
-          </li>
-        </ol>
+    <div className="flex flex-col min-h-screen bg-gray-50 text-neutral">
+      <Header />
+      <main className="flex-grow min-h-screen">
+        {/* Hero Section */}
+        <section
+          className="relative h-[calc(100vh-100px)] bg-cover bg-center flex flex-col items-center justify-center text-neutral pt-24"
+          style={{ backgroundImage: "url('/hero.png')" }}
+        >
+          <div className="relative z-10 text-center p-4 max-w-5xl mx-auto flex flex-col items-center justify-center flex-grow text-white">
+            <h1 className="text-5xl md:text-7xl font-extrabold mb-4 drop-shadow-lg text-gray-100">Find Your Perfect Car in Bergen</h1>
+            <p className="text-xl md:text-3xl mb-8 drop-shadow-md text-gray-300">
+              <span>
+                Rent a car for your next adventure
+              </span>
+            </p>
+            <div className="relative z-10 w-full flex justify-center">
+              <SearchForm onSearch={handleSearch} />
+            </div>
+          </div>
+        </section>
 
-        <div className="flex gap-4 items-center flex-col sm:flex-row">
-          <a
-            className="rounded-full border border-solid border-transparent transition-colors flex items-center justify-center bg-foreground text-background gap-2 hover:bg-[#383838] dark:hover:bg-[#ccc] font-medium text-sm sm:text-base h-10 sm:h-12 px-4 sm:px-5 sm:w-auto"
-            href="https://vercel.com/new?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            <Image
-              className="dark:invert"
-              src="/vercel.svg"
-              alt="Vercel logomark"
-              width={20}
-              height={20}
-            />
-            Deploy now
-          </a>
-          <a
-            className="rounded-full border border-solid border-black/[.08] dark:border-white/[.145] transition-colors flex items-center justify-center hover:bg-[#f2f2f2] dark:hover:bg-[#1a1a1a] hover:border-transparent font-medium text-sm sm:text-base h-10 sm:h-12 px-4 sm:px-5 w-full sm:w-auto md:w-[158px]"
-            href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Read our docs
-          </a>
-        </div>
+        <section className="py-24 bg-white text-center">
+          <h2 className="text-4xl font-bold mb-12 text-gray-800">Why Choose Us?</h2>
+          <div className="container mx-auto grid grid-cols-1 md:grid-cols-3 gap-12">
+            <div className="p-8 shadow-lg rounded-lg bg-gray-50 transform transition-transform duration-300 hover:scale-105">
+              <div className="text-6xl mb-4 text-accent">🚗</div>
+              <h3 className="text-2xl font-semibold mb-2 text-gray-800">Wide Range of Cars</h3>
+              <p className="text-neutral-light text-lg">
+                We have a wide range of cars to choose from. You can choose the car that best suits your needs.
+              </p>
+            </div>
+            <div className="p-8 shadow-lg rounded-lg bg-gray-50 transform transition-transform duration-300 hover:scale-105">
+              <div className="text-6xl mb-4 text-accent">💰</div>
+              <h3 className="text-2xl font-semibold mb-2 text-gray-800">Best Price Guarantee</h3>
+              <p className="text-neutral-light text-lg">
+                We offer the best price for our cars. You can be sure that you are getting the best deal.
+              </p>
+            </div>
+            <div className="p-8 shadow-lg rounded-lg bg-gray-50 transform transition-transform duration-300 hover:scale-105">
+              <div className="text-6xl mb-4 text-accent">⚡</div>
+              <h3 className="text-2xl font-semibold mb-2 text-gray-800">24/7 Customer Support</h3>
+              <p className="text-neutral-light text-lg">
+                We are here to help you with any questions you may have. Our customer support is available 24/7.
+              </p>
+            </div>
+          </div>
+        </section>
+
+        <section className="py-24 bg-white text-neutral">
+          <div className="container mx-auto flex flex-col md:flex-row items-center justify-center gap-12 max-w-6xl">
+            <div className="md:w-1/2 w-full p-6">
+              <h2 className="text-4xl font-bold mb-6 text-gray-800">Explore Bergen</h2>
+              <p className="text-lg text-neutral-dark mb-8">
+                Explore the beautiful city of Bergen and its surroundings with one of our rental cars. We have a wide range of cars to choose from, so you can find the perfect one for your trip.
+              </p>
+              <button
+                onClick={() => router.push("/cars")}
+                className="bg-[#ff5757] text-white px-8 py-3 rounded-md text-lg hover:bg-[#e64d4d] transition"
+              >
+                Book Now
+              </button>
+            </div>
+            <div className="md:w-1/2 w-full">
+              <img 
+                src="/intro.png" 
+                alt="A car" 
+                className="rounded-lg shadow-lg w-full h-auto object-cover transform transition-transform duration-300 hover:scale-105"
+              />
+            </div>
+          </div>
+        </section>
+
+        <section className="py-24 bg-white text-center">
+          <h2 className="text-4xl font-bold mb-12 text-gray-800">What Our Clients Say</h2>
+          <div className="container mx-auto max-w-4xl relative">
+            {testimonials.map((testimonial, index) => (
+              <blockquote
+                key={index}
+                className={`bg-gray-50 p-8 rounded-lg shadow-lg text-gray-600 italic transition-opacity duration-500 ${index === currentTestimonialIndex ? 'opacity-100 block' : 'opacity-0 hidden'}`}
+              >
+                “{testimonial.quote}”
+                <footer className="mt-4 text-right font-semibold text-gray-800">— {testimonial.author}</footer>
+              </blockquote>
+            ))}
+            <div className="flex justify-center mt-8 space-x-2">
+              {testimonials.map((_, index) => (
+                <button
+                  key={index}
+                  onClick={() => setCurrentTestimonialIndex(index)}
+                  className={`h-3 w-3 rounded-full ${index === currentTestimonialIndex ? 'bg-[#ff5757]' : 'bg-gray-300'} focus:outline-none`}
+                ></button>
+              ))}
+            </div>
+          </div>
+        </section>
+
+        
       </main>
-      <footer className="row-start-3 flex gap-[24px] flex-wrap items-center justify-center">
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="/file.svg"
-            alt="File icon"
-            width={16}
-            height={16}
-          />
-          Learn
-        </a>
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="/window.svg"
-            alt="Window icon"
-            width={16}
-            height={16}
-          />
-          Examples
-        </a>
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://nextjs.org?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="/globe.svg"
-            alt="Globe icon"
-            width={16}
-            height={16}
-          />
-          Go to nextjs.org →
-        </a>
-      </footer>
+      <Footer />
     </div>
   );
 }
