@@ -22,9 +22,9 @@ async function readCars() {
   return JSON.parse(fileContents);
 }
 
-export async function GET(request: Request, context: { params: { id: string } }) { // Corrected signature
+export async function GET(request: Request, { params }: { params: Promise<{ id: string }> }) {
   await new Promise(resolve => setTimeout(resolve, 1000)); // Simulate 1 second delay
-  const { id } = context.params; // Access id from context.params
+  const { id } = await params; // Access id from awaited params
   const cars = await readCars();
   const car = cars.find((c: Car) => c.id === parseInt(id)); // Typed c
 

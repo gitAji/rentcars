@@ -1,18 +1,30 @@
 "use client";
 
+import { Suspense } from 'react';
 import { useEffect, useState } from "react";
 import { useSearchParams, useRouter } from "next/navigation";
 import Header from "../../components/Header";
 import Footer from "../../components/Footer";
 import CarCard from "../components/CarCard";
-import Loading from "../../components/loading"; // 👈 Import custom loading animation
+import Loading from "../../components/loading";
 
 interface Car {
-  id: string;
-  // Add other properties as needed
+  id: number;
+  make: string;
+  model: string;
+  year: number;
+  price: number;
+  imageUrl: string;
+  imageUrls: string[];
+  town: string;
+  passengers: number;
+  carType: string;
+  description?: string;
+  features?: string[];
+  terms?: string;
 }
 
-export default function CarsPage() {
+function CarsPageContent() {
   const searchParams = useSearchParams();
   const router = useRouter();
   const [cars, setCars] = useState<Car[]>([]);
@@ -20,7 +32,9 @@ export default function CarsPage() {
   const [error, setError] = useState<string | null>(null);
 
   const [filterTown, setFilterTown] = useState(searchParams.get("town") || "");
-  const [filterCarType, setFilterCarType] = useState(searchParams.get("carType") || "");
+  const [filterCarType, setFilterCarType] = useState(
+    searchParams.get("carType") || ""
+  );
 
   useEffect(() => {
     const fetchCars = async () => {
@@ -70,7 +84,9 @@ export default function CarsPage() {
         style={{ backgroundImage: "url('/cars-hero.jpg')" }}
       >
         <div className="absolute inset-0 bg-gray-800 bg-opacity-40" />
-        <h1 className="relative z-10 text-4xl md:text-5xl text-white font-bold">Find Your Perfect Ride</h1>
+        <h1 className="relative z-10 text-4xl md:text-5xl text-white font-bold">
+          Find Your Perfect Ride
+        </h1>
       </section>
 
       {/* Main Content */}
@@ -78,11 +94,16 @@ export default function CarsPage() {
         <div className="container mx-auto p-8 flex flex-col md:flex-row gap-8">
           {/* Filter Sidebar */}
           <aside className="w-full md:w-1/4 p-4 bg-gray-100 rounded-lg shadow-md">
-            <h2 className="text-2xl font-bold mb-4 text-primary">Filter Cars</h2>
+            <h2 className="text-2xl font-bold mb-4 text-primary">
+              Filter Cars
+            </h2>
 
             {/* Town Filter */}
             <div className="mb-4">
-              <label htmlFor="filterTown" className="block text-neutral-dark mb-2">
+              <label
+                htmlFor="filterTown"
+                className="block text-neutral-dark mb-2"
+              >
                 Town:
               </label>
               <select
@@ -100,7 +121,10 @@ export default function CarsPage() {
 
             {/* Car Type Filter */}
             <div className="mb-4">
-              <label htmlFor="filterType" className="block text-neutral-dark mb-2">
+              <label
+                htmlFor="filterType"
+                className="block text-neutral-dark mb-2"
+              >
                 Car Type:
               </label>
               <input
@@ -123,7 +147,9 @@ export default function CarsPage() {
 
           {/* Car Grid */}
           <section className="flex-1">
-            <h2 className="text-3xl font-bold mb-8 text-primary">Available Cars</h2>
+            <h2 className="text-3xl font-bold mb-8 text-primary">
+              Available Cars
+            </h2>
 
             {/* Loading State */}
             {loading ? (
@@ -131,16 +157,13 @@ export default function CarsPage() {
             ) : error ? (
               <div className="text-center p-4 text-red-500">Error: {error}</div>
             ) : cars.length === 0 ? (
-              <p className="text-neutral-light text-lg">No cars found matching your criteria.</p>
+              <p className="text-neutral-light text-lg">
+                No cars found matching your criteria.
+              </p>
             ) : (
               <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
                 {cars.map((car: Car) => (
-                  <CarCard
-                    key={car.id}
-                    car={car}
-                    startDate={searchParams.get("startDate") || ""}
-                    endDate={searchParams.get("endDate") || ""}
-                  />
+                  <CarCard key={car.id} car={car} />
                 ))}
               </div>
             )}
@@ -150,5 +173,13 @@ export default function CarsPage() {
 
       <Footer />
     </div>
+  );
+}
+
+export default function CarsPage() {
+  return (
+    <Suspense fallback={<Loading />}>
+      <CarsPageContent />
+    </Suspense>
   );
 }

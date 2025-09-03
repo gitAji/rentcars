@@ -32,37 +32,22 @@ async function readCars(): Promise<Car[]> {
   }
   try {
     const file = await fs.readFile(carsFilePath, 'utf-8');
-    cachedCars = JSON.parse(file);
-    return cachedCars;
+    const cars: Car[] = JSON.parse(file);
+    cachedCars = cars;
+    return cars;
   } catch (error) {
     console.error('Error reading cars file:', error);
     throw new Error('Failed to load cars data');
   }
 }
 
-// GET handler with corrected type
-export async function GET(
-  req: NextRequest,
-  { params }: { params: Record<string, string> } // Flexible type to avoid type error
-) {
+// GET handler for all cars
+export async function GET() {
   try {
-    const carId = parseInt(params.id);
-
-    // Validate ID
-    if (isNaN(carId) || carId <= 0) {
-      return NextResponse.json({ error: 'Invalid car ID' }, { status: 400 });
-    }
-
     const cars = await readCars();
-    const car = cars.find((car) => car.id === carId);
-
-    if (!car) {
-      return NextResponse.json({ error: 'Car not found' }, { status: 404 });
-    }
-
-    return NextResponse.json(car);
+    return NextResponse.json(cars);
   } catch (error) {
-    console.error(`Error in GET /api/cars/[id] for id ${params.id}:`, error);
+    console.error('Error in GET /api/cars:', error);
     return NextResponse.json({ error: 'Internal server error' }, { status: 500 });
   }
 }
