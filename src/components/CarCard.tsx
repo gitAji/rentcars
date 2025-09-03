@@ -1,5 +1,7 @@
 import Link from 'next/link';
 
+import Image from 'next/image';
+
 interface CarCardProps {
   car: {
     id: number;
@@ -33,7 +35,7 @@ export default function CarCard({ car, startDate, endDate }: CarCardProps) {
 
   return (
     <Link href={`/cars/${car.id}?startDate=${startDate}&endDate=${endDate}`} className="block border border-gray-200 rounded-lg shadow-md bg-white text-neutral cursor-pointer transform transition-all duration-300 hover:scale-105 hover:shadow-lg overflow-hidden">
-      <img src={car.imageUrl} alt={`${car.make} ${car.model}`} className="w-full h-48 object-cover" />
+      <Image src={car.imageUrl} alt={`${car.make} ${car.model}`} width={500} height={300} className="w-full h-48 object-cover" />
       <div className="p-4">
         <h2 className="text-2xl font-bold text-primary mb-1">{car.make} {car.model}</h2>
         <p className="text-neutral-light text-sm mb-3">{car.year}</p>

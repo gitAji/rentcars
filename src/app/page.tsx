@@ -7,6 +7,8 @@ import Footer from "../components/Footer";
 import SearchForm from "../components/SearchForm";
 import Loading from "../components/loading"; // Added import
 
+import Image from 'next/image';
+
 export default function HomePage() {
   const router = useRouter();
 
@@ -77,11 +79,11 @@ export default function HomePage() {
       <main className="flex-grow min-h-screen">
         {/* Hero Section */}
         <section
-          className="relative h-[calc(100vh-100px)] bg-cover bg-center flex flex-col items-center justify-center text-neutral pt-24"
+          className="relative h-[calc(100vh-100px)] bg-cover bg-center flex flex-col items-center justify-center text-neutral pt-40 sm:pt-48 md:pt-56"
           style={{ backgroundImage: "url('/hero.png')" }}
         >
           <div className="relative z-10 text-center p-4 max-w-5xl mx-auto flex flex-col items-center justify-center flex-grow text-white">
-            <h1 className="text-5xl md:text-7xl font-extrabold mb-4 drop-shadow-lg text-gray-100">Find Your Perfect Car in Bergen</h1>
+            <h1 className="text-4xl sm:text-5xl md:text-6xl font-extrabold mb-4 drop-shadow-lg text-gray-100">Find Your Perfect Car in Bergen</h1>
             <p className="text-xl md:text-3xl mb-8 drop-shadow-md text-gray-300">
               <span>
                 Rent a car for your next adventure
@@ -135,9 +137,11 @@ export default function HomePage() {
               </button>
             </div>
             <div className="md:w-1/2 w-full">
-              <img 
+              <Image 
                 src="/intro.png" 
                 alt="A car" 
+                width={500} 
+                height={300} 
                 className="rounded-lg shadow-lg w-full h-auto object-cover transform transition-transform duration-300 hover:scale-105"
               />
             </div>

@@ -5,6 +5,8 @@ import Header from "../../components/Header";
 import Footer from "../../components/Footer";
 import Loading from "../../components/loading"; // Added
 
+import Image from 'next/image';
+
 export default function PrivacyPolicyPage() {
   const [isLoading, setIsLoading] = useState(true); // Added
 
@@ -37,9 +39,11 @@ export default function PrivacyPolicyPage() {
         <div className="relative z-10 w-full max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex items-center justify-between">
             {/* Logo */}
-            <img
+            <Image
               src="/logo.png" // Replace with your actual logo path
               alt="RentCars Logo"
+              width={48} // Add appropriate width (h-12 * 4 = 48)
+              height={64} // Add appropriate height (h-16 * 4 = 64)
               className="h-12 md:h-16 object-contain"
               aria-label="RentCars Logo"
             />

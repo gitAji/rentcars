@@ -5,6 +5,8 @@ import { useRouter } from "next/navigation";
 import Header from "@/components/Header";
 import Loading from "@/components/loading";
 
+import Image from 'next/image';
+
 // Define interfaces for type safety
 interface Car {
   id: string;
@@ -199,9 +201,11 @@ export default function CarDetailsPage({ params }: { params: Promise<{ id: strin
 
         <div className="grid grid-cols-1 md:grid-cols-2 gap-8 mb-6">
           <div className="relative w-full h-64 sm:h-80 md:h-96 rounded-lg shadow-md overflow-hidden">
-            <img
+            <Image
               src={carImages[currentImageIndex]}
               alt={`Image of ${car.make} ${car.model} - ${currentImageIndex + 1}`}
+              width={500}
+              height={300}
               className="w-full h-full object-cover transition-opacity duration-500 ease-in-out"
             />
             {/* Navigation Buttons */}
@@ -210,14 +214,18 @@ export default function CarDetailsPage({ params }: { params: Promise<{ id: strin
               className="absolute top-1/2 left-4 -translate-y-1/2 bg-black bg-opacity-50 text-white p-2 rounded-full focus:outline-none hover:bg-opacity-75 transition-colors"
               aria-label="Previous image"
             >
-              &lt;
+              <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M15 19l-7-7 7-7"></path>
+              </svg>
             </button>
             <button
               onClick={goToNextImage}
               className="absolute top-1/2 right-4 -translate-y-1/2 bg-black bg-opacity-50 text-white p-2 rounded-full focus:outline-none hover:bg-opacity-75 transition-colors"
               aria-label="Next image"
             >
-              &gt;
+              <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M9 5l7 7-7 7"></path>
+              </svg>
             </button>
             {/* Image Indicators */}
             <div className="absolute bottom-4 left-1/2 -translate-x-1/2 flex space-x-2">
@@ -310,7 +318,6 @@ export default function CarDetailsPage({ params }: { params: Promise<{ id: strin
                 checked={selectedExtras.includes(extra.name)}
                 onChange={handleExtraChange}
                 className="h-5 w-5 text-primary border-gray-300 rounded focus:ring-primary"
-                aria-label={`Select ${extra.name} for kr${extra.price}/day`}
               />
               <label
                 htmlFor={extra.name}

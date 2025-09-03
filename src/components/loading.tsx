@@ -1,4 +1,5 @@
 // components/Loading.tsx
+import Image from 'next/image';
 import React from "react";
 
 export default function Loading() {
@@ -6,7 +7,7 @@ export default function Loading() {
     <div className="flex flex-col items-center justify-center py-12">
       <div className="relative w-full h-24 overflow-hidden">
         <div className="animate-race absolute left-0">
-          <img src="/car-icon.png" alt="Loading Car" className="h-24" /> {/* Increased size */}
+          <Image src="/car-icon.png" alt="Loading Car" width={96} height={96} className="h-24" />
         </div>
       </div>
       <p className="mt-4 text-lg font-semibold text-primary">Loading...</p>

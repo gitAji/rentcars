@@ -3,6 +3,8 @@
 import Link from 'next/link';
 import { useState } from 'react';
 
+import Image from 'next/image';
+
 export default function Header() {
   const [isOpen, setIsOpen] = useState(false);
 
@@ -10,29 +12,43 @@ export default function Header() {
     <header className="absolute top-0 left-0 w-full z-50 p-4 flex justify-between items-center text-white">
       <div className="flex gap-4 items-center">
         <Link href="/">
-          <img src="/logo.png" alt="RentCars Logo" className="h-40" />
+          <Image src="/logo.png" alt="RentCars Logo" width={64} height={64} className="h-16 sm:h-20 md:h-24" />
         </Link>
       </div>
-      <nav className="hidden md:flex gap-8 items-center">
+      <nav className="hidden md:flex gap-8 items-center" role="navigation">
         <Link href="/" className="hover:text-gray-300 font-semibold">Home</Link>
         <Link href="/cars" className="hover:text-gray-300 font-semibold">Cars</Link>
         <Link href="/about" className="hover:text-gray-300 font-semibold">About</Link>
         <Link href="/contact" className="hover:text-gray-300 font-semibold">Contact</Link>
       </nav>
       <div className="md:hidden">
-        <button onClick={() => setIsOpen(!isOpen)}>
+        <button
+          onClick={() => setIsOpen(!isOpen)}
+          aria-label="Open menu"
+          aria-expanded={isOpen}
+          aria-controls="mobile-menu"
+        >
           <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M4 6h16M4 12h16m-7 6h7"></path>
           </svg>
         </button>
       </div>
       {isOpen && (
-        <div className="md:hidden absolute top-full left-0 w-full bg-gray-800 text-white">
-          <nav className="flex flex-col items-center gap-4 p-4">
-            <Link href="/" className="hover:text-gray-300 font-semibold">Home</Link>
-            <Link href="/cars" className="hover:text-gray-300 font-semibold">Cars</Link>
-            <Link href="/about" className="hover:text-gray-300 font-semibold">About</Link>
-            <Link href="/contact" className="hover:text-gray-300 font-semibold">Contact</Link>
+        <div id="mobile-menu" className="md:hidden fixed inset-0 bg-gray-900 bg-opacity-90 flex flex-col items-center justify-center">
+          <button
+            onClick={() => setIsOpen(false)}
+            className="absolute top-4 right-4 text-white"
+            aria-label="Close menu"
+          >
+            <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M6 18L18 6M6 6l12 12"></path>
+            </svg>
+          </button>
+          <nav className="flex flex-col items-center gap-8" role="navigation">
+            <Link href="/" className="text-2xl text-white hover:text-gray-300 font-semibold" onClick={() => setIsOpen(false)}>Home</Link>
+            <Link href="/cars" className="text-2xl text-white hover:text-gray-300 font-semibold" onClick={() => setIsOpen(false)}>Cars</Link>
+            <Link href="/about" className="text-2xl text-white hover:text-gray-300 font-semibold" onClick={() => setIsOpen(false)}>About</Link>
+            <Link href="/contact" className="text-2xl text-white hover:text-gray-300 font-semibold" onClick={() => setIsOpen(false)}>Contact</Link>
           </nav>
         </div>
       )}
