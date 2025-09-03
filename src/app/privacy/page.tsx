@@ -51,7 +51,7 @@ export default function PrivacyPolicyPage() {
             <Header />
           </div>
           {/* Hero Title */}
-          <h1 className="mt-6 text-4xl md:text-5xl text-white font-bold text-center">
+          <h1 className="mt-6 text-4xl md:text-5xl text-gray-800 sm:text-white font-bold text-center">
             Privacy Policy
           </h1>
         </div>

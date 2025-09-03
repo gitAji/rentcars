@@ -26,7 +26,7 @@ export default function TermsAndConditionsPage() {
   return (
     <div className="flex flex-col min-h-screen bg-gray-50 text-neutral">
       <Header />
-      <main className="flex-grow container mx-auto p-8">
+      <main className="flex-grow container mx-auto p-8 text-gray-800 sm:text-neutral">
         <h1 className="text-4xl font-bold mb-6 text-gray-800">Terms and Conditions</h1>
         <p className="mb-4 text-gray-600">
           Please read these terms and conditions carefully before using Our Service.

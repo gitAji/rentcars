@@ -9,13 +9,13 @@ const config: Config = {
   theme: {
     extend: {
       colors: {
-        primary: '#0070f3',
-        secondary: '#ffffff',
-        accent: '#f5a623',
-        'accent-dark': '#e49512',
-        neutral: '#424242',
-        'neutral-dark': '#212121',
-        'neutral-light': '#bdbdbd',
+        primary: 'var(--color-primary)',
+        secondary: 'var(--color-secondary)',
+        accent: 'var(--color-accent)',
+        'accent-dark': 'var(--color-accent-dark)',
+        neutral: 'var(--color-neutral)',
+        'neutral-dark': 'var(--color-neutral-dark)',
+        'neutral-light': 'var(--color-neutral-light)',
       },
     },
   },

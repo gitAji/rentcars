@@ -84,7 +84,7 @@ function CarsPageContent() {
         style={{ backgroundImage: "url('/cars-hero.jpg')" }}
       >
         <div className="absolute inset-0 bg-gray-800 bg-opacity-40" />
-        <h1 className="relative z-10 text-4xl md:text-5xl text-white font-bold">
+        <h1 className="relative z-10 text-4xl md:text-5xl text-gray-800 sm:text-white font-bold">
           Find Your Perfect Ride
         </h1>
       </section>

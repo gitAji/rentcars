@@ -3,7 +3,14 @@
 :root {
   --background: #ffffff;
   --foreground: #171717;
- 
+
+  --color-primary: #0070f3;
+  --color-secondary: #ffffff;
+  --color-accent: #ff5757; /* Changed from #f5a623 to match the button color */
+  --color-accent-dark: #e64d4d; /* Darker version of the new accent color */
+  --color-neutral: #424242;
+  --color-neutral-dark: #212121;
+  --color-neutral-light: #bdbdbd;
 }
 
 @theme inline {
@@ -17,6 +24,14 @@
   :root {
     --background: #0a0a0a;
     --foreground: #ededed;
+
+    --color-primary: #0070f3; /* Keep primary consistent or adjust for dark mode */
+    --color-secondary: #0a0a0a; /* Dark background for secondary */
+    --color-accent: #ff5757;
+    --color-accent-dark: #e64d4d;
+    --color-neutral: #bdbdbd; /* Lighter neutral for dark mode */
+    --color-neutral-dark: #ededed; /* Even lighter neutral for dark mode */
+    --color-neutral-light: #424242; /* Darker neutral for dark mode */
   }
 }
 

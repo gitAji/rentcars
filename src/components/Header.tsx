@@ -12,7 +12,7 @@ export default function Header() {
     <header className="absolute top-0 left-0 w-full z-50 p-4 flex justify-between items-center text-white">
       <div className="flex gap-4 items-center">
         <Link href="/">
-          <Image src="/logo.png" alt="RentCars Logo" width={64} height={64} className="h-16 sm:h-20 md:h-24" />
+          <Image src="/logo.png" alt="RentCars Logo" width={128} height={128} className="h-16 sm:h-20 md:h-32" />
         </Link>
       </div>
       <nav className="hidden md:flex gap-8 items-center" role="navigation">

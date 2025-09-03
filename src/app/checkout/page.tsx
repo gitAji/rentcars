@@ -2,7 +2,7 @@
 
 import { Suspense } from 'react';
 import { useEffect, useState } from "react";
-import { useRouter, useSearchParams } from "next/navigation";
+import { useSearchParams } from "next/navigation";
 import Header from "@/components/Header";
 import Loading from "@/components/loading";
 
@@ -20,7 +20,6 @@ interface Car {
 }
 
 function CheckoutPageContent() {
-  const router = useRouter();
   const searchParams = useSearchParams();
 
   const [car, setCar] = useState<Car | null>(null);

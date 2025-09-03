@@ -34,7 +34,7 @@ export default function AboutPage() {
         style={{ backgroundImage: "url('/about-hero.jpg')" }} // 👈 Replace with your own image
       >
         <div className="absolute inset-0 bg-gray-800 bg-opacity-40" />
-        <h1 className="relative z-10 text-4xl md:text-5xl text-white font-bold">About Us</h1>
+        <h1 className="relative z-10 text-4xl md:text-5xl text-gray-800 sm:text-white font-bold">About Us</h1>
       </section>
 
       {/* Main Content in white */}
