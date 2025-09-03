@@ -1,12 +1,8 @@
 import { NextRequest, NextResponse } from 'next/server';
-import type { NextApiRequest } from 'next';
-import type { NextPageContext } from 'next';
-
-import fs from 'fs/promises';
 import path from 'path';
+import fs from 'fs/promises';
 
-const carsFilePath = path.join(process.cwd(), 'data', 'cars.json');
-
+// Define the Car interface
 interface Car {
   id: number;
   make: string;
@@ -23,29 +19,50 @@ interface Car {
   terms?: string;
 }
 
+// Path to the JSON file
+const carsFilePath = path.join(process.cwd(), 'data', 'cars.json');
+
+// Cache for cars data to avoid repeated file reads
+let cachedCars: Car[] | null = null;
+
+// Read cars from file
 async function readCars(): Promise<Car[]> {
-  const fileContents = await fs.readFile(carsFilePath, 'utf8');
-  return JSON.parse(fileContents);
+  if (cachedCars) {
+    return cachedCars;
+  }
+  try {
+    const file = await fs.readFile(carsFilePath, 'utf-8');
+    cachedCars = JSON.parse(file);
+    return cachedCars;
+  } catch (error) {
+    console.error('Error reading cars file:', error);
+    throw new Error('Failed to load cars data');
+  }
 }
 
-// ✅ Correct signature (no destructuring directly)
+// GET handler with corrected type
 export async function GET(
-  request: NextRequest,
-  context: { params: Record<string, string> }
+  req: NextRequest,
+  { params }: { params: Record<string, string> } // Flexible type to avoid type error
 ) {
-  const { id } = context.params;
+  try {
+    const carId = parseInt(params.id);
 
-  const carId = parseInt(id);
-  if (isNaN(carId)) {
-    return NextResponse.json({ error: 'Invalid car ID' }, { status: 400 });
+    // Validate ID
+    if (isNaN(carId) || carId <= 0) {
+      return NextResponse.json({ error: 'Invalid car ID' }, { status: 400 });
+    }
+
+    const cars = await readCars();
+    const car = cars.find((car) => car.id === carId);
+
+    if (!car) {
+      return NextResponse.json({ error: 'Car not found' }, { status: 404 });
+    }
+
+    return NextResponse.json(car);
+  } catch (error) {
+    console.error(`Error in GET /api/cars/[id] for id ${params.id}:`, error);
+    return NextResponse.json({ error: 'Internal server error' }, { status: 500 });
   }
-
-  const cars = await readCars();
-  const car = cars.find((car) => car.id === carId);
-
-  if (!car) {
-    return NextResponse.json({ error: 'Car not found' }, { status: 404 });
-  }
-
-  return NextResponse.json(car);
 }
