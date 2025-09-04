@@ -12,7 +12,9 @@ export default function Header() {
     <header className="absolute top-0 left-0 w-full z-50 p-4 flex justify-between items-center text-white">
       <div className="flex gap-4 items-center">
         <Link href="/">
-          <Image src="/logo.png" alt="RentCars Logo" width={500} height={500} className="h-16 sm:h-20 md:h-32" />
+          <div className="relative h-20 w-60 sm:h-28 sm:w-84 md:h-32 md:w-96"> {/* Adjust width based on aspect ratio */}
+            <Image src="/logo.png" alt="RentCars Logo" layout="fill" objectFit="contain" />
+          </div>
         </Link>
       </div>
       <nav className="hidden md:flex gap-8 items-center" role="navigation">

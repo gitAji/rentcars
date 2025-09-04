@@ -83,8 +83,8 @@ export default function HomePage() {
           style={{ backgroundImage: "url('/hero.png')" }}
         >
           <div className="relative z-10 text-center p-4 max-w-5xl mx-auto flex flex-col items-center justify-center flex-grow text-white">
-            <h1 className="text-4xl sm:text-5xl md:text-6xl font-extrabold mb-4 drop-shadow-lg text-gray-800 sm:text-gray-100">Find Your Perfect Car in Bergen</h1>
-            <p className="text-xl md:text-3xl mb-8 drop-shadow-md text-gray-600 sm:text-gray-300">
+            <h1 className="text-4xl sm:text-5xl md:text-6xl font-extrabold mb-4 drop-shadow-lg text-white">Find Your Perfect Car in Bergen</h1>
+            <p className="text-xl md:text-3xl mb-8 drop-shadow-md text-white">
               <span>
                 Rent a car for your next adventure
               </span>

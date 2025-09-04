@@ -1,5 +1,12 @@
 import './globals.css';
 import type { Metadata } from 'next';
+import { Montserrat } from 'next/font/google'; // Import Montserrat font
+
+const montserrat = Montserrat({
+  subsets: ['latin'],
+  display: 'swap',
+  variable: '--font-montserrat', // Define a CSS variable for the font
+});
 
 export const metadata: Metadata = {
   title: 'RentCars - Your Premier Car Rental Platform',
@@ -33,7 +40,9 @@ export const metadata: Metadata = {
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
     <html lang="en">
-      <body className="bg-secondary text-neutral">{children}</body>
+      <body className={`bg-secondary text-neutral ${montserrat.variable}`}>
+        {children}
+      </body>
     </html>
   );
 }

@@ -17,6 +17,9 @@ const config: Config = {
         'neutral-dark': 'var(--color-neutral-dark)',
         'neutral-light': 'var(--color-neutral-light)',
       },
+      fontFamily: {
+        sans: ['var(--font-montserrat)'], // Use the CSS variable for sans-serif font
+      },
     },
   },
   plugins: [],
