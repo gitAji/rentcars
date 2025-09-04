@@ -35,6 +35,7 @@ function CarsPageContent() {
   const [filterCarType, setFilterCarType] = useState(
     searchParams.get("carType") || ""
   );
+  const [isFilterSidebarOpen, setIsFilterSidebarOpen] = useState(false); // New state for sidebar
 
   useEffect(() => {
     const fetchCars = async () => {
@@ -63,7 +64,6 @@ function CarsPageContent() {
     if (filterTown) newSearchParams.set("town", filterTown);
     if (filterCarType) newSearchParams.set("carType", filterCarType);
 
-    // Preserve other params (like startDate, endDate)
     searchParams.forEach((value, key) => {
       if (key !== "town" && key !== "carType") {
         newSearchParams.set(key, value);
@@ -71,14 +71,13 @@ function CarsPageContent() {
     });
 
     router.push(`/cars?${newSearchParams.toString()}`);
+    setIsFilterSidebarOpen(false); // Close sidebar after applying filters
   };
 
   return (
     <div className="flex flex-col min-h-screen">
-      {/* Transparent Header */}
       <Header />
 
-      {/* Hero Section */}
       <section
         className="relative h-[300px] bg-cover bg-center flex items-center justify-center"
         style={{ backgroundImage: "url('/cars-hero.jpg')" }}
@@ -89,14 +88,30 @@ function CarsPageContent() {
         </h1>
       </section>
 
-      {/* Main Content */}
       <main className="bg-white flex-grow">
         <div className="container mx-auto p-8 flex flex-col md:flex-row gap-8">
+          {/* Filter Toggle Button (Mobile Only) */}
+          <button
+            onClick={() => setIsFilterSidebarOpen(true)}
+            className="md:hidden w-full bg-primary text-white p-3 rounded-md mb-4"
+          >
+            Filter Cars
+          </button>
+
           {/* Filter Sidebar */}
-          <aside className="w-full md:w-1/4 p-4 bg-gray-100 rounded-lg shadow-md">
-            <h2 className="text-2xl font-bold mb-4 text-primary">
-              Filter Cars
-            </h2>
+          <aside
+            className={`fixed inset-y-0 left-0 w-64 bg-gray-100 p-4 transform ${
+              isFilterSidebarOpen ? "translate-x-0" : "-translate-x-full"
+            } md:relative md:translate-x-0 md:w-1/4 transition-transform duration-300 ease-in-out z-40`}
+          >
+            <div className="flex justify-between items-center mb-4 md:hidden">
+              <h2 className="text-2xl font-bold text-primary">Filter Cars</h2>
+              <button onClick={() => setIsFilterSidebarOpen(false)} className="text-neutral-dark">
+                <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M6 18L18 6M6 6l12 12"></path>
+                </svg>
+              </button>
+            </div>
 
             {/* Town Filter */}
             <div className="mb-4">
@@ -144,6 +159,14 @@ function CarsPageContent() {
               Apply Filters
             </button>
           </aside>
+
+          {/* Overlay */}
+          {isFilterSidebarOpen && (
+            <div
+              className="fixed inset-0 bg-black bg-opacity-50 z-30 md:hidden"
+              onClick={() => setIsFilterSidebarOpen(false)}
+            ></div>
+          )}
 
           {/* Car Grid */}
           <section className="flex-1">
