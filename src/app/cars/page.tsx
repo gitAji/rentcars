@@ -22,6 +22,8 @@ interface Car {
   description?: string;
   features?: string[];
   terms?: string;
+  seats: number;
+  shortDescription: string;
 }
 
 function CarsPageContent() {
@@ -35,7 +37,10 @@ function CarsPageContent() {
   const [filterCarType, setFilterCarType] = useState(
     searchParams.get("carType") || ""
   );
-  const [isFilterSidebarOpen, setIsFilterSidebarOpen] = useState(false); // New state for sidebar
+  const [showFilters, setShowFilters] = useState(false);
+
+  const startDate = searchParams.get("startDate") || "";
+  const endDate = searchParams.get("endDate") || "";
 
   useEffect(() => {
     const fetchCars = async () => {
@@ -59,114 +64,97 @@ function CarsPageContent() {
     fetchCars();
   }, [searchParams]);
 
-  const handleFilterChange = () => {
-    const newSearchParams = new URLSearchParams();
-    if (filterTown) newSearchParams.set("town", filterTown);
-    if (filterCarType) newSearchParams.set("carType", filterCarType);
-
-    searchParams.forEach((value, key) => {
-      if (key !== "town" && key !== "carType") {
-        newSearchParams.set(key, value);
-      }
-    });
-
+  const handleFilterChange = (param: string, value: string) => {
+    const newSearchParams = new URLSearchParams(searchParams.toString());
+    if (value) {
+      newSearchParams.set(param, value);
+    } else {
+      newSearchParams.delete(param);
+    }
     router.push(`/cars?${newSearchParams.toString()}`);
-    setIsFilterSidebarOpen(false); // Close sidebar after applying filters
   };
+
+  const towns = ["Oslo", "Bergen", "Stavanger"];
+  const carTypes = ["Sedan", "SUV", "Hatchback", "Electric"];
 
   return (
     <div className="flex flex-col min-h-screen">
       <Header />
 
       <section
-        className="relative h-[300px] bg-cover bg-center flex items-center justify-center"
+        className="relative h-48 md:h-64 bg-cover bg-center flex items-center justify-center"
         style={{ backgroundImage: "url('/cars-hero.jpg')" }}
       >
         <div className="absolute inset-0 bg-gray-800 bg-opacity-40" />
-        <h1 className="relative z-10 text-4xl md:text-5xl text-gray-800 sm:text-white font-bold">
+        <h1 className="relative z-10 text-4xl md:text-5xl text-white font-bold">
           Find Your Perfect Ride
         </h1>
       </section>
 
       <main className="bg-white flex-grow">
-        <div className="container mx-auto p-8 flex flex-col md:flex-row gap-8">
+        <div className="container mx-auto p-4 md:p-8 flex flex-col md:flex-row gap-8 max-w-7xl">
           {/* Filter Toggle Button (Mobile Only) */}
           <button
-            onClick={() => setIsFilterSidebarOpen(true)}
+            onClick={() => setShowFilters(!showFilters)}
             className="md:hidden w-full bg-primary text-white p-3 rounded-md mb-4"
           >
-            Filter Cars
+            {showFilters ? "Hide" : "Show"} Filters
           </button>
 
-          {/* Filter Sidebar */}
-          <aside
-            className={`fixed inset-y-0 left-0 w-64 bg-gray-100 p-4 transform ${
-              isFilterSidebarOpen ? "translate-x-0" : "-translate-x-full"
-            } md:relative md:translate-x-0 md:w-1/4 transition-transform duration-300 ease-in-out z-40`}
+          {/* Filter Section */}
+          <div
+            className={`${showFilters ? "block" : "hidden"} md:block bg-gray-100 p-4 rounded-lg md:w-1/4`}
           >
-            <div className="flex justify-between items-center mb-4 md:hidden">
-              <h2 className="text-2xl font-bold text-primary">Filter Cars</h2>
-              <button onClick={() => setIsFilterSidebarOpen(false)} className="text-neutral-dark">
-                <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M6 18L18 6M6 6l12 12"></path>
-                </svg>
-              </button>
-            </div>
+            <h2 className="text-2xl font-bold text-primary mb-4">Filter Cars</h2>
 
             {/* Town Filter */}
             <div className="mb-4">
-              <label
-                htmlFor="filterTown"
-                className="block text-neutral-dark mb-2"
-              >
-                Town:
-              </label>
-              <select
-                id="filterTown"
-                value={filterTown}
-                onChange={(e) => setFilterTown(e.target.value)}
-                className="w-full p-2 border rounded-md text-neutral"
-              >
-                <option value="">All</option>
-                <option value="Oslo">Oslo</option>
-                <option value="Bergen">Bergen</option>
-                <option value="Stavanger">Stavanger</option>
-              </select>
+              <h3 className="font-semibold mb-2 text-neutral-dark">Town</h3>
+              <div className="flex flex-wrap gap-2">
+                {towns.map((town) => (
+                  <button
+                    key={town}
+                    onClick={() => {
+                      const newTown = filterTown === town ? "" : town;
+                      setFilterTown(newTown);
+                      handleFilterChange("town", newTown);
+                    }}
+                    className={`px-4 py-2 rounded-md text-sm font-medium ${
+                      filterTown === town
+                        ? "bg-primary text-white"
+                        : "bg-white text-neutral-dark border border-gray-300"
+                    }`}
+                  >
+                    {town}
+                  </button>
+                ))}
+              </div>
             </div>
 
             {/* Car Type Filter */}
             <div className="mb-4">
-              <label
-                htmlFor="filterType"
-                className="block text-neutral-dark mb-2"
-              >
-                Car Type:
-              </label>
-              <input
-                type="text"
-                id="filterType"
-                value={filterCarType}
-                onChange={(e) => setFilterCarType(e.target.value)}
-                className="w-full p-2 border rounded-md text-neutral"
-                placeholder="e.g., Sedan, SUV"
-              />
+              <h3 className="font-semibold mb-2 text-neutral-dark">Car Type</h3>
+              <div className="flex flex-wrap gap-2">
+                {carTypes.map((type) => (
+                  <button
+                    key={type}
+                    onClick={() => {
+                      const newCarType = filterCarType === type ? "" : type;
+                      setFilterCarType(newCarType);
+                      handleFilterChange("carType", newCarType);
+                    }}
+                    className={`px-4 py-2 rounded-md text-sm font-medium ${
+                      filterCarType === type
+                        ? "bg-primary text-white"
+                        : "bg-white text-neutral-dark border border-gray-300"
+                    }`}
+                  >
+                    {type}
+                  </button>
+                ))}
+              </div>
             </div>
-
-            <button
-              onClick={handleFilterChange}
-              className="w-full bg-[#ff5757] text-white p-2 rounded-md hover:bg-[#e64d4d]"
-            >
-              Apply Filters
-            </button>
-          </aside>
-
-          {/* Overlay */}
-          {isFilterSidebarOpen && (
-            <div
-              className="fixed inset-0 bg-black bg-opacity-50 z-30 md:hidden"
-              onClick={() => setIsFilterSidebarOpen(false)}
-            ></div>
-          )}
+          </div>
 
           {/* Car Grid */}
           <section className="flex-1">
@@ -186,7 +174,7 @@ function CarsPageContent() {
             ) : (
               <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
                 {cars.map((car: Car) => (
-                  <CarCard key={car.id} car={car} />
+                  <CarCard key={car.id} car={car} startDate={startDate} endDate={endDate} />
                 ))}
               </div>
             )}

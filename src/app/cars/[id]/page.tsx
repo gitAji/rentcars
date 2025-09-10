@@ -19,6 +19,9 @@ interface Car {
   description?: string;
   features?: string[];
   terms?: string;
+  seats: number;
+  carType: string;
+  shortDescription: string;
 }
 
 interface Extra {
