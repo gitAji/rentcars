@@ -76,9 +76,32 @@ function CheckoutPageContent() {
   const numberOfDays = getNumberOfDays();
   const totalPrice = car ? car.price * numberOfDays : 0;
 
+  const handleVippsPayment = async () => {
+    const orderId = `rentcars-${Date.now()}`;
+    try {
+      const res = await fetch("/api/vipps", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ orderId, amount: totalPrice }),
+      });
+
+      if (res.ok) {
+        const { redirectUrl } = await res.json();
+        window.location.href = redirectUrl;
+      } else {
+        const error = await res.json();
+        setError(error.message || "Failed to initiate Vipps payment.");
+      }
+    } catch (error) {
+      setError("Failed to initiate Vipps payment.");
+    }
+  };
+
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    // Handle form submission
+    await handleVippsPayment();
   };
 
   if (loading) {
@@ -243,13 +266,7 @@ function CheckoutPageContent() {
                   <div className="flex flex-col gap-4">
                     <button
                       type="submit"
-                      className="w-full bg-blue-600 text-white p-3 rounded-md hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2"
-                    >
-                      Pay with Stripe
-                    </button>
-                    <button
-                      type="submit"
-                      className="w-full bg-orange-500 text-white p-3 rounded-md hover:bg-orange-600 focus:outline-none focus:ring-2 focus:ring-orange-400 focus:ring-offset-2"
+                      className="w-full bg-red-500 text-white p-3 rounded-md hover:bg-red-600 focus:outline-none focus:ring-2 focus:ring-red-500 focus:ring-offset-2"
                     >
                       Pay with Vipps
                     </button>
