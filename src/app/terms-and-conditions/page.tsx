@@ -116,7 +116,7 @@ export default function TermsAndConditionsPage() {
 
         <h2 className="text-2xl font-bold mb-4 text-gray-800">United States Legal Compliance</h2>
         <p className="mb-4 text-gray-600">
-          You represent and warrant that (i) You are not located in a country that is subject to the United States government embargo, or that has been designated by the United States government as a "terrorist supporting" country, and (ii) You are not listed on any United States government list of prohibited or restricted parties.
+          You represent and warrant that (i) You are not located in a country that is subject to the United States government embargo, or that has been designated by the United States government as a terrorist supporting country, and (ii) You are not listed on any United States government list of prohibited or restricted parties.
         </p>
 
         <h2 className="text-2xl font-bold mb-4 text-gray-800">Severability and Waiver</h2>
