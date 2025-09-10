@@ -121,7 +121,7 @@ function CarsPageContent() {
                     }}
                     className={`px-4 py-2 rounded-md text-sm font-medium ${
                       filterTown === town
-                        ? "bg-primary text-white"
+                        ? "bg-red-500 text-white"
                         : "bg-white text-neutral-dark border border-gray-300"
                     }`}
                   >
@@ -145,7 +145,7 @@ function CarsPageContent() {
                     }}
                     className={`px-4 py-2 rounded-md text-sm font-medium ${
                       filterCarType === type
-                        ? "bg-primary text-white"
+                        ? "bg-red-500 text-white"
                         : "bg-white text-neutral-dark border border-gray-300"
                     }`}
                   >
