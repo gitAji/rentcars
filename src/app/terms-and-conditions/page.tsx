@@ -69,7 +69,7 @@ export default function TermsAndConditionsPage() {
 
         <h2 className="text-2xl font-bold mb-4 text-gray-800">Links to Other Websites</h2>
         <p className="mb-4 text-gray-600">
-          Our Service may contain links to other websites that are not operated by the Company. If You click on a third party link, You will be directed to that third party's site. We strongly advise You to review the Terms and Conditions of every site You visit.
+          Our Service may contain links to other websites that are not operated by the Company. If You click on a third party link, You will be directed to that third party &apos;s site. We strongly advise You to review the Terms and Conditions of every site You visit.
         </p>
         <p className="mb-4 text-gray-600">
           We have no control over and assume no responsibility for the content, privacy policies or practices of any third party sites or services.
