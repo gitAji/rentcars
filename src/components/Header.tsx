@@ -9,10 +9,10 @@ export default function Header() {
   const [isOpen, setIsOpen] = useState(false);
 
   return (
-    <header className="absolute top-0 left-0 w-full z-50 p-4 flex justify-between items-center text-white">
+    <header className="absolute top-0 left-0  w-full z-50 p-4 flex justify-between items-center text-white">
       <div className="flex gap-4 items-center">
         <Link href="/">
-          <div className="relative h-20 w-60 sm:h-28 sm:w-84 md:h-32 md:w-96"> {/* Adjust width based on aspect ratio */}
+          <div className="relative h-20 w-60 sm:h-28 sm:w-50 md:h-32 md:w-60"> {/* Adjust width based on aspect ratio */}
             <Image src="/logo.png" alt="RentCars Logo" layout="fill" objectFit="contain" />
           </div>
         </Link>
