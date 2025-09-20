@@ -12,6 +12,7 @@ export default function Footer() {
               Your premier destination for car rentals. We offer a wide range of vehicles to suit your needs, ensuring a smooth and enjoyable journey.
             </p>
             <p className="text-sm">&copy; {new Date().getFullYear()} RentCars. All rights reserved.</p>
+            <p className="text-sm mt-2">A ONE KUMARASAMY org nr:922103682</p>
           </div>
 
           {/* Column 2: Quick Links */}
