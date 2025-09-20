@@ -18,8 +18,8 @@ export default function Header() {
         </Link>
         <nav className="hidden md:flex gap-8 items-center" role="navigation">
           <Link href="/" className="hover:text-gray-300 font-semibold">Home</Link>
-          <Link href="/cars" className="hover:text-gray-300 font-semibold">Cars</Link>
           <Link href="/about" className="hover:text-gray-300 font-semibold">About</Link>
+          <Link href="/cars" className="hover:text-gray-300 font-semibold">Cars</Link>
           <Link href="/contact" className="hover:text-gray-300 font-semibold">Contact</Link>
         </nav>
         <div className="md:hidden">
@@ -47,8 +47,8 @@ export default function Header() {
             </button>
             <nav className="flex flex-col items-center gap-8" role="navigation">
               <Link href="/" className="text-2xl text-white hover:text-gray-300 font-semibold" onClick={() => setIsOpen(false)}>Home</Link>
-              <Link href="/cars" className="text-2xl text-white hover:text-gray-300 font-semibold" onClick={() => setIsOpen(false)}>Cars</Link>
               <Link href="/about" className="text-2xl text-white hover:text-gray-300 font-semibold" onClick={() => setIsOpen(false)}>About</Link>
+              <Link href="/cars" className="text-2xl text-white hover:text-gray-300 font-semibold" onClick={() => setIsOpen(false)}>Cars</Link>
               <Link href="/contact" className="text-2xl text-white hover:text-gray-300 font-semibold" onClick={() => setIsOpen(false)}>Contact</Link>
             </nav>
           </div>

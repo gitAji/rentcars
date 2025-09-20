@@ -42,10 +42,25 @@ async function readCars(): Promise<Car[]> {
 }
 
 // GET handler for all cars
-export async function GET() {
+export async function GET(request: Request) {
   try {
+    const { searchParams } = new URL(request.url);
+    const town = searchParams.get('town');
+    const carType = searchParams.get('carType');
+
     const cars = await readCars();
-    return NextResponse.json(cars);
+
+    let filteredCars = cars;
+
+    if (town) {
+      filteredCars = filteredCars.filter(car => car.town.toLowerCase() === town.toLowerCase());
+    }
+
+    if (carType) {
+      filteredCars = filteredCars.filter(car => car.carType.toLowerCase() === carType.toLowerCase());
+    }
+
+    return NextResponse.json(filteredCars);
   } catch (error) {
     console.error('Error in GET /api/cars:', error);
     return NextResponse.json({ error: 'Internal server error' }, { status: 500 });

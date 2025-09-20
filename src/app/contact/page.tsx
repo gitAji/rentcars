@@ -54,9 +54,11 @@ export default function ContactPage() {
     );
   }
 
-  return (
+      return (
     <div className="flex flex-col min-h-screen">
+              <div className="pb-24">
       <Header />
+      </div>
 
       <section
         className="relative h-[300px] bg-cover bg-center flex items-center justify-center"
@@ -68,7 +70,7 @@ export default function ContactPage() {
         </h1>
       </section>
 
-      <main className="bg-white flex-grow">
+                  <main className="bg-white flex-grow">
         <div className="container mx-auto p-8">
           <h2 className="text-3xl font-bold mb-6 text-primary">Get in Touch</h2>
           <p className="mb-6 text-neutral-dark">

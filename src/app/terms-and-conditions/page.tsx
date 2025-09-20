@@ -23,11 +23,21 @@ export default function TermsAndConditionsPage() {
     );
   }
 
-  return (
+      return (
     <div className="flex flex-col min-h-screen bg-gray-50 text-neutral">
-      <Header />
-      <main className="flex-grow container mx-auto p-8 text-gray-800 sm:text-neutral">
-        <h1 className="text-4xl font-bold mb-6 text-gray-800">Terms and Conditions</h1>
+              
+      <section
+        className="relative h-[300px] bg-cover bg-center flex items-center justify-center"
+        style={{ backgroundImage: "url('/contact-hero.jpg')" }}
+      >
+        <Header />
+        <div className="absolute inset-0 bg-gray-800 bg-opacity-40" />
+        <h1 className="relative z-10 text-4xl md:text-5xl text-gray-800 sm:text-white font-bold">
+          Terms and Conditions
+        </h1>
+      </section>
+                  <main className="flex-grow container mx-auto p-8 text-gray-800 sm:text-neutral">
+        
         <p className="mb-4 text-gray-600">
           Please read these terms and conditions carefully before using Our Service.
         </p>
@@ -40,13 +50,13 @@ export default function TermsAndConditionsPage() {
         <h3 className="text-xl font-bold mb-2 text-gray-800">Definitions</h3>
         <ul className="list-disc list-inside mb-4 text-gray-600">
           <li><strong>Affiliate</strong> means an entity that controls, is controlled by or is under common control with a party, where &quot;control&quot; means ownership of 50% or more of the shares, equity interest or other securities entitled to vote for election of directors or other managing authority.</li>
-          <li><strong>Company</strong> (referred to as either &quot;the Company&quot;, &quot;We&quot;, &quot;Us&quot; or &quot;Our&quot; in this Agreement) refers to RentCars.</li>
+          <li><strong>Company</strong> (referred to as either &quot;the Company&quot;, &quot;We&quot;, &quot;Us&quot; or &quot;Our&quot; in this Agreement) refers to RentCars.no.</li>
           <li><strong>Country</strong> refers to: Norway</li>
           <li><strong>Device</strong> means any device that can access the Service such as a computer, a cellphone or a digital tablet.</li>
           <li><strong>Service</strong> refers to the Website.</li>
           <li><strong>Terms and Conditions</strong> (also referred as &quot;Terms&quot;) mean these Terms and Conditions that form the entire agreement between You and the Company regarding the use of the Service.</li>
           <li><strong>Third-party Social Media Service</strong> means any services or content (including data, information, products or services) provided by a third-party that may be displayed, included or made available by the Service.</li>
-          <li><strong>Website</strong> refers to RentCars, accessible from https://www.rentcars.com</li>
+          <li><strong>Website</strong> refers to RentCars, accessible from https://www.rentcars.no</li>
           <li><strong>You</strong> means the individual accessing or using the Service, or the company, or other legal entity on behalf of which such individual is accessing or using the Service, as applicable.</li>
         </ul>
 
@@ -142,8 +152,8 @@ export default function TermsAndConditionsPage() {
           If you have any questions about these Terms and Conditions, You can contact us:
         </p>
         <ul className="list-disc list-inside mb-4 text-gray-600">
-          <li>By email: info@rentcars.com</li>
-          <li>By visiting this page on our website: https://www.rentcars.com/contact</li>
+          <li>By email: info@rentcars.no</li>
+          <li>By visiting this page on our website: https://www.rentcars.no/contact</li>
         </ul>
       </main>
       <Footer />

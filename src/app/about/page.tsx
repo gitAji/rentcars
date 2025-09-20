@@ -23,22 +23,20 @@ export default function AboutPage() {
     );
   }
 
-  return (
+      return (
     <div className="flex flex-col min-h-screen">
       {/* Transparent Header */}
-      <Header />
-
-      {/* Hero Section */}
-      <section
+              <section
         className="relative h-[300px] bg-cover bg-center flex items-center justify-center"
         style={{ backgroundImage: "url('/about-hero.jpg')" }} // 👈 Replace with your own image
       >
+        <Header />
         <div className="absolute inset-0 bg-gray-800 bg-opacity-40" />
         <h1 className="relative z-10 text-4xl md:text-5xl text-gray-800 sm:text-white font-bold">About Us</h1>
       </section>
 
       {/* Main Content in white */}
-      <main className="bg-white flex-grow">
+                  <main className="bg-white flex-grow">
         <div className="container mx-auto p-8">
           <h2 className="text-3xl font-bold mb-6 text-primary">Who We Are</h2>
           <p className="mb-4 text-neutral-dark">
