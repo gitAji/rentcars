@@ -2,6 +2,8 @@ import Link from 'next/link';
 
 import Image from 'next/image';
 
+import { FaCar, FaCarSide, FaCarAlt, FaBolt } from 'react-icons/fa';
+
 interface CarCardProps {
   car: {
     id: number;
@@ -33,6 +35,21 @@ export default function CarCard({ car, startDate, endDate }: CarCardProps) {
   const days = calculateDays();
   const estimatedTotal = days * car.price;
 
+  const renderCarTypeIcon = () => {
+    switch (car.carType.toLowerCase()) {
+      case 'sedan':
+        return <FaCar className="w-5 h-5 mr-1" />;
+      case 'suv':
+        return <FaCarSide className="w-5 h-5 mr-1" />;
+      case 'hatchback':
+        return <FaCarAlt className="w-5 h-5 mr-1" />;
+      case 'electric':
+        return <FaBolt className="w-5 h-5 mr-1" />;
+      default:
+        return <FaCar className="w-5 h-5 mr-1" />;
+    }
+  };
+
   return (
     <Link href={`/cars/${car.id}?startDate=${startDate}&endDate=${endDate}`} className="block border border-gray-200 rounded-lg shadow-md bg-white text-neutral cursor-pointer transform transition-all duration-300 hover:scale-105 hover:shadow-lg overflow-hidden">
       <Image src={car.imageUrl} alt={`${car.make} ${car.model}`} width={500} height={300} className="w-full h-48 object-cover" />
@@ -46,7 +63,7 @@ export default function CarCard({ car, startDate, endDate }: CarCardProps) {
             <span>{car.seats} seats</span>
           </div>
           <div className="flex items-center text-neutral-light">
-            <svg className="w-5 h-5 mr-1" fill="currentColor" viewBox="0 0 20 20"><path d="M3 5a2 2 0 012-2h10a2 2 0 012 2v8a2 2 0 01-2 2H5a2 2 0 01-2-2V5zm11 1H6v6h8V6z" clipRule="evenodd" fillRule="evenodd"></path></svg>
+            {renderCarTypeIcon()}
             <span>{car.carType}</span>
           </div>
         </div>

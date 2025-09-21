@@ -26,6 +26,8 @@ interface Car {
   shortDescription: string;
 }
 
+import { FaFilter } from 'react-icons/fa';
+
 function CarsPageContent() {
   const searchParams = useSearchParams();
   const router = useRouter();
@@ -105,7 +107,10 @@ function CarsPageContent() {
           <div
             className={`${showFilters ? "block" : "hidden"} md:block bg-gray-100 p-4 rounded-lg md:w-1/4`}
           >
-            <h2 className="text-2xl font-bold text-primary mb-4">Filter Cars</h2>
+            <h2 className="text-2xl font-bold text-primary mb-4 flex items-center">
+              <FaFilter className="mr-2" />
+              Filter Cars
+            </h2>
 
             {/* Town Filter */}
             <div className="mb-4">

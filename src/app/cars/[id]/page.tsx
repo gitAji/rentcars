@@ -198,9 +198,14 @@ export default function CarDetailsPage({ params }: { params: Promise<{ id: strin
 
       {/* Main Content */}
       <div className="container mx-auto p-6 bg-primary text-neutral-dark rounded-lg shadow-lg flex-grow mb-2">
-        <h1 className="text-3xl sm:text-4xl font-bold mb-4 text-primary">
-          {car.make} {car.model}
-        </h1>
+        <div className="mb-4 font-bold">
+          <p className="text-sm text-gray-500">
+            <a href="/" className="hover:underline">Home</a> | 
+            <a href="/cars" className="hover:underline">Cars</a> | 
+            <span>{car.make} {car.model}</span>
+          </p>
+        </div>
+        
 
         <div className="grid grid-cols-1 md:grid-cols-2 gap-8 mb-6">
           <div className="relative w-full h-64 sm:h-80 md:h-96 rounded-lg shadow-md overflow-hidden">
