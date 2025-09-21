@@ -344,7 +344,8 @@ export default function CarDetailsPage({ params }: { params: Promise<{ id: strin
 
           <button
             onClick={handleCheckout}
-            className="mt-4 w-full bg-red-500 text-white p-3 rounded-md hover:bg-red-600 focus:outline-none focus:ring-2 focus:ring-red-500 focus:ring-offset-2 text-lg font-bold"
+            disabled={!car || !startDate || !endDate || totalPrice === 0}
+            className="mt-4 w-full bg-red-500 text-white p-3 rounded-md hover:bg-red-600 focus:outline-none focus:ring-2 focus:ring-red-500 focus:ring-offset-2 text-lg font-bold disabled:opacity-50 disabled:cursor-not-allowed"
             aria-label="Proceed to checkout"
           >
             Proceed to Checkout

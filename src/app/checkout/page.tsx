@@ -1,12 +1,15 @@
 "use client";
 
-import { Suspense } from 'react';
-import { useEffect, useState } from "react";
-import { useSearchParams } from "next/navigation";
+import { Suspense, useEffect, useState } from "react";
+import { useSearchParams, useRouter } from "next/navigation";
+import { loadStripe } from '@stripe/stripe-js';
+import { Elements, useStripe, useElements, PaymentElement } from '@stripe/react-stripe-js';
+
+const stripePromise = loadStripe(process.env.NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY!);
+
 import Header from "@/components/Header";
 import Loading from "@/components/loading";
 import Image from "next/image";
-
 import Footer from "@/components/Footer";
 
 interface Car {
@@ -22,11 +25,21 @@ interface Car {
   terms?: string;
 }
 
-function CheckoutPageContent() {
-  const searchParams = useSearchParams();
+interface CheckoutPageContentProps {
+  car: Car;
+  startDate: string;
+  endDate: string;
+  extras: string[];
+  totalPrice: number;
+  clientSecret: string;
+}
 
-  const [car, setCar] = useState<Car | null>(null);
-  const [loading, setLoading] = useState(true);
+function CheckoutPageContent({ car, startDate, endDate, extras, totalPrice, clientSecret }: CheckoutPageContentProps) {
+  const router = useRouter();
+  const stripe = useStripe();
+  const elements = useElements();
+
+  const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
   const [name, setName] = useState("");
@@ -35,33 +48,62 @@ function CheckoutPageContent() {
   const [driverLicense, setDriverLicense] = useState("");
   const [instructions, setInstructions] = useState("");
 
-  const carId = searchParams.get("carId");
-  const startDate = searchParams.get("startDate");
-  const endDate = searchParams.get("endDate");
-  const extras = searchParams.getAll("extras");
+  const handleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    await handleStripePayment();
+  };
 
-  useEffect(() => {
-    if (carId) {
-      const fetchCar = async () => {
-        try {
-          const res = await fetch(`/api/cars/${carId}`);
-          if (!res.ok) {
-            throw new Error(`HTTP error! status: ${res.status}`);
-          }
-          const data = await res.json();
-          setCar(data);
-        } catch (e: unknown) {
-          setError((e as Error).message);
-        } finally {
-          setLoading(false);
-        }
-      };
-      fetchCar();
-    } else {
-      setLoading(false);
-      setError("Car ID is missing");
+  const handleStripePayment = async () => {
+    if (!stripe || !elements) {
+      return;
     }
-  }, [carId]);
+
+    // 1. Call elements.submit() to validate and collect payment details
+    const { error: submitError } = await elements.submit();
+    if (submitError) {
+      setError(submitError.message || 'Payment details are incomplete or invalid.');
+      setLoading(false);
+      return;
+    }
+
+    if (totalPrice === 0 || !name || !email) {
+      setError("Please fill in all required contact details and select valid dates.");
+      setLoading(false);
+      return;
+    }
+
+    setLoading(true);
+    setError(null);
+
+    try {
+      const bookingId = `RC-${Date.now()}-${Math.floor(Math.random() * 1000)}`;
+
+      const { error: confirmError, paymentIntent } = await stripe.confirmPayment({
+        elements,
+        clientSecret,
+        confirmParams: {
+          return_url: `${window.location.origin}/confirmation?bookingId=${bookingId}&carId=${car.id}&carMake=${car.make}&carModel=${car.model}&startDate=${startDate}&endDate=${endDate}&extras=${extras.join(',')}&totalPrice=${totalPrice}&customerName=${name}&customerEmail=${email}`,
+          receipt_email: email,
+        },
+      });
+
+      if (confirmError) {
+        throw new Error(confirmError.message || 'Payment confirmation failed.');
+      }
+
+      if (paymentIntent.status === 'succeeded') {
+        router.push(`/confirmation?bookingId=${bookingId}&carId=${car.id}&carMake=${car.make}&carModel=${car.model}&startDate=${startDate}&endDate=${endDate}&extras=${extras.join(',')}&totalPrice=${totalPrice}&customerName=${name}&customerEmail=${email}`);
+      } else {
+        setError(`Payment status: ${paymentIntent.status}`);
+      }
+
+    } catch (e: any) {
+      console.error('Stripe payment error:', e);
+      setError(e.message || 'An unexpected error occurred during payment.');
+    } finally {
+      setLoading(false);
+    }
+  };
 
   const getNumberOfDays = () => {
     if (startDate && endDate) {
@@ -74,59 +116,6 @@ function CheckoutPageContent() {
   };
 
   const numberOfDays = getNumberOfDays();
-  const totalPrice = car ? car.price * numberOfDays : 0;
-
-  const handleVippsPayment = async () => {
-    const orderId = `rentcars-${Date.now()}`;
-    try {
-      const res = await fetch("/api/vipps", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({ orderId, amount: totalPrice }),
-      });
-
-      if (res.ok) {
-        const { redirectUrl } = await res.json();
-        window.location.href = redirectUrl;
-      } else {
-        const error = await res.json();
-        setError(error.message || "Failed to initiate Vipps payment.");
-      }
-    } catch (error) {
-      setError("Failed to initiate Vipps payment.");
-    }
-  };
-
-  const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault();
-    await handleVippsPayment();
-  };
-
-  if (loading) {
-    return (
-      <div className="flex justify-center items-center min-h-screen">
-        <Loading />
-      </div>
-    );
-  }
-
-  if (error) {
-    return (
-      <div className="flex justify-center items-center min-h-screen">
-        Error: {error}
-      </div>
-    );
-  }
-
-  if (!car) {
-    return (
-      <div className="flex justify-center items-center min-h-screen">
-        Car not found.
-      </div>
-    );
-  }
 
   return (
     <>
@@ -144,6 +133,9 @@ function CheckoutPageContent() {
 
       <main className="bg-white flex-grow">
         <div className="container mx-auto p-4 sm:p-6">
+          {error && (
+            <div className="text-center p-4 text-red-500 mb-4">Error: {error}</div>
+          )}
           <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
             <div>
               <div className="bg-white p-6 rounded-lg shadow-md mb-4">
@@ -263,12 +255,19 @@ function CheckoutPageContent() {
                 </div>
                 <div className="mt-6">
                   <h3 className="text-lg font-semibold mb-4">Payment</h3>
+                  <div className="mb-4">
+                    <PaymentElement />
+                  </div>
+
+
                   <div className="flex flex-col gap-4">
                     <button
-                      type="submit"
-                      className="w-full bg-red-500 text-white p-3 rounded-md hover:bg-red-600 focus:outline-none focus:ring-2 focus:ring-red-500 focus:ring-offset-2"
+                      type="button"
+                      onClick={handleStripePayment}
+                      disabled={!stripe || !elements || totalPrice === 0 || !name || !email || loading}
+                      className="w-full bg-red-500 text-white p-3 rounded-md hover:bg-red-600 focus:outline-none focus:ring-2 focus:ring-red-500 focus:ring-offset-2 disabled:opacity-50 disabled:cursor-not-allowed"
                     >
-                      Pay with Vipps
+                      Pay
                     </button>
                   </div>
                 </div>
@@ -283,9 +282,133 @@ function CheckoutPageContent() {
 }
 
 export default function CheckoutPage() {
+  const searchParams = useSearchParams();
+  const carId = searchParams.get("carId");
+  const startDate = searchParams.get("startDate");
+  const endDate = searchParams.get("endDate");
+  const extras = searchParams.getAll("extras");
+  const totalPrice = parseFloat(searchParams.get("totalPrice") || "0");
+
+  const [clientSecret, setClientSecret] = useState<string | null>(null);
+  const [loadingClientSecret, setLoadingClientSecret] = useState(true);
+  const [clientSecretError, setClientSecretError] = useState<string | null>(null);
+
+  const [car, setCar] = useState<Car | null>(null);
+  const [loadingCar, setLoadingCar] = useState(true);
+  const [carError, setCarError] = useState<string | null>(null);
+
+  useEffect(() => {
+    const fetchCar = async () => {
+      if (!carId) {
+        setCarError("Car ID is missing.");
+        setLoadingCar(false);
+        return;
+      }
+      try {
+        const res = await fetch(`/api/cars/${carId}`);
+        if (!res.ok) {
+          throw new Error(`HTTP error! status: ${res.status}`);
+        }
+        const data = await res.json();
+        setCar(data);
+      } catch (e: unknown) {
+        setCarError((e as Error).message || "Failed to load car details.");
+      } finally {
+        setLoadingCar(false);
+      }
+    };
+    fetchCar();
+  }, [carId]);
+
+  useEffect(() => {
+    const fetchClientSecret = async () => {
+      if (!carId || !startDate || !endDate || totalPrice === 0) {
+        setClientSecretError("Missing car details or dates for payment.");
+        setLoadingClientSecret(false);
+        return;
+      }
+
+      try {
+        const response = await fetch('/api/stripe/checkout-session', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({
+            carId,
+            startDate,
+            endDate,
+            extras,
+            totalPrice,
+            // customerName and customerEmail are not available here yet, will be passed from form
+            // bookingId will be generated on client side in CheckoutPageContent
+          }),
+        });
+
+        if (!response.ok) {
+          const errorData = await response.json();
+          throw new Error(errorData.error || 'Failed to create Payment Intent');
+        }
+
+        const { clientSecret } = await response.json();
+        setClientSecret(clientSecret);
+      } catch (e: any) {
+        console.error('Error fetching client secret:', e);
+        setClientSecretError(e.message || 'Failed to load payment options.');
+      } finally {
+        setLoadingClientSecret(false);
+      }
+    };
+
+    if (!loadingCar && !carError && car) { // Only fetch client secret if car details are loaded
+      fetchClientSecret();
+    }
+  }, [carId, startDate, endDate, extras, totalPrice, loadingCar, carError, car]);
+
+  if (loadingCar || loadingClientSecret) {
+    return (
+      <div className="flex justify-center items-center min-h-screen">
+        <Loading />
+      </div>
+    );
+  }
+
+  if (carError || clientSecretError) {
+    return (
+      <div className="flex justify-center items-center min-h-screen">
+        Error: {carError || clientSecretError}
+      </div>
+    );
+  }
+
+  if (!car) {
+    return (
+      <div className="flex justify-center items-center min-h-screen">
+        <p className="text-2xl text-primary">Car not found.</p>
+      </div>
+    );
+  }
+
+  if (!clientSecret) {
+    return (
+      <div className="flex justify-center items-center min-h-screen">
+        <p className="text-2xl text-accent">Payment options not available.</p>
+      </div>
+    );
+  }
+
   return (
     <Suspense fallback={<Loading />}>
-      <CheckoutPageContent />
+      <Elements stripe={stripePromise} options={{ clientSecret }}>
+        <CheckoutPageContent 
+          car={car}
+          startDate={startDate}
+          endDate={endDate}
+          extras={extras}
+          totalPrice={totalPrice}
+          clientSecret={clientSecret}
+        />
+      </Elements>
     </Suspense>
   );
 }

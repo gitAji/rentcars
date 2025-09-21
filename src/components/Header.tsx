@@ -11,7 +11,7 @@ export default function Header() {
   return (
     <header className="absolute top-0 left-0  w-full z-50 p-4">
       <div className="container mx-auto flex justify-between items-center text-white">
-        <Link href="/">
+        <Link href="/" className="z-50">
           <div className="relative h-16 w-40 sm:h-20 sm:w-50 md:h-24 md:w-60"> {/* Adjust width based on aspect ratio */}
             <Image src="/logo.png" alt="RentCars Logo" layout="fill" objectFit="contain" />
           </div>
