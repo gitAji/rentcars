@@ -97,9 +97,9 @@ function CheckoutPageContent({ car, startDate, endDate, extras, totalPrice, clie
         setError(`Payment status: ${paymentIntent.status}`);
       }
 
-    } catch (e: any) {
+    } catch (e: unknown) {
       console.error('Stripe payment error:', e);
-      setError(e.message || 'An unexpected error occurred during payment.');
+      setError(e instanceof Error ? e.message : 'An unexpected error occurred during payment.');
     } finally {
       setLoading(false);
     }
