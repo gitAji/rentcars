@@ -1,5 +1,5 @@
 import { NextResponse } from 'next/server';
-import { PDFDocument, rgb, StandardFonts, PageSizes } from 'pdf-lib';
+import { PDFDocument, rgb, StandardFonts, PageSizes, PDFFont } from 'pdf-lib';
 import fs from 'fs/promises';
 import path from 'path';
 
@@ -72,7 +72,7 @@ export async function POST(req: Request) {
     });
     yOffset -= 20;
 
-    const addDetail = (label: string, value: string, labelFont: any, labelSize: number, valueFont: any, valueSize: number) => {
+    const addDetail = (label: string, value: string, labelFont: PDFFont, labelSize: number, valueFont: PDFFont, valueSize: number) => {
       page.drawText(`${label}:`, {
         x: 50,
         y: yOffset,
@@ -190,11 +190,12 @@ export async function POST(req: Request) {
       },
     });
 
-  } catch (error: any) {
+  } catch (error) {
     console.error('Error generating PDF:', error);
-    if (error.stack) {
+    if (error instanceof Error && error.stack) {
       console.error('Error stack:', error.stack);
     }
-    return NextResponse.json({ error: 'Failed to generate PDF', details: error.message || String(error) }, { status: 500 });
+    const message = error instanceof Error ? error.message : String(error);
+    return NextResponse.json({ error: 'Failed to generate PDF', details: message }, { status: 500 });
   }
 }

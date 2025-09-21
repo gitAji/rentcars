@@ -1,33 +1,16 @@
 "use client";
 
 import { Suspense } from 'react';
-import { useEffect, useState } from "react";
 import { useSearchParams } from "next/navigation";
 import Header from "@/components/Header";
 import Link from "next/link";
 import Loading from "@/components/loading";
-
-interface Booking {
-  id: string;
-  carMake: string;
-  carModel: string;
-  customerName: string;
-  customerEmail: string;
-  startDate: string;
-  endDate: string;
-  totalPrice: number;
-  bookingDate: string;
-  extras: string[];
-  message?: string;
-  details?: string;
-}
 
 function ConfirmationPageContent() {
   const searchParams = useSearchParams();
 
   // Extract booking details directly from searchParams
   const bookingId = searchParams.get("bookingId");
-  const carId = searchParams.get("carId");
   const carMake = searchParams.get("carMake");
   const carModel = searchParams.get("carModel");
   const customerName = searchParams.get("customerName");

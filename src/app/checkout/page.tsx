@@ -352,9 +352,9 @@ export default function CheckoutPage() {
 
         const { clientSecret } = await response.json();
         setClientSecret(clientSecret);
-      } catch (e: any) {
+      } catch (e: unknown) {
         console.error('Error fetching client secret:', e);
-        setClientSecretError(e.message || 'Failed to load payment options.');
+        setClientSecretError(e instanceof Error ? e.message : 'Failed to load payment options.');
       } finally {
         setLoadingClientSecret(false);
       }

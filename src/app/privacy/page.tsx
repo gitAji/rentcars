@@ -5,7 +5,7 @@ import Header from "../../components/Header";
 import Footer from "../../components/Footer";
 import Loading from "../../components/loading"; // Added
 
-import Image from 'next/image';
+
 
 export default function PrivacyPolicyPage() {
   const [isLoading, setIsLoading] = useState(true); // Added

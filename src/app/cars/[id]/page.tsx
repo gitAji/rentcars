@@ -6,6 +6,7 @@ import Header from "@/components/Header";
 import Loading from "@/components/loading";
 
 import Image from 'next/image';
+import Link from 'next/link';
 
 // Define interfaces for type safety
 interface Car {
@@ -200,8 +201,8 @@ export default function CarDetailsPage({ params }: { params: Promise<{ id: strin
       <div className="container mx-auto p-6 bg-primary text-neutral-dark rounded-lg shadow-lg flex-grow mb-2">
         <div className="mb-4 font-bold">
           <p className="text-sm text-gray-500">
-            <a href="/" className="hover:underline">Home</a> | 
-            <a href="/cars" className="hover:underline">Cars</a> | 
+            <Link href="/" className="hover:underline">Home</Link> | 
+            <Link href="/cars" className="hover:underline">Cars</Link> | 
             <span>{car.make} {car.model}</span>
           </p>
         </div>
