@@ -182,9 +182,9 @@ export async function POST(req: Request) {
     });
 
     const pdfBytes = await pdfDoc.save();
-    const pdfBuffer = Buffer.from(pdfBytes);
 
-    return new NextResponse(pdfBuffer, {
+    // @ts-ignore - This is a workaround for a build issue with Next.js and pdf-lib types.
+    return new NextResponse(pdfBytes, {
       headers: {
         'Content-Type': 'application/pdf',
         'Content-Disposition': `attachment; filename="booking-${bookingDetails.id}.pdf"`,
