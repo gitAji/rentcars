@@ -183,7 +183,7 @@ export async function POST(req: Request) {
 
     const pdfBytes = await pdfDoc.save();
 
-    // @ts-ignore - This is a workaround for a build issue with Next.js and pdf-lib types.
+    // @ts-expect-error - This is a workaround for a build issue with Next.js and pdf-lib types.
     return new NextResponse(pdfBytes, {
       headers: {
         'Content-Type': 'application/pdf',

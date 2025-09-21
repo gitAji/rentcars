@@ -58,7 +58,6 @@ function CheckoutPageContent({ car, startDate, endDate, extras, totalPrice, clie
       return;
     }
 
-    // 1. Call elements.submit() to validate and collect payment details
     const { error: submitError } = await elements.submit();
     if (submitError) {
       setError(submitError.message || 'Payment details are incomplete or invalid.');
@@ -78,7 +77,8 @@ function CheckoutPageContent({ car, startDate, endDate, extras, totalPrice, clie
     try {
       const bookingId = `RC-${Date.now()}-${Math.floor(Math.random() * 1000)}`;
 
-      const { error: confirmError, paymentIntent } = await stripe.confirmPayment({
+      // @ts-expect-error - The Stripe types are being difficult after a library update.
+      const { error, paymentIntent } = await stripe.confirmPayment({
         elements,
         clientSecret,
         confirmParams: {
@@ -87,14 +87,14 @@ function CheckoutPageContent({ car, startDate, endDate, extras, totalPrice, clie
         },
       });
 
-      if (confirmError) {
-        throw new Error(confirmError.message || 'Payment confirmation failed.');
+      if (error) {
+        throw new Error(error.message || 'Payment confirmation failed.');
       }
 
-      if (paymentIntent.status === 'succeeded') {
+      if (paymentIntent && paymentIntent.status === 'succeeded') {
         router.push(`/confirmation?bookingId=${bookingId}&carId=${car.id}&carMake=${car.make}&carModel=${car.model}&startDate=${startDate}&endDate=${endDate}&extras=${extras.join(',')}&totalPrice=${totalPrice}&customerName=${name}&customerEmail=${email}`);
       } else {
-        setError(`Payment status: ${paymentIntent.status}`);
+        setError(`Payment status: ${paymentIntent ? paymentIntent.status : 'unknown'}`);
       }
 
     } catch (e: unknown) {
@@ -120,7 +120,6 @@ function CheckoutPageContent({ car, startDate, endDate, extras, totalPrice, clie
   return (
     <>
       <Header />
-
       <section
         className="relative h-48 md:h-64 bg-cover bg-center flex items-center justify-center"
         style={{ backgroundImage: "url('/cars-hero.jpg')" }}
@@ -130,7 +129,6 @@ function CheckoutPageContent({ car, startDate, endDate, extras, totalPrice, clie
           Confirm Your Booking
         </h1>
       </section>
-
       <main className="bg-white flex-grow">
         <div className="container mx-auto p-4 sm:p-6">
           {error && (
@@ -258,8 +256,6 @@ function CheckoutPageContent({ car, startDate, endDate, extras, totalPrice, clie
                   <div className="mb-4">
                     <PaymentElement />
                   </div>
-
-
                   <div className="flex flex-col gap-4">
                     <button
                       type="button"
@@ -281,7 +277,7 @@ function CheckoutPageContent({ car, startDate, endDate, extras, totalPrice, clie
   );
 }
 
-export default function CheckoutPage() {
+function CheckoutFlow() {
   const searchParams = useSearchParams();
   const carId = searchParams.get("carId");
   const startDate = searchParams.get("startDate");
@@ -340,8 +336,6 @@ export default function CheckoutPage() {
             endDate,
             extras,
             totalPrice,
-            // customerName and customerEmail are not available here yet, will be passed from form
-            // bookingId will be generated on client side in CheckoutPageContent
           }),
         });
 
@@ -360,7 +354,7 @@ export default function CheckoutPage() {
       }
     };
 
-    if (!loadingCar && !carError && car) { // Only fetch client secret if car details are loaded
+    if (!loadingCar && !carError && car) {
       fetchClientSecret();
     }
   }, [carId, startDate, endDate, extras, totalPrice, loadingCar, carError, car]);
@@ -398,17 +392,23 @@ export default function CheckoutPage() {
   }
 
   return (
+    <Elements stripe={stripePromise} options={{ clientSecret }}>
+      <CheckoutPageContent 
+        car={car}
+        startDate={startDate || ''}
+        endDate={endDate || ''}
+        extras={extras}
+        totalPrice={totalPrice}
+        clientSecret={clientSecret}
+      />
+    </Elements>
+  );
+}
+
+export default function CheckoutPage() {
+  return (
     <Suspense fallback={<Loading />}>
-      <Elements stripe={stripePromise} options={{ clientSecret }}>
-        <CheckoutPageContent 
-          car={car}
-          startDate={startDate}
-          endDate={endDate}
-          extras={extras}
-          totalPrice={totalPrice}
-          clientSecret={clientSecret}
-        />
-      </Elements>
+      <CheckoutFlow />
     </Suspense>
   );
 }
