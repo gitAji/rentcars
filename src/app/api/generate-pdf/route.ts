@@ -182,10 +182,10 @@ export async function POST(req: Request) {
     });
 
     const pdfBytes = await pdfDoc.save();
+    const pdfBlob = new Blob([pdfBytes], { type: 'application/pdf' });
 
-    return new NextResponse(pdfBytes, {
+    return new NextResponse(pdfBlob, {
       headers: {
-        'Content-Type': 'application/pdf',
         'Content-Disposition': `attachment; filename="booking-${bookingDetails.id}.pdf"`,
       },
     });
