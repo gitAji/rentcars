@@ -124,7 +124,7 @@ function CarsPageContent() {
                       setFilterTown(newTown);
                       handleFilterChange("town", newTown);
                     }}
-                    className={`px-4 py-2 rounded-md text-sm font-medium ${
+                    className={`px-4 py-2 rounded-md text-sm font-medium cursor-pointer ${
                       filterTown === town
                         ? "bg-red-500 text-white"
                         : "bg-white text-neutral-dark border border-gray-300"
@@ -148,7 +148,7 @@ function CarsPageContent() {
                       setFilterCarType(newCarType);
                       handleFilterChange("carType", newCarType);
                     }}
-                    className={`px-4 py-2 rounded-md text-sm font-medium ${
+                    className={`px-4 py-2 rounded-md text-sm font-medium cursor-pointer ${
                       filterCarType === type
                         ? "bg-red-500 text-white"
                         : "bg-white text-neutral-dark border border-gray-300"

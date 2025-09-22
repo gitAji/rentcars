@@ -58,21 +58,25 @@ function CheckoutPageContent({ car, startDate, endDate, extras, totalPrice, clie
       return;
     }
 
+    if (!name || !email || !phone) {
+      setError("Please fill in all required fields: Full Name, Email, and Phone.");
+      return;
+    }
+
+    if (totalPrice === 0) {
+      setError("Please select valid dates to calculate the total price.");
+      return;
+    }
+
+    setLoading(true);
+    setError(null);
+
     const { error: submitError } = await elements.submit();
     if (submitError) {
       setError(submitError.message || 'Payment details are incomplete or invalid.');
       setLoading(false);
       return;
     }
-
-    if (totalPrice === 0 || !name || !email) {
-      setError("Please fill in all required contact details and select valid dates.");
-      setLoading(false);
-      return;
-    }
-
-    setLoading(true);
-    setError(null);
 
     try {
       const bookingId = `RC-${Date.now()}-${Math.floor(Math.random() * 1000)}`;
@@ -260,8 +264,8 @@ function CheckoutPageContent({ car, startDate, endDate, extras, totalPrice, clie
                     <button
                       type="button"
                       onClick={handleStripePayment}
-                      disabled={!stripe || !elements || totalPrice === 0 || !name || !email || loading}
-                      className="w-full bg-red-500 text-white p-3 rounded-md hover:bg-red-600 focus:outline-none focus:ring-2 focus:ring-red-500 focus:ring-offset-2 disabled:opacity-50 disabled:cursor-not-allowed"
+                      disabled={!stripe || !elements || totalPrice === 0 || !name || !email || !phone || loading}
+                      className="w-full bg-red-500 text-white p-3 rounded-md hover:bg-red-600 focus:outline-none focus:ring-2 focus:ring-red-500 focus:ring-offset-2 disabled:opacity-50 disabled:cursor-not-allowed cursor-pointer"
                     >
                       Pay
                     </button>

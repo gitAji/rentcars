@@ -20,9 +20,15 @@ export default function SearchForm({ onSearch }: SearchFormProps) {
   const [carType, setCarType] = useState("");
   const [startDate, setStartDate] = useState("");
   const [endDate, setEndDate] = useState("");
+  const [error, setError] = useState<string | null>(null);
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
+    if (!town || !startDate || !endDate) {
+      setError("Please select a town, start date, and end date.");
+      return;
+    }
+    setError(null);
     onSearch({
       ...(town && { town }),
       ...(adults && { adults: parseInt(adults) }),
@@ -121,9 +127,11 @@ export default function SearchForm({ onSearch }: SearchFormProps) {
         </div>
       </div>
 
+      {error && <p className="text-red-500 text-center mb-4">{error}</p>}
+
       <button
         type="submit"
-        className="w-full bg-[#ff5757] text-white p-3 rounded-md hover:bg-[#e64d4d] focus:outline-none focus:ring-2 focus:ring-[#ff5757] focus:ring-offset-2"
+        className="w-full bg-[#ff5757] text-white p-3 rounded-md hover:bg-[#e64d4d] focus:outline-none focus:ring-2 focus:ring-[#ff5757] focus:ring-offset-2 cursor-pointer"
       >
         Search Cars
       </button>

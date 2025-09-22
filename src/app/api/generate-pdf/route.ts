@@ -53,7 +53,7 @@ export async function POST(req: Request) {
       color: textColor,
     });
 
-    let yOffset = pageHeight - 150; // Starting Y for main content
+    let yOffset = pageHeight - logoDisplayHeight - 100; // Starting Y for main content
 
     // Section: Customer Details
     page.drawText('Customer Details', {

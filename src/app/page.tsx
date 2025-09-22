@@ -165,7 +165,7 @@ export default function HomePage() {
                 <button
                   key={index}
                   onClick={() => setCurrentTestimonialIndex(index)}
-                  className={`h-3 w-3 rounded-full ${index === currentTestimonialIndex ? 'bg-[#ff5757]' : 'bg-gray-300'} focus:outline-none`}
+                  className={`h-3 w-3 rounded-full cursor-pointer ${index === currentTestimonialIndex ? 'bg-[#ff5757]' : 'bg-gray-300'} focus:outline-none`}
                 ></button>
               ))}
             </div>

@@ -46,10 +46,10 @@ export default function Header() {
               </svg>
             </button>
             <nav className="flex flex-col items-center gap-8" role="navigation">
-              <Link href="/" className="text-2xl text-white hover:text-gray-300 font-semibold" onClick={() => setIsOpen(false)}>Home</Link>
-              <Link href="/about" className="text-2xl text-white hover:text-gray-300 font-semibold" onClick={() => setIsOpen(false)}>About</Link>
-              <Link href="/cars" className="text-2xl text-white hover:text-gray-300 font-semibold" onClick={() => setIsOpen(false)}>Cars</Link>
-              <Link href="/contact" className="text-2xl text-white hover:text-gray-300 font-semibold" onClick={() => setIsOpen(false)}>Contact</Link>
+              <Link href="/" className="text-2xl text-white hover:text-gray-300 font-semibold cursor-pointer" onClick={() => setIsOpen(false)}>Home</Link>
+              <Link href="/about" className="text-2xl text-white hover:text-gray-300 font-semibold cursor-pointer" onClick={() => setIsOpen(false)}>About</Link>
+              <Link href="/cars" className="text-2xl text-white hover:text-gray-300 font-semibold cursor-pointer" onClick={() => setIsOpen(false)}>Cars</Link>
+              <Link href="/contact" className="text-2xl text-white hover:text-gray-300 font-semibold cursor-pointer" onClick={() => setIsOpen(false)}>Contact</Link>
             </nav>
           </div>
         )}

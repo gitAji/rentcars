@@ -56,14 +56,11 @@ export default function ContactPage() {
 
       return (
     <div className="flex flex-col min-h-screen">
-              <div className="pb-24">
-      <Header />
-      </div>
-
-      <section
+              <section
         className="relative h-[300px] bg-cover bg-center flex items-center justify-center"
         style={{ backgroundImage: "url('/contact-hero.jpg')" }}
       >
+        <Header />
         <div className="absolute inset-0 bg-gray-800 bg-opacity-40" />
         <h1 className="relative z-10 text-4xl md:text-5xl text-gray-800 sm:text-white font-bold">
           Contact Us
@@ -141,7 +138,7 @@ export default function ContactPage() {
               <button
                 type="submit"
                 disabled={isSubmitting}
-                className="bg-[#ff5757] text-white px-6 py-3 rounded-md hover:bg-[#e64d4d] disabled:opacity-50 disabled:cursor-not-allowed"
+                className="bg-[#ff5757] text-white px-6 py-3 rounded-md hover:bg-[#e64d4d] disabled:opacity-50 disabled:cursor-not-allowed cursor-pointer"
               >
                 {isSubmitting ? "Sending..." : "Send Message"}
               </button>

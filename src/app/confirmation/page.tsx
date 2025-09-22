@@ -124,7 +124,7 @@ function ConfirmationPageContent() {
             </Link>
             <button
               onClick={handleDownloadPdf}
-              className="w-full sm:w-auto bg-green-600 text-white px-5 py-3 rounded-md hover:bg-green-700 focus:outline-none focus:ring-2 focus:ring-green-600 focus:ring-offset-2 transition-colors duration-200 text-lg font-semibold" // Increased padding, font size, hover, transition
+              className="w-full sm:w-auto bg-green-600 text-white px-5 py-3 rounded-md hover:bg-green-700 focus:outline-none focus:ring-2 focus:ring-green-600 focus:ring-offset-2 transition-colors duration-200 text-lg font-semibold cursor-pointer" // Increased padding, font size, hover, transition
             >
               Download Booking PDF
             </button>
