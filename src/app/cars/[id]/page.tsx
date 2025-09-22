@@ -1,10 +1,9 @@
 "use client";
 
-import { useEffect, useState, use, useMemo, useCallback } from "react";
-import { useRouter } from "next/navigation";
+import { Suspense, useEffect, useState, use, useMemo, useCallback } from "react";
+import { useRouter, useSearchParams } from "next/navigation";
 import Header from "@/components/Header";
 import Loading from "@/components/loading";
-
 import Image from 'next/image';
 import Link from 'next/link';
 
@@ -16,7 +15,7 @@ interface Car {
   year: number;
   price: number;
   imageUrl: string;
-  imageUrls: string[]; // Added
+  imageUrls: string[];
   description?: string;
   features?: string[];
   terms?: string;
@@ -30,39 +29,34 @@ interface Extra {
   price: number;
 }
 
-export default function CarDetailsPage({ params }: { params: Promise<{ id: string }> }) { // params is a Promise
+function CarDetailsContent({ id }: { id: string }) {
   const router = useRouter();
-  const { id } = use(params);
+  const searchParams = useSearchParams();
+
   const [car, setCar] = useState<Car | null>(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
   const [selectedExtras, setSelectedExtras] = useState<string[]>([]);
   const [currentImageIndex, setCurrentImageIndex] = useState(0);
-  const [startDate, setStartDate] = useState("");
-  const [endDate, setEndDate] = useState("");
+  const [startDate, setStartDate] = useState(searchParams.get("startDate") || "");
+  const [endDate, setEndDate] = useState(searchParams.get("endDate") || "");
   const [totalPrice, setTotalPrice] = useState(0);
   const [extrasOptions, setExtrasOptions] = useState<Extra[]>([]);
 
   const carImages = useMemo(() => {
-    if (!car) return []; // Return empty array if car is null
-    return car.imageUrls || []; // Use car.imageUrls, or empty array if not present
-  }, [car]); // Depend on car object
+    if (!car) return [];
+    return car.imageUrls || [];
+  }, [car]);
 
   const goToNextImage = useCallback(() => {
-    if (carImages.length === 0) return; // Prevent error if no images
-    setCurrentImageIndex((prevIndex) =>
-      (prevIndex + 1) % carImages.length
-    );
-  }, [carImages.length, setCurrentImageIndex]);
+    if (carImages.length === 0) return;
+    setCurrentImageIndex((prevIndex) => (prevIndex + 1) % carImages.length);
+  }, [carImages.length]);
 
   const goToPrevImage = useCallback(() => {
-    if (carImages.length === 0) return; // Prevent error if no images
-    setCurrentImageIndex((prevIndex) =>
-      (prevIndex - 1 + carImages.length) % carImages.length
-    );
-  }, [carImages.length, setCurrentImageIndex]);
-
-  
+    if (carImages.length === 0) return;
+    setCurrentImageIndex((prevIndex) => (prevIndex - 1 + carImages.length) % carImages.length);
+  }, [carImages.length]);
 
   useEffect(() => {
     const fetchExtras = async () => {
@@ -77,7 +71,6 @@ export default function CarDetailsPage({ params }: { params: Promise<{ id: strin
         setError((e as Error).message || "Failed to load extras");
       }
     };
-
     fetchExtras();
   }, []);
 
@@ -98,7 +91,6 @@ export default function CarDetailsPage({ params }: { params: Promise<{ id: strin
         setLoading(false);
       }
     };
-
     if (id) {
       fetchCar();
     }
@@ -116,7 +108,6 @@ export default function CarDetailsPage({ params }: { params: Promise<{ id: strin
       const diffTime = Math.abs(end.getTime() - start.getTime());
       const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
       let price = car.price * diffDays;
-
       selectedExtras.forEach((extraName) => {
         const extra = extrasOptions.find((e) => e.name === extraName);
         if (extra) {
@@ -141,7 +132,6 @@ export default function CarDetailsPage({ params }: { params: Promise<{ id: strin
       alert("Please select a valid start and end date to proceed.");
       return;
     }
-
     const query = new URLSearchParams({
       carId: car.id,
       startDate,
@@ -149,7 +139,6 @@ export default function CarDetailsPage({ params }: { params: Promise<{ id: strin
       extras: selectedExtras.join(","),
       totalPrice: totalPrice.toFixed(2),
     }).toString();
-
     router.push(`/checkout?${query}`);
   };
 
@@ -177,16 +166,9 @@ export default function CarDetailsPage({ params }: { params: Promise<{ id: strin
     );
   }
 
-  
-
-  
-
   return (
     <div className="flex flex-col min-h-screen">
-      {/* Header */}
       <Header />
-
-      {/* Hero Section */}
       <section
         className="relative h-[300px] bg-cover bg-center flex items-center justify-center"
         style={{ backgroundImage: `url(${car.imageUrl || "/default-car-hero.jpg"})` }}
@@ -196,8 +178,6 @@ export default function CarDetailsPage({ params }: { params: Promise<{ id: strin
           {car.make} {car.model}
         </h1>
       </section>
-
-      {/* Main Content */}
       <div className="container mx-auto p-6 bg-primary text-neutral-dark rounded-lg shadow-lg flex-grow mb-2">
         <div className="mb-4 font-bold">
           <p className="text-sm text-gray-500">
@@ -206,8 +186,6 @@ export default function CarDetailsPage({ params }: { params: Promise<{ id: strin
             <span>{car.make} {car.model}</span>
           </p>
         </div>
-        
-
         <div className="grid grid-cols-1 md:grid-cols-2 gap-8 mb-6">
           <div className="relative w-full h-64 sm:h-80 md:h-96 rounded-lg shadow-md overflow-hidden">
             <Image
@@ -217,7 +195,6 @@ export default function CarDetailsPage({ params }: { params: Promise<{ id: strin
               height={300}
               className="w-full h-full object-cover transition-opacity duration-500 ease-in-out"
             />
-            {/* Navigation Buttons */}
             <button
               onClick={goToPrevImage}
               className="absolute top-1/2 left-4 -translate-y-1/2 bg-black bg-opacity-50 text-white p-2 rounded-full focus:outline-none hover:bg-opacity-75 transition-colors"
@@ -236,7 +213,6 @@ export default function CarDetailsPage({ params }: { params: Promise<{ id: strin
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M9 5l7 7-7 7"></path>
               </svg>
             </button>
-            {/* Image Indicators */}
             <div className="absolute bottom-4 left-1/2 -translate-x-1/2 flex space-x-2">
               {carImages.map((_, idx) => (
                 <button
@@ -248,14 +224,12 @@ export default function CarDetailsPage({ params }: { params: Promise<{ id: strin
               ))}
             </div>
           </div>
-
           <div>
             <h2 className="text-2xl font-bold mb-2 text-primary">Description</h2>
             <p className="text-neutral text-base mb-4">
               {car.description ||
                 `Discover the features and comfort of the ${car.make} ${car.model}. This car is an excellent choice for your travel needs, offering a blend of performance and style.`}
             </p>
-
             <h2 className="text-2xl font-bold mb-2 text-primary">Included Features</h2>
             <ul className="list-disc list-inside text-neutral text-base mb-4">
               {car.features && car.features.length > 0 ? (
@@ -268,11 +242,11 @@ export default function CarDetailsPage({ params }: { params: Promise<{ id: strin
                 </>
               )}
             </ul>
-
-            <h2 className="text-2xl font-bold mb-2 text-primary">Terms and Conditions</h2>            <p className="text-neutral text-base mb-4">              {car.terms || `Minimum rental age is 21. Valid driver's license required. Fuel policy: full to full,The vehicle must be returned in the same clean condition as delivered. A cleaning fee may apply if the vehicle requires excessive cleaning upon return.`}            </p>
+            <h2 className="text-2xl font-bold mb-2 text-primary">Terms and Conditions</h2>
+            <p className="text-neutral text-base mb-4">              {car.terms || `Minimum rental age is 21. Valid driver's license required. Fuel policy: full to full,The vehicle must be returned in the same clean condition as delivered. A cleaning fee may apply if the vehicle requires excessive cleaning upon return.`}
+            </p>
           </div>
         </div>
-
         <div className="grid grid-cols-1 sm:grid-cols-3 gap-8 mb-6 items-end">
           <div>
             <p className="text-base font-bold">Year: {car.year}</p>
@@ -292,7 +266,7 @@ export default function CarDetailsPage({ params }: { params: Promise<{ id: strin
               id="startDate"
               value={startDate}
               onChange={(e) => setStartDate(e.target.value)}
-              min={new Date().toISOString().split("T")[0]} // Prevent past dates
+              min={new Date().toISOString().split("T")[0]}
               className="mt-1 block w-full p-2 border border-gray-300 rounded-md shadow-sm focus:ring-primary focus:border-primary"
               aria-required="true"
             />
@@ -309,13 +283,12 @@ export default function CarDetailsPage({ params }: { params: Promise<{ id: strin
               id="endDate"
               value={endDate}
               onChange={(e) => setEndDate(e.target.value)}
-              min={startDate || new Date().toISOString().split("T")[0]} // Prevent end date before start date
+              min={startDate || new Date().toISOString().split("T")[0]}
               className="mt-1 block w-full p-2 border border-gray-300 rounded-md shadow-sm focus:ring-primary focus:border-primary"
               aria-required="true"
             />
           </div>
         </div>
-
         <h2 className="text-2xl font-bold mb-4 text-primary">Optional Extras</h2>
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 mb-6">
           {extrasOptions.map((extra) => (
@@ -337,12 +310,10 @@ export default function CarDetailsPage({ params }: { params: Promise<{ id: strin
             </div>
           ))}
         </div>
-
         <div className="bg-gray-100 p-6 rounded-lg shadow-inner">
           <h2 className="text-3xl font-bold mb-4 text-primary text-center">
             Total Price: kr{totalPrice.toFixed(2)}
           </h2>
-
           <button
             onClick={handleCheckout}
             disabled={!car || !startDate || !endDate || totalPrice === 0}
@@ -354,5 +325,13 @@ export default function CarDetailsPage({ params }: { params: Promise<{ id: strin
         </div>
       </div>
     </div>
+  );
+}
+
+export default function CarDetailsPage({ params }: { params: { id: string } }) {
+  return (
+    <Suspense fallback={<Loading />}>
+      <CarDetailsContent id={params.id} />
+    </Suspense>
   );
 }
