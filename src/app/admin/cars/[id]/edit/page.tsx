@@ -141,7 +141,7 @@ function EditCarPage({ params }: { params: { id: string } }) {
       const newOtherImagesToUpload = otherImages.filter(file => file instanceof File); // Filter out existing URLs (which are strings)
       const existingOtherImageUrls = otherImagePreviews.filter(preview => typeof preview === 'string'); // Keep existing URLs
 
-      let uploadedOtherImageUrls: string[] = [];
+      const uploadedOtherImageUrls: string[] = [];
       if (newOtherImagesToUpload.length > 0) {
         const uploadPromises = newOtherImagesToUpload.map(file => {
           const fileName = `${Date.now()}-${file.name}`;
@@ -183,8 +183,12 @@ function EditCarPage({ params }: { params: { id: string } }) {
       alert('Car updated successfully!');
       router.push('/admin/cars'); // Redirect to manage cars page
 
-    } catch (error: any) {
-      setError(error.message);
+    } catch (error: unknown) {
+      if (error instanceof Error) {
+        setError(error.message);
+      } else {
+        setError('An unknown error occurred.');
+      }
     } finally {
       setLoadingSubmit(false);
     }

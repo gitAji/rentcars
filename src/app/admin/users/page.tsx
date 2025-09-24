@@ -24,8 +24,12 @@ function ManageUsersPage() {
       }
       const data: UserProfile[] = await res.json();
       setUsers(data);
-    } catch (err: any) {
-      setError(err.message);
+    } catch (err: unknown) {
+      if (err instanceof Error) {
+        setError(err.message);
+      } else {
+        setError('An unknown error occurred.');
+      }
     } finally {
       setLoading(false);
     }
@@ -50,8 +54,12 @@ function ManageUsersPage() {
         }
         // Update local state
         setUsers(users.map(user => user.id === userId ? { ...user, role: newRole } : user));
-      } catch (err: any) {
-        setError(err.message);
+      } catch (err: unknown) {
+        if (err instanceof Error) {
+          setError(err.message);
+        } else {
+          setError('An unknown error occurred.');
+        }
       }
     }
   };
@@ -69,8 +77,12 @@ function ManageUsersPage() {
         }
         // Update local state
         setUsers(users.filter(user => user.id !== userId));
-      } catch (err: any) {
-        setError(err.message);
+      } catch (err: unknown) {
+        if (err instanceof Error) {
+          setError(err.message);
+        } else {
+          setError('An unknown error occurred.');
+        }
       }
     }
   };

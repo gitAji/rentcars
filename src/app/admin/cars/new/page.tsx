@@ -92,7 +92,7 @@ function NewCarPage() {
       const { data: { publicUrl: mainPublicUrl } } = supabase.storage.from('car_images').getPublicUrl(mainImageData.path);
 
       // 2. Upload other images
-      let otherPublicUrls: string[] = [];
+      const otherPublicUrls: string[] = [];
       if (otherImages.length > 0) {
         const uploadPromises = otherImages.map(file => {
           const fileName = `${Date.now()}-${file.name}`;
@@ -134,8 +134,12 @@ function NewCarPage() {
       alert('Car added successfully!');
       router.push('/admin');
 
-    } catch (error: any) {
-      setError(error.message);
+    } catch (error: unknown) {
+      if (error instanceof Error) {
+        setError(error.message);
+      } else {
+        setError('An unknown error occurred.');
+      }
     } finally {
       setLoading(false);
     }

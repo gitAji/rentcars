@@ -16,8 +16,11 @@ export async function GET() {
     const uniqueTowns = [...new Set(towns)];
 
     return NextResponse.json(uniqueTowns);
-  } catch (error: any) {
+  } catch (error: unknown) {
     console.error('Error in GET /api/towns:', error);
-    return NextResponse.json({ error: 'Internal server error', details: error.message }, { status: 500 });
+    if (error instanceof Error) {
+      return NextResponse.json({ error: 'Internal server error', details: error.message }, { status: 500 });
+    }
+    return NextResponse.json({ error: 'Internal server error', details: 'An unknown error occurred.' }, { status: 500 });
   }
 }

@@ -43,8 +43,12 @@ function AdminPage() {
         setBookingCount(bookings || 0);
         setRecentBookings(recent || []);
 
-      } catch (error: any) {
-        setError(error.message);
+      } catch (error: unknown) {
+        if (error instanceof Error) {
+          setError(error.message);
+        } else {
+          setError('An unknown error occurred.');
+        }
       } finally {
         setLoading(false);
       }

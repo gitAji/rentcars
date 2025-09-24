@@ -6,7 +6,7 @@ const supabaseAdmin = createClient(
   process.env.SUPABASE_SERVICE_ROLE_KEY! // Use the service role key
 );
 
-export async function GET(req: Request) {
+export async function GET(_req: Request) {
   try {
     const { data: { users }, error: authError } = await supabaseAdmin.auth.admin.listUsers();
     if (authError) throw authError;
@@ -30,8 +30,11 @@ export async function GET(req: Request) {
     });
 
     return NextResponse.json(mergedUsers);
-  } catch (error: any) {
+  } catch (error: unknown) {
     console.error('Error listing users:', error);
-    return NextResponse.json({ error: 'Failed to list users', details: error.message }, { status: 500 });
+    if (error instanceof Error) {
+      return NextResponse.json({ error: 'Failed to list users', details: error.message }, { status: 500 });
+    }
+    return NextResponse.json({ error: 'Failed to list users', details: 'An unknown error occurred.' }, { status: 500 });
   }
 }

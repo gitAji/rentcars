@@ -27,8 +27,11 @@ export async function GET(request: Request, { params }: { params: { id: string }
 
     return NextResponse.json({ available: isAvailable });
 
-  } catch (error: any) {
+  } catch (error: unknown) {
     console.error('Error checking car availability:', error);
-    return NextResponse.json({ error: 'Internal server error', details: error.message }, { status: 500 });
+    if (error instanceof Error) {
+      return NextResponse.json({ error: 'Internal server error', details: error.message }, { status: 500 });
+    }
+    return NextResponse.json({ error: 'Internal server error', details: 'An unknown error occurred.' }, { status: 500 });
   }
 }

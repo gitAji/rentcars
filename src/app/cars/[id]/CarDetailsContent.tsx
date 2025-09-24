@@ -42,7 +42,6 @@ export default function CarDetailsContent({ car, id }: CarDetailsContentProps) {
   const startDate = searchParams.get("startDate") || "";
   const endDate = searchParams.get("endDate") || "";
 
-  const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [currentImageIndex, setCurrentImageIndex] = useState(0);
   const [extrasOptions, setExtrasOptions] = useState<Extra[]>([]);
@@ -107,9 +106,7 @@ export default function CarDetailsContent({ car, id }: CarDetailsContentProps) {
     }
   }, [car, startDate, endDate, selectedExtras, extrasOptions]);
 
-  if (loading) {
-    return <Loading />;
-  }
+  
 
   if (!car) {
     return (

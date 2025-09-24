@@ -10,8 +10,11 @@ export async function GET() {
     }
 
     return NextResponse.json(extras);
-  } catch (error: any) {
+  } catch (error: unknown) {
     console.error('Error fetching extras:', error);
-    return NextResponse.json({ message: 'Internal Server Error' }, { status: 500 });
+    if (error instanceof Error) {
+      return NextResponse.json({ message: 'Internal Server Error', details: error.message }, { status: 500 });
+    }
+    return NextResponse.json({ message: 'Internal Server Error', details: 'An unknown error occurred.' }, { status: 500 });
   }
 }

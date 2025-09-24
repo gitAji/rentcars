@@ -1,6 +1,6 @@
 "use client";
 
-import { Suspense, useEffect, useState } from "react";
+import { Suspense, useEffect, useState, useCallback } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
@@ -105,7 +105,7 @@ function CarsPageContent() {
     fetchCars();
   }, [searchParams]);
 
-  const handleApplyFilters = () => {
+  const handleApplyFilters = useCallback(() => {
     const params = new URLSearchParams();
     if (town) {
       params.set("town", town);
@@ -120,7 +120,7 @@ function CarsPageContent() {
       params.set("endDate", endDate);
     }
     router.push(`/cars?${params.toString()}`);
-  };
+  }, [town, activeCarTypes, startDate, endDate, router]);
 
   const handleClearAllFilters = () => {
     setTown("");
@@ -142,7 +142,7 @@ function CarsPageContent() {
 
   useEffect(() => {
     handleApplyFilters(); // Apply filters whenever activeCarTypes or town changes
-  }, [activeCarTypes, town]);
+  }, [handleApplyFilters]);
 
   const hasActiveFilters = town || activeCarTypes.length > 0;
 

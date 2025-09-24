@@ -1,6 +1,6 @@
 'use client';
 
-import { useEffect, useState } from 'react';
+import { useEffect, useState, useCallback } from 'react';
 import { supabase } from '@/lib/supabaseClient';
 import withAdminAuth from '@/components/withAdminAuth';
 import Loading from '@/components/loading';
@@ -37,7 +37,7 @@ function BookingsPage() {
   const [itemsPerPage] = useState(10); // You can adjust this value
   const [totalCount, setTotalCount] = useState(0);
 
-  const fetchBookings = async () => {
+  const fetchBookings = useCallback(async () => {
     setLoading(true);
     setError(null);
     try {
@@ -67,16 +67,20 @@ function BookingsPage() {
         setBookings(data || []);
         setTotalCount(count || 0);
       }
-    } catch (err: any) {
-      setError(err.message);
+    } catch (err: unknown) {
+      if (err instanceof Error) {
+        setError(err.message);
+      } else {
+        setError('An unknown error occurred.');
+      }
     } finally {
       setLoading(false);
     }
-  };
+  }, [currentPage, itemsPerPage, searchTerm, filterCarId, filterStartDate, filterEndDate]);
 
   useEffect(() => {
     fetchBookings();
-  }, [searchTerm, filterCarId, filterStartDate, filterEndDate, currentPage]);
+  }, [fetchBookings]);
 
   useEffect(() => {
     const fetchCarOptions = async () => {
@@ -87,8 +91,12 @@ function BookingsPage() {
           .order('make', { ascending: true });
         if (error) throw error;
         setCarOptions(data);
-      } catch (err: any) {
-        console.error("Error fetching car options:", err.message);
+      } catch (err: unknown) {
+        if (err instanceof Error) {
+          console.error("Error fetching car options:", err.message);
+        } else {
+          console.error("Error fetching car options: An unknown error occurred.");
+        }
       }
     };
     fetchCarOptions();

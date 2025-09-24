@@ -49,7 +49,10 @@ export async function GET(request: Request) {
           throw carTypeError;
         }
 
-        const carTypeNames = carTypeData ? carTypeData.map((ct: any) => ct.car_types.name) : [];
+        interface CarTypeData {
+          car_types: { name: string };
+        }
+        const carTypeNames = carTypeData ? carTypeData.map((ct: CarTypeData) => ct.car_types.name) : [];
 
         return {
           ...car,
@@ -59,8 +62,11 @@ export async function GET(request: Request) {
     );
 
     return NextResponse.json(carsWithTypes);
-  } catch (error: any) {
+  } catch (error: unknown) {
     console.error('Error in GET /api/cars:', error);
-    return NextResponse.json({ error: 'Internal server error', details: error.message }, { status: 500 });
+    if (error instanceof Error) {
+      return NextResponse.json({ error: 'Internal server error', details: error.message }, { status: 500 });
+    }
+    return NextResponse.json({ error: 'Internal server error', details: 'An unknown error occurred.' }, { status: 500 });
   }
 }

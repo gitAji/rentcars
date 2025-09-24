@@ -42,9 +42,12 @@ export async function POST(req: Request) {
     });
 
     return NextResponse.json({ clientSecret: paymentIntent.client_secret });
-  } catch (error: any) { // Explicitly type error as 'any' for easier logging
+  } catch (error: unknown) { // Explicitly type error as 'unknown' for safer handling
     console.error('Error creating Payment Intent:', error);
     // Always return the error message from Stripe if available, otherwise a generic message
-    return NextResponse.json({ error: error.message || 'Failed to create Payment Intent' }, { status: 500 });
+    if (error instanceof Error) {
+      return NextResponse.json({ error: error.message || 'Failed to create Payment Intent' }, { status: 500 });
+    }
+    return NextResponse.json({ error: 'Failed to create Payment Intent' }, { status: 500 });
   }
 }

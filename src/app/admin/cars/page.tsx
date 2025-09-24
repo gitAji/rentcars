@@ -1,6 +1,6 @@
 'use client';
 
-import { useEffect, useState } from 'react';
+import { useEffect, useState, useCallback } from 'react';
 import { supabase } from '@/lib/supabaseClient';
 import withAdminAuth from '@/components/withAdminAuth';
 import Loading from '@/components/loading';
@@ -33,7 +33,7 @@ function ManageCarsPage() {
   const [itemsPerPage] = useState(10); // You can adjust this value
   const [totalCount, setTotalCount] = useState(0);
 
-  const fetchCars = async () => {
+  const fetchCars = useCallback(async () => {
     setLoading(true);
     setError(null);
     try {
@@ -60,16 +60,20 @@ function ManageCarsPage() {
         setCars(data || []);
         setTotalCount(count || 0);
       }
-    } catch (err: any) {
-      setError(err.message);
+    } catch (err: unknown) {
+      if (err instanceof Error) {
+        setError(err.message);
+      } else {
+        setError('An unknown error occurred.');
+      }
     } finally {
       setLoading(false);
     }
-  };
+  }, [currentPage, itemsPerPage, searchTerm, filterTown, filterCarType]);
 
   useEffect(() => {
     fetchCars();
-  }, [searchTerm, filterTown, filterCarType, currentPage]);
+  }, [fetchCars]);
 
   useEffect(() => {
     const fetchFilterOptions = async () => {
@@ -86,8 +90,12 @@ function ManageCarsPage() {
         if (carTypesError) throw carTypesError;
         setCarTypeOptions(Array.from(new Set(carTypesData.map(item => item.car_type).filter(Boolean))));
 
-      } catch (err: any) {
-        console.error("Error fetching filter options:", err.message);
+      } catch (err: unknown) {
+        if (err instanceof Error) {
+          console.error("Error fetching filter options:", err.message);
+        } else {
+          console.error("Error fetching filter options: An unknown error occurred.");
+        }
       }
     };
     fetchFilterOptions();
@@ -119,8 +127,12 @@ function ManageCarsPage() {
         // Re-fetch cars to update pagination correctly
         fetchCars();
 
-      } catch (err: any) {
-        setError(err.message);
+      } catch (err: unknown) {
+        if (err instanceof Error) {
+          setError(err.message);
+        } else {
+          setError('An unknown error occurred.');
+        }
       }
     }
   };

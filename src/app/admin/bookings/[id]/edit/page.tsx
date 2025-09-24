@@ -47,6 +47,10 @@ function EditBookingPage({ params }: { params: { id: string } }) {
         .from('bookings')
         .select('*')
         .eq('id', bookingId)
+        .single() as { data: Booking | null, error: any };
+        .from('bookings')
+        .select('*')
+        .eq('id', bookingId)
         .single();
 
       if (error) {
@@ -95,8 +99,12 @@ function EditBookingPage({ params }: { params: { id: string } }) {
       alert('Booking updated successfully!');
       router.push('/admin/bookings'); // Redirect to manage bookings page
 
-    } catch (error: any) {
-      setError(error.message);
+    } catch (error: unknown) {
+      if (error instanceof Error) {
+        setError(error.message);
+      } else {
+        setError('An unknown error occurred.');
+      }
     } finally {
       setLoadingSubmit(false);
     }

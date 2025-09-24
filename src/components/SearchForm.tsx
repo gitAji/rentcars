@@ -41,9 +41,13 @@ export default function SearchForm({ onSearch }: SearchFormProps) {
         if (carTypesError) throw carTypesError;
         setCarTypeOptions(carTypesData.map(item => item.name).filter(Boolean));
 
-      } catch (err: any) {
-        console.error("Error fetching filter options:", err.message);
-        setError("Failed to load filter options.");
+      } catch (err: unknown) {
+        console.error("Error fetching filter options:", err);
+        if (err instanceof Error) {
+          setError("Failed to load filter options." + err.message);
+        } else {
+          setError("Failed to load filter options. An unknown error occurred.");
+        }
       }
     };
     fetchFilterOptions();

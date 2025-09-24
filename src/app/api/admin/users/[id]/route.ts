@@ -20,9 +20,12 @@ export async function PATCH(req: Request, { params }: { params: { id: string } }
     if (profileError) throw profileError;
 
     return NextResponse.json({ success: true });
-  } catch (error: any) {
+  } catch (error: unknown) {
     console.error('Error updating user role:', error);
-    return NextResponse.json({ error: 'Failed to update user role', details: error.message }, { status: 500 });
+    if (error instanceof Error) {
+      return NextResponse.json({ error: 'Failed to update user role', details: error.message }, { status: 500 });
+    }
+    return NextResponse.json({ error: 'Failed to update user role', details: 'An unknown error occurred.' }, { status: 500 });
   }
 }
 
@@ -36,8 +39,11 @@ export async function DELETE(req: Request, { params }: { params: { id: string } 
     if (authError) throw authError;
 
     return NextResponse.json({ success: true });
-  } catch (error: any) {
+  } catch (error: unknown) {
     console.error('Error deleting user:', error);
-    return NextResponse.json({ error: 'Failed to delete user', details: error.message }, { status: 500 });
+    if (error instanceof Error) {
+      return NextResponse.json({ error: 'Failed to delete user', details: error.message }, { status: 500 });
+    }
+    return NextResponse.json({ error: 'Failed to delete user', details: 'An unknown error occurred.' }, { status: 500 });
   }
 }

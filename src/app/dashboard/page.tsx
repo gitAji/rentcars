@@ -18,7 +18,6 @@ interface Booking {
 }
 
 function DashboardPage() {
-  const [user, setUser] = useState<User | null>(null);
   const [bookings, setBookings] = useState<Booking[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
@@ -27,7 +26,6 @@ function DashboardPage() {
     const fetchData = async () => {
       const { data: { session } } = await supabase.auth.getSession();
       if (session) {
-        setUser(session.user);
         const { data, error } = await supabase
           .from('bookings')
           .select('*')
