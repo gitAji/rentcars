@@ -7,9 +7,9 @@ import withAdminAuth from '@/components/withAdminAuth';
 import Loading from '@/components/loading';
 import Image from 'next/image';
 
-function EditCarPage({ params }: { params: { id: string } }) {
+function EditCarPage() {
   const router = useRouter();
-  const carId = params.id;
+  const { id: carId } = router.query as { id: string };
 
   const [make, setMake] = useState('');
   const [model, setModel] = useState('');

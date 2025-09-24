@@ -6,7 +6,6 @@ import withAuth from '@/components/withAuth';
 import Header from '@/components/Header';
 import Footer from '@/components/Footer';
 import Loading from '@/components/loading';
-import type { User } from '@supabase/supabase-js';
 
 interface Booking {
   id: number;

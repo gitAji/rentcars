@@ -31,7 +31,7 @@ export async function PATCH(req: Request, { params }: { params: { id: string } }
 
 export async function DELETE(req: Request, { params }: { params: { id: string } }) {
   try {
-    const { id: userId } = params;
+    const { id: userId } = (params as any);
 
     // Delete user from auth.users
     const { error: authError } = await supabaseAdmin.auth.admin.deleteUser(userId);

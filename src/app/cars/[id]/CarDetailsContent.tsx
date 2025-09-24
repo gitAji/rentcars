@@ -5,7 +5,6 @@ import { useRouter, useSearchParams } from "next/navigation";
 import Image from "next/image";
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
-import Loading from "@/components/loading";
 import Link from "next/link";
 
 // Define interfaces for type safety

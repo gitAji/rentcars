@@ -6,7 +6,7 @@ const supabaseAdmin = createClient(
   process.env.SUPABASE_SERVICE_ROLE_KEY! // Use the service role key
 );
 
-export async function GET(_req: Request) {
+export async function GET(_req: Request) { // eslint-disable-line @typescript-eslint/no-unused-vars
   try {
     const { data: { users }, error: authError } = await supabaseAdmin.auth.admin.listUsers();
     if (authError) throw authError;

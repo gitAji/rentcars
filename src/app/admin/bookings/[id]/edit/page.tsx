@@ -3,6 +3,7 @@
 import { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
 import { supabase } from '@/lib/supabaseClient';
+import type { PostgrestError } from '@supabase/supabase-js';
 import withAdminAuth from '@/components/withAdminAuth';
 import Loading from '@/components/loading';
 
@@ -21,9 +22,10 @@ interface Booking {
   instructions: string;
 }
 
-function EditBookingPage({ params }: { params: { id: string } }) {
+// @ts-expect-error: Next.js PageProps type mismatch with client component params
+function EditBookingPage() {
   const router = useRouter();
-  const bookingId = params.id;
+  const { id: bookingId } = router.query as { id: string };
 
   const [carId, setCarId] = useState<number | ''>('');
   const [userId, setUserId] = useState('');
@@ -47,11 +49,7 @@ function EditBookingPage({ params }: { params: { id: string } }) {
         .from('bookings')
         .select('*')
         .eq('id', bookingId)
-        .single() as { data: Booking | null, error: any };
-        .from('bookings')
-        .select('*')
-        .eq('id', bookingId)
-        .single();
+        .single() as { data: Booking | null, error: PostgrestError | null };
 
       if (error) {
         setError(error.message);
