@@ -1,18 +1,14 @@
 [
   {
     "name": "Child Seat",
-    "price": 100
-  },
-  {
-    "name": "Roof Box",
-    "price": 150
-  },
-  {
-    "name": "Camping Kit",
-    "price": 200
+    "price": 50
   },
   {
     "name": "Additional Driver",
     "price": 100
+  },
+  {
+    "name": "GPS",
+    "price": 75
   }
 ]

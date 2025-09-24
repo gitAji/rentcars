@@ -96,6 +96,31 @@ function CheckoutPageContent({ car, startDate, endDate, extras, totalPrice, clie
       }
 
       if (paymentIntent && paymentIntent.status === 'succeeded') {
+        // Send confirmation email
+        try {
+          const bookingDetails = {
+            id: bookingId,
+            carMake: car.make,
+            carModel: car.model,
+            customerName: name,
+            customerEmail: email,
+            startDate,
+            endDate,
+            totalPrice,
+            extras,
+          };
+          await fetch('/api/send-confirmation-email', {
+            method: 'POST',
+            headers: {
+              'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({ bookingDetails }),
+          });
+        } catch (emailError) {
+          console.error('Failed to send confirmation email:', emailError);
+          // Do not block the user flow if email fails
+        }
+
         router.push(`/confirmation?bookingId=${bookingId}&carId=${car.id}&carMake=${car.make}&carModel=${car.model}&startDate=${startDate}&endDate=${endDate}&extras=${extras.join(',')}&totalPrice=${totalPrice}&customerName=${name}&customerEmail=${email}`);
       } else {
         setError(`Payment status: ${paymentIntent ? paymentIntent.status : 'unknown'}`);
@@ -126,7 +151,7 @@ function CheckoutPageContent({ car, startDate, endDate, extras, totalPrice, clie
       <Header />
       <section
         className="relative h-48 md:h-64 bg-cover bg-center flex items-center justify-center"
-        style={{ backgroundImage: "url('/cars-hero.jpg')" }}
+        style={{ backgroundImage: "url('/bergen.jpg')" }}
       >
         <div className="absolute inset-0 bg-gray-800 bg-opacity-40" />
         <h1 className="relative z-10 text-4xl md:text-5xl text-white font-bold">
@@ -265,7 +290,7 @@ function CheckoutPageContent({ car, startDate, endDate, extras, totalPrice, clie
                       type="button"
                       onClick={handleStripePayment}
                       disabled={!stripe || !elements || totalPrice === 0 || !name || !email || !phone || loading}
-                      className="w-full bg-red-500 text-white p-3 rounded-md hover:bg-red-600 focus:outline-none focus:ring-2 focus:ring-red-500 focus:ring-offset-2 disabled:opacity-50 disabled:cursor-not-allowed cursor-pointer"
+                      className="w-full bg-red-600 text-white p-3 rounded-md hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-red-600 focus:ring-offset-2 disabled:opacity-50 disabled:cursor-not-allowed cursor-pointer"
                     >
                       Pay
                     </button>
@@ -325,10 +350,12 @@ function CheckoutFlow() {
       if (!carId || !startDate || !endDate || totalPrice === 0) {
         setClientSecretError("Missing car details or dates for payment.");
         setLoadingClientSecret(false);
+        console.log("Missing data for client secret:", { carId, startDate, endDate, totalPrice });
         return;
       }
 
       try {
+        console.log("Sending to checkout-session API:", { carId, startDate, endDate, extras, totalPrice });
         const response = await fetch('/api/stripe/checkout-session', {
           method: 'POST',
           headers: {
@@ -336,6 +363,8 @@ function CheckoutFlow() {
           },
           body: JSON.stringify({
             carId,
+            carMake: car.make,
+            carModel: car.model,
             startDate,
             endDate,
             extras,

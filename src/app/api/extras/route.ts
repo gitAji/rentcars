@@ -1,15 +1,17 @@
 import { NextResponse } from 'next/server';
-import fs from 'fs/promises';
-import path from 'path';
-
-const extrasFilePath = path.join(process.cwd(), 'data', 'extras.json');
-
-async function readExtras() {
-  const fileContents = await fs.readFile(extrasFilePath, 'utf8');
-  return JSON.parse(fileContents);
-}
+import { supabase } from '@/lib/supabaseClient';
 
 export async function GET() {
-  const extras = await readExtras();
-  return NextResponse.json(extras);
+  try {
+    const { data: extras, error } = await supabase.from('extras').select('*');
+
+    if (error) {
+      throw error;
+    }
+
+    return NextResponse.json(extras);
+  } catch (error: any) {
+    console.error('Error fetching extras:', error);
+    return NextResponse.json({ message: 'Internal Server Error' }, { status: 500 });
+  }
 }

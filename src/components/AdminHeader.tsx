@@ -4,10 +4,10 @@ export default function AdminHeader() {
   return (
     <header className="p-4 flex justify-between items-center bg-neutral text-white">
       <div className="flex gap-4 items-center">
-        <Link href="/admin" className="hover:text-primary cursor-pointer">Admin Dashboard</Link>
+        <Link href="/admin" className="hover:text-red-500 cursor-pointer">Admin Dashboard</Link>
       </div>
       <nav className="flex gap-4 items-center">
-        <Link href="/admin/cars/new" className="hover:text-primary cursor-pointer">Add Car</Link>
+        <Link href="/admin/cars/new" className="hover:text-red-500 cursor-pointer">Add Car</Link>
         <Link href="/admin/bookings" className="hover:text-primary cursor-pointer">View Bookings</Link>
         <Link href="/" className="hover:text-primary cursor-pointer">Home</Link>
       </nav>

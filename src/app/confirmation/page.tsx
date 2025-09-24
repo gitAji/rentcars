@@ -5,6 +5,7 @@ import { useSearchParams } from "next/navigation";
 import Header from "@/components/Header";
 import Link from "next/link";
 import Loading from "@/components/loading";
+import Footer from "@/components/Footer";
 
 function ConfirmationPageContent() {
   const searchParams = useSearchParams();
@@ -72,18 +73,18 @@ function ConfirmationPageContent() {
       {/* Hero Section */}
       <section
         className="relative h-48 md:h-64 bg-cover bg-center flex items-center justify-center"
-        style={{ backgroundImage: "url('/cars-hero.jpg')" }} // You might want a specific confirmation hero image
+        style={{ backgroundImage: "url('/oslo.jpg')" }} // You might want a specific confirmation hero image
       >
         <div className="absolute inset-0 bg-gray-800 bg-opacity-40" />
         <h1 className="relative z-10 text-4xl md:text-5xl text-white font-bold">
           Booking Confirmed!
         </h1>
       </section>
-      <div className="min-h-screen flex flex-col items-center justify-center bg-secondary p-4">
-        <div className="bg-white p-8 rounded-lg shadow-md text-center">
+      <div className="min-h-screen flex flex-col items-center justify-center bg-secondary p-2">
+        <div className="bg-gray-100 p-6 rounded-lg shadow-md text-center">
           
           {bookingDetails && (
-            <div className="space-y-3 text-lg text-neutral-dark mb-6"> {/* Added space-y and text-neutral-dark */}
+            <div className="space-y-3 text-lg text-neutral-dark mb-2"> {/* Added space-y and text-neutral-dark */}
               <p>
                 <span className="font-semibold text-primary">Booking ID:</span>{" "}
                 <span className="font-medium">{bookingDetails.id}</span>
@@ -131,6 +132,7 @@ function ConfirmationPageContent() {
           </div>
         </div>
       </div>
+       <Footer />
     </>
   );
 }
@@ -140,5 +142,6 @@ export default function ConfirmationPage() {
     <Suspense fallback={<Loading />}>
       <ConfirmationPageContent />
     </Suspense>
+   
   );
 }

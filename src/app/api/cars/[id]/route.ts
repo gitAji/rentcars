@@ -1,36 +1,49 @@
 import { NextResponse } from 'next/server';
-import fs from 'fs/promises';
-import path from 'path';
+import { supabase } from '@/lib/supabaseClient';
 
-const carsFilePath = path.join(process.cwd(), 'data', 'cars.json');
+export async function GET(request: Request, { params }: { params: { id: string } }) {
+  try {
+    const { id } = params;
 
-interface Car {
-  id: number; // Assuming id is a number
-  make: string;
-  model: string;
-  year: number;
-  price: number;
-  imageUrl: string;
-  imageUrls: string[];
-  description?: string;
-  features?: string[];
-  terms?: string;
-}
+    const { data: car, error } = await supabase
+      .from('cars')
+      .select('*')
+      .eq('id', id)
+      .single(); // Use .single() to get a single record
 
-async function readCars() {
-  const fileContents = await fs.readFile(carsFilePath, 'utf8');
-  return JSON.parse(fileContents);
-}
+    if (error) {
+      if (error.code === 'PGRST116') { // No rows found
+        return new NextResponse('Car not found', { status: 404 });
+      }
+      throw error;
+    }
 
-export async function GET(request: Request, { params }: { params: Promise<{ id: string }> }) {
-  await new Promise(resolve => setTimeout(resolve, 1000)); // Simulate 1 second delay
-  const { id } = await params; // Access id from awaited params
-  const cars = await readCars();
-  const car = cars.find((c: Car) => c.id === parseInt(id)); // Typed c
+    if (!car) {
+      return new NextResponse('Car not found', { status: 404 });
+    }
 
-  if (car) {
-    return NextResponse.json(car);
-  } else {
-    return new NextResponse('Car not found', { status: 404 });
+    const { data: carTypeData, error: carTypeError } = await supabase
+      .from('car_car_types')
+      .select('car_types(name)')
+      .eq('car_id', car.id);
+
+    if (carTypeError) {
+      throw carTypeError;
+    }
+
+    const carTypeNames = carTypeData ? carTypeData.map((ct: any) => ct.car_types.name) : [];
+
+    const formattedCar = {
+      ...car,
+      imageUrl: car.image_url,
+      imageUrls: car.image_urls,
+      carType: carTypeNames,
+      shortDescription: car.short_description,
+    };
+
+    return NextResponse.json(formattedCar);
+  } catch (error: any) {
+    console.error('Error in GET /api/cars/[id]:', error);
+    return NextResponse.json({ error: 'Internal server error', details: error.message }, { status: 500 });
   }
 }

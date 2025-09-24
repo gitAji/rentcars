@@ -30,7 +30,7 @@ export default function PrivacyPolicyPage() {
       
       <section
         className="relative h-[300px] bg-cover bg-center flex items-center justify-center"
-        style={{ backgroundImage: "url('/contact-hero.jpg')" }}
+        style={{ backgroundImage: "url('/trondheim.jpg')" }}
       >
         <Header />
         <div className="absolute inset-0 bg-gray-800 bg-opacity-40" />

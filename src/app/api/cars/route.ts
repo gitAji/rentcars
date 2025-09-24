@@ -1,68 +1,66 @@
 import { NextResponse } from 'next/server';
-import path from 'path';
-import fs from 'fs/promises';
+import { supabase } from '@/lib/supabaseClient';
 
-// Define the Car interface
-interface Car {
-  id: number;
-  make: string;
-  model: string;
-  year: number;
-  price: number;
-  imageUrl: string;
-  imageUrls: string[];
-  town: string;
-  passengers: number;
-  carType: string;
-  description?: string;
-  features?: string[];
-  terms?: string;
-}
-
-// Path to the JSON file
-const carsFilePath = path.join(process.cwd(), 'data', 'cars.json');
-
-// Cache for cars data to avoid repeated file reads
-let cachedCars: Car[] | null = null;
-
-// Read cars from file
-async function readCars(): Promise<Car[]> {
-  if (cachedCars) {
-    return cachedCars;
-  }
-  try {
-    const file = await fs.readFile(carsFilePath, 'utf-8');
-    const cars: Car[] = JSON.parse(file);
-    cachedCars = cars;
-    return cars;
-  } catch (error) {
-    console.error('Error reading cars file:', error);
-    throw new Error('Failed to load cars data');
-  }
-}
-
-// GET handler for all cars
 export async function GET(request: Request) {
   try {
     const { searchParams } = new URL(request.url);
     const town = searchParams.get('town');
-    const carType = searchParams.get('carType');
+    const carTypes = searchParams.get('carType')?.split(',');
 
-    const cars = await readCars();
-
-    let filteredCars = cars;
+    let query = supabase.from('cars').select('*');
 
     if (town) {
-      filteredCars = filteredCars.filter(car => car.town.toLowerCase() === town.toLowerCase());
+      query = query.eq('town', town);
     }
 
-    if (carType) {
-      filteredCars = filteredCars.filter(car => car.carType.toLowerCase() === carType.toLowerCase());
+    if (carTypes && carTypes.length > 0 && carTypes.some(ct => ct !== '')) {
+      const { data: carIdsData, error: carIdsError } = await supabase
+        .from('car_types')
+        .select('car_car_types!inner(car_id)')
+        .in('name', carTypes);
+
+      if (carIdsError) {
+        throw carIdsError;
+      }
+      
+      const carIds = carIdsData.flatMap(ct => ct.car_car_types).map(cct => cct.car_id);
+      
+      if (carIds.length === 0) {
+        return NextResponse.json([]);
+      }
+
+      query = query.in('id', carIds);
     }
 
-    return NextResponse.json(filteredCars);
-  } catch (error) {
+    const { data: cars, error } = await query;
+
+    if (error) {
+      throw error;
+    }
+
+    const carsWithTypes = await Promise.all(
+      cars.map(async (car) => {
+        const { data: carTypeData, error: carTypeError } = await supabase
+          .from('car_car_types')
+          .select('car_types(name)')
+          .eq('car_id', car.id);
+
+        if (carTypeError) {
+          throw carTypeError;
+        }
+
+        const carTypeNames = carTypeData ? carTypeData.map((ct: any) => ct.car_types.name) : [];
+
+        return {
+          ...car,
+          carType: carTypeNames,
+        };
+      })
+    );
+
+    return NextResponse.json(carsWithTypes);
+  } catch (error: any) {
     console.error('Error in GET /api/cars:', error);
-    return NextResponse.json({ error: 'Internal server error' }, { status: 500 });
+    return NextResponse.json({ error: 'Internal server error', details: error.message }, { status: 500 });
   }
 }

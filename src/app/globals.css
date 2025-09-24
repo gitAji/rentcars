@@ -4,7 +4,7 @@
   --background: #ffffff;
   --foreground: #171717;
 
-  --color-primary: #0070f3;
+  
   --color-secondary: #ffffff;
   --color-accent: #ff5757; /* Changed from #f5a623 to match the button color */
   --color-accent-dark: #e64d4d; /* Darker version of the new accent color */
@@ -18,7 +18,7 @@
     --background: #0a0a0a;
     --foreground: #ededed;
 
-    --color-primary: #0070f3;
+                    --color-primary: #0070f3;
     --color-secondary: #0a0a0a;
     --color-accent: #ff5757;
     --color-accent-dark: #e64d4d;

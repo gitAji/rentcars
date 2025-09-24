@@ -1,6 +1,7 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
+import { supabase } from '@/lib/supabaseClient';
 
 interface SearchFormProps {
   onSearch: (filters: {
@@ -21,6 +22,32 @@ export default function SearchForm({ onSearch }: SearchFormProps) {
   const [startDate, setStartDate] = useState("");
   const [endDate, setEndDate] = useState("");
   const [error, setError] = useState<string | null>(null);
+
+  const [townOptions, setTownOptions] = useState<string[]>([]);
+  const [carTypeOptions, setCarTypeOptions] = useState<string[]>([]);
+
+  useEffect(() => {
+    const fetchFilterOptions = async () => {
+      try {
+        const { data: townsData, error: townsError } = await supabase
+          .from('cars')
+          .select('town', { distinct: true });
+        if (townsError) throw townsError;
+        setTownOptions(Array.from(new Set(townsData.map(item => item.town?.trim().toLowerCase()).filter(Boolean))));
+
+        const { data: carTypesData, error: carTypesError } = await supabase
+          .from('car_types')
+          .select('name');
+        if (carTypesError) throw carTypesError;
+        setCarTypeOptions(carTypesData.map(item => item.name).filter(Boolean));
+
+      } catch (err: any) {
+        console.error("Error fetching filter options:", err.message);
+        setError("Failed to load filter options.");
+      }
+    };
+    fetchFilterOptions();
+  }, []);
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
@@ -54,11 +81,7 @@ export default function SearchForm({ onSearch }: SearchFormProps) {
             className="p-3 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-[#ff5757] text-gray-900 w-full"
           >
             <option value="">Select Town</option>
-            <option value="Oslo">Oslo</option>
-            <option value="Bergen">Bergen</option>
-            <option value="Stavanger">Stavanger</option>
-            <option value="Trondheim">Trondheim</option>
-            <option value="Tromsø">Tromsø</option>
+            {townOptions.map(option => <option key={option} value={option}>{option}</option>)}
           </select>
         </div>
 
@@ -97,10 +120,7 @@ export default function SearchForm({ onSearch }: SearchFormProps) {
             className="p-3 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-[#ff5757] text-gray-900 w-full"
           >
             <option value="">Car Type</option>
-            <option value="compact">Compact</option>
-            <option value="sedan">Sedan</option>
-            <option value="suv">SUV</option>
-            <option value="van">Van</option>
+            {carTypeOptions.map(option => <option key={option} value={option}>{option}</option>)}
           </select>
         </div>
 
