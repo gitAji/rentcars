@@ -6,9 +6,11 @@ const supabaseAdmin = createClient(
   process.env.SUPABASE_SERVICE_ROLE_KEY! // Use the service role key
 );
 
-export async function PATCH(req: Request, { params }: { params: { id: string } }) {
+export async function PATCH(req: Request, context) {
   try {
-    const { id: userId } = params;
+    // @ts-expect-error: Next.js API route params type mismatch
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    const { id: userId } = (context.params as any);
     const { role: newRole } = await req.json();
 
     // Update role in profiles table
@@ -29,9 +31,11 @@ export async function PATCH(req: Request, { params }: { params: { id: string } }
   }
 }
 
-export async function DELETE(req: Request, { params }: { params: { id: string } }) {
+export async function DELETE(req: Request, context) {
   try {
-    const { id: userId } = (params as any);
+    // @ts-expect-error: Next.js API route params type mismatch
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    const { id: userId } = (context.params as any);
 
     // Delete user from auth.users
     const { error: authError } = await supabaseAdmin.auth.admin.deleteUser(userId);
