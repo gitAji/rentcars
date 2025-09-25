@@ -50,9 +50,9 @@ export async function GET(request: Request) {
         }
 
         interface CarTypeData {
-          car_types: { name: string };
+          car_types: { name: string }[];
         }
-        const carTypeNames = carTypeData ? carTypeData.map((ct: CarTypeData) => ct.car_types.name) : [];
+        const carTypeNames = carTypeData ? carTypeData.flatMap((ct: CarTypeData) => ct.car_types.map(type => type.name)) : [];
 
         return {
           ...car,

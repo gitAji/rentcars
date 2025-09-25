@@ -1,7 +1,7 @@
 'use client';
 
 import { useState, useEffect } from 'react';
-import { useRouter } from 'next/navigation';
+import { useRouter, useParams } from 'next/navigation';
 import { supabase } from '@/lib/supabaseClient';
 import withAdminAuth from '@/components/withAdminAuth';
 import Loading from '@/components/loading';
@@ -9,7 +9,8 @@ import Image from 'next/image';
 
 function EditCarPage() {
   const router = useRouter();
-  const { id: carId } = router.query as { id: string };
+  const params = useParams();
+  const carId = params.id as string;
 
   const [make, setMake] = useState('');
   const [model, setModel] = useState('');

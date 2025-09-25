@@ -14,8 +14,8 @@ interface Car {
   model: string;
   year: number;
   price: number;
-  image_url: string;
-  image_urls: string[];
+  imageUrl: string;
+  imageUrls: string[];
   description?: string;
   features?: string[];
   terms?: string;
@@ -48,10 +48,10 @@ export default function CarDetailsContent({ car, id }: CarDetailsContentProps) {
   const [totalPrice, setTotalPrice] = useState(0);
 
   const carImages = useMemo(() => {
-    return car.image_urls && car.image_urls.length > 0
-      ? car.image_urls
-      : car.image_url
-      ? [car.image_url]
+    return car.imageUrls && car.imageUrls.length > 0
+      ? car.imageUrls
+      : car.imageUrl
+      ? [car.imageUrl]
       : [];
   }, [car]);
 
@@ -120,7 +120,7 @@ export default function CarDetailsContent({ car, id }: CarDetailsContentProps) {
       <Header />
       <section
         className="relative h-[300px] bg-cover bg-center flex items-center justify-center"
-        style={{ backgroundImage: `url(${car.image_url || "/default-car-hero.jpg"})` }}
+        style={{ backgroundImage: `url(${car.imageUrl || "/default-car-hero.jpg"})` }}
       >
         <div className="absolute inset-0 bg-gray-800 bg-opacity-40" />
         <h1 className="relative z-10 text-3xl sm:text-4xl md:text-5xl text-white font-bold">

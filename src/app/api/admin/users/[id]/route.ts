@@ -1,16 +1,20 @@
 import { NextResponse } from 'next/server';
 import { createClient } from '@supabase/supabase-js';
 
-const supabaseAdmin = createClient(
-  process.env.NEXT_PUBLIC_SUPABASE_URL!,
-  process.env.SUPABASE_SERVICE_ROLE_KEY! // Use the service role key
-);
+const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL;
+const supabaseServiceRoleKey = process.env.SUPABASE_SERVICE_ROLE_KEY;
 
+const supabaseAdmin = (supabaseUrl && supabaseServiceRoleKey)
+  ? createClient(supabaseUrl, supabaseServiceRoleKey)
+  : null;
+
+// @ts-expect-error: Next.js API route params type mismatch
 export async function PATCH(req: Request, context) {
+  if (!supabaseAdmin) {
+    return NextResponse.json({ error: 'Supabase client not initialized due to missing environment variables.' }, { status: 500 });
+  }
   try {
-    // @ts-expect-error: Next.js API route params type mismatch
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    const { id: userId } = (context.params as any);
+    const { id: userId } = context.params as { id: string };
     const { role: newRole } = await req.json();
 
     // Update role in profiles table
@@ -31,11 +35,13 @@ export async function PATCH(req: Request, context) {
   }
 }
 
+// @ts-expect-error: Next.js API route params type mismatch
 export async function DELETE(req: Request, context) {
+  if (!supabaseAdmin) {
+    return NextResponse.json({ error: 'Supabase client not initialized due to missing environment variables.' }, { status: 500 });
+  }
   try {
-    // @ts-expect-error: Next.js API route params type mismatch
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    const { id: userId } = (context.params as any);
+    const { id: userId } = context.params as { id: string };
 
     // Delete user from auth.users
     const { error: authError } = await supabaseAdmin.auth.admin.deleteUser(userId);

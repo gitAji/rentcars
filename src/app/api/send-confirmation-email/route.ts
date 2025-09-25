@@ -1,10 +1,16 @@
 import { NextResponse } from 'next/server';
 import { Resend } from 'resend';
 
-const resend = new Resend(process.env.RESEND_API_KEY);
+const resendApiKey = process.env.RESEND_API_KEY;
+
+const resend = resendApiKey ? new Resend(resendApiKey) : null;
 const ADMIN_EMAIL = 'kontaktaone@gmail.com';
 
 export async function POST(req: Request) {
+  if (!resend) {
+    console.error('Resend client not initialized due to missing RESEND_API_KEY environment variable.');
+    return NextResponse.json({ error: 'Failed to send confirmation email: Resend client not initialized.' }, { status: 500 });
+  }
   try {
     const { bookingDetails } = await req.json();
 

@@ -363,8 +363,8 @@ function CheckoutFlow() {
           },
           body: JSON.stringify({
             carId,
-            carMake: car.make,
-            carModel: car.model,
+            carMake: car!.make,
+            carModel: car!.model,
             startDate,
             endDate,
             extras,

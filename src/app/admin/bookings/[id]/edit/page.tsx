@@ -1,7 +1,7 @@
 'use client';
 
 import { useState, useEffect } from 'react';
-import { useRouter } from 'next/navigation';
+import { useRouter, useParams } from 'next/navigation';
 import { supabase } from '@/lib/supabaseClient';
 import type { PostgrestError } from '@supabase/supabase-js';
 import withAdminAuth from '@/components/withAdminAuth';
@@ -22,10 +22,10 @@ interface Booking {
   instructions: string;
 }
 
-// @ts-expect-error: Next.js PageProps type mismatch with client component params
 function EditBookingPage() {
   const router = useRouter();
-  const { id: bookingId } = router.query as { id: string };
+  const params = useParams();
+  const bookingId = params.id as string;
 
   const [carId, setCarId] = useState<number | ''>('');
   const [userId, setUserId] = useState('');

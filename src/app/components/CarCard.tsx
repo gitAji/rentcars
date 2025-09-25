@@ -5,7 +5,7 @@ import { useState } from 'react';
 
 interface CarCardProps {
   car: {
-    id: number;
+    id: string;
     make: string;
     model: string;
     year: number;

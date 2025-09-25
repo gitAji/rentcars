@@ -31,13 +31,15 @@ export default function SearchForm({ onSearch }: SearchFormProps) {
       try {
         const { data: townsData, error: townsError } = await supabase
           .from('cars')
-          .select('town', { distinct: true });
+          // eslint-disable-next-line @typescript-eslint/no-explicit-any
+          .select('town', { distinct: true } as any);
         if (townsError) throw townsError;
         setTownOptions(Array.from(new Set(townsData.map(item => item.town?.trim().toLowerCase()).filter(Boolean))));
 
         const { data: carTypesData, error: carTypesError } = await supabase
           .from('car_types')
-          .select('name');
+          // eslint-disable-next-line @typescript-eslint/no-explicit-any
+          .select('name', { distinct: true } as any);
         if (carTypesError) throw carTypesError;
         setCarTypeOptions(carTypesData.map(item => item.name).filter(Boolean));
 

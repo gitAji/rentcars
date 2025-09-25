@@ -29,11 +29,12 @@ interface Car {
   features?: string[];
   terms?: string;
   seats: number;
-  carType: string;
+  carType: string[];
   shortDescription: string;
 }
 
-export default async function CarDetailsPage({ params }: { params: { id: string } }) {
+// @ts-expect-error: Next.js PageProps type mismatch
+export default async function CarDetailsPage({ params }) {
   const { id } = params;
 
   let car: Car | null = null;

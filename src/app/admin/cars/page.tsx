@@ -80,13 +80,13 @@ function ManageCarsPage() {
       try {
         const { data: townsData, error: townsError } = await supabase
           .from('cars')
-          .select('town', { distinct: true });
+          .select('town');
         if (townsError) throw townsError;
         setTownOptions(Array.from(new Set(townsData.map(item => item.town).filter(Boolean))));
 
         const { data: carTypesData, error: carTypesError } = await supabase
           .from('cars')
-          .select('car_type', { distinct: true });
+          .select('car_type');
         if (carTypesError) throw carTypesError;
         setCarTypeOptions(Array.from(new Set(carTypesData.map(item => item.car_type).filter(Boolean))));
 
