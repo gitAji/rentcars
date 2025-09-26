@@ -14,10 +14,7 @@ const nextConfig: NextConfig = {
       },
     ],
   },
-  env: {
-    NEXT_PUBLIC_BASE_URL: process.env.NEXT_PUBLIC_BASE_URL || 'http://localhost:3000',
-    STRIPE_SECRET_KEY: process.env.STRIPE_SECRET_KEY, // Explicitly expose to server-side
-  },
+  
   /* config options here */
 };
 
