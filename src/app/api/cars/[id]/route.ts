@@ -31,7 +31,14 @@ export async function GET(request: Request, context: any) { // eslint-disable-li
       throw carTypeError;
     }
 
-    const carTypeNames = carTypeData ? carTypeData.map((ct: { car_types: { name: string } }) => ct.car_types.name) : [];
+    const carTypeNames = carTypeData
+      ? carTypeData.flatMap((ct) => {
+          if (Array.isArray(ct.car_types)) {
+            return ct.car_types.map((type) => type.name);
+          }
+          return [];
+        })
+      : [];
 
     const formattedCar = {
       ...car,
