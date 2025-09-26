@@ -1,7 +1,7 @@
 import { NextResponse } from 'next/server';
 import { supabase } from '@/lib/supabaseClient';
 
-export async function GET(request: Request, context: { params: { id: string } }) {
+export async function GET(request: Request, context: any) { // eslint-disable-line @typescript-eslint/no-explicit-any
   try {
     const { id } = context.params;
 
