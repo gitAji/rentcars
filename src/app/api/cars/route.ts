@@ -49,10 +49,7 @@ export async function GET(request: Request) {
           throw carTypeError;
         }
 
-        interface CarTypeData {
-          car_types: { name: string }[];
-        }
-        const carTypeNames = carTypeData ? carTypeData.flatMap((ct: CarTypeData) => ct.car_types.map(type => type.name)) : [];
+        const carTypeNames = carTypeData ? (carTypeData as any).map((ct: any) => ct.car_types.name) : []; // eslint-disable-line @typescript-eslint/no-explicit-any
 
         return {
           ...car,

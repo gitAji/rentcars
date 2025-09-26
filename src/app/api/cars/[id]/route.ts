@@ -1,9 +1,9 @@
 import { NextResponse } from 'next/server';
 import { supabase } from '@/lib/supabaseClient';
 
-export async function GET(request: Request, context: any) { // eslint-disable-line @typescript-eslint/no-explicit-any
+export async function GET(request: Request, { params }: { params: { id: string } }) {
   try {
-    const { id } = context.params;
+    const { id } = params;
 
     const { data: car, error } = await supabase
       .from('cars')
@@ -31,10 +31,7 @@ export async function GET(request: Request, context: any) { // eslint-disable-li
       throw carTypeError;
     }
 
-    interface CarTypeData {
-      car_types: { name: string }[];
-    }
-    const carTypeNames = carTypeData ? carTypeData.flatMap((ct: CarTypeData) => ct.car_types.map(type => type.name)) : [];
+    const carTypeNames = carTypeData ? carTypeData.map((ct: { car_types: { name: string } }) => ct.car_types.name) : [];
 
     const formattedCar = {
       ...car,

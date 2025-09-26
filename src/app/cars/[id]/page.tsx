@@ -33,8 +33,7 @@ interface Car {
   shortDescription: string;
 }
 
-// @ts-expect-error: Next.js PageProps type mismatch
-export default async function CarDetailsPage({ params }) {
+export default async function CarDetailsPage({ params }: { params: { id: string } }) {
   const { id } = params;
 
   let car: Car | null = null;
