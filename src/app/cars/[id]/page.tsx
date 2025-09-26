@@ -33,8 +33,8 @@ interface Car {
   shortDescription: string;
 }
 
-export default async function CarDetailsPage({ params }: { params: { id: string } }) {
-  const { id } = params;
+export default async function CarDetailsPage({ params }: { params: Promise<{ id: string }> }) {
+  const { id } = await params;
 
   let car: Car | null = null;
   let error: string | null = null;
