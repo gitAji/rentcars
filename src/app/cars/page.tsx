@@ -172,7 +172,7 @@ function CarsPageContent() {
       </section>
       <main className="container mx-auto px-4 py-8">
         {/* Filter Bar */}
-        <div className="bg-white p-4 rounded-lg shadow-md mb-8">
+        <div className="bg-secondary p-4 rounded-lg shadow-md mb-8">
           <div className="flex flex-col md:flex-row justify-between items-center gap-4">
             <h2 className="text-xl font-bold text-gray-800">Filters</h2>
             <div className="flex flex-wrap gap-2">

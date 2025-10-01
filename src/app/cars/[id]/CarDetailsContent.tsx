@@ -218,7 +218,7 @@ export default function CarDetailsContent({ car, id }: CarDetailsContentProps) {
 
           {/* Right Column: Booking Details */}
           <div className="md:col-span-1 space-y-6">
-            <div className="bg-white p-6 rounded-lg shadow-md">
+            <div className="bg-secondary p-6 rounded-lg shadow-md">
               <h1 className="text-3xl font-extrabold text-primary mb-2">
                 {car.make} {car.model}
               </h1>
@@ -243,7 +243,7 @@ export default function CarDetailsContent({ car, id }: CarDetailsContentProps) {
               </p>
             </div>
 
-            <div className="bg-white p-6 rounded-lg shadow-md">
+            <div className="bg-secondary p-6 rounded-lg shadow-md">
               <h2 className="text-2xl font-bold mb-4">Booking Details</h2>
               <div className="space-y-4">
                 <div>

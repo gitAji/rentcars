@@ -149,7 +149,7 @@ function ManageCarsPage() {
       <h1 className="text-3xl font-bold mb-6 text-gray-800">Manage Fleet</h1>
       {error && <p className="text-red-500 py-4">{error}</p>}
 
-      <div className="mb-6 p-4 bg-white rounded-lg shadow-md flex flex-col md:flex-row gap-4">
+      <div className="mb-6 p-4 bg-secondary rounded-lg shadow-md flex flex-col md:flex-row gap-4">
         <input
           type="text"
           placeholder="Search by Make or Model..."
@@ -179,7 +179,7 @@ function ManageCarsPage() {
         </select>
       </div>
 
-      <div className="bg-white p-8 rounded-lg shadow-md">
+      <div className="bg-secondary p-8 rounded-lg shadow-md">
         <table className="w-full text-left">
           <thead>
             <tr className="border-b">
@@ -236,7 +236,7 @@ function ManageCarsPage() {
               <button
                 key={index + 1}
                 onClick={() => setCurrentPage(index + 1)}
-                className={`px-4 py-2 border rounded-md ${currentPage === index + 1 ? 'bg-blue-500 text-white' : 'bg-white text-blue-500'}`}
+                className={`px-4 py-2 border rounded-md ${currentPage === index + 1 ? 'bg-blue-500 text-white' : 'bg-secondary text-blue-500'}`}
               >
                 {index + 1}
               </button>

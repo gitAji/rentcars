@@ -51,7 +51,7 @@ export default function SignupPage() {
         </h1>
       </section>
       <main className="flex-grow flex items-center justify-center bg-gray-50 py-12">
-        <div className="w-full max-w-md p-8 space-y-6 bg-white rounded-lg shadow-md">
+        <div className="w-full max-w-md p-8 space-y-6 bg-secondary rounded-lg shadow-md">
           <h2 className="text-2xl font-bold text-center text-primary">Create an Account</h2>
           {success ? (
             <p className="text-center text-green-500">

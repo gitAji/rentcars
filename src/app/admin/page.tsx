@@ -68,14 +68,14 @@ function AdminPage() {
       
       {/* Stat Cards */}
       <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-8">
-        <div className="bg-white p-6 rounded-lg shadow-md flex items-center">
+        <div className="bg-secondary p-6 rounded-lg shadow-md flex items-center">
           <FaCar size={40} className="text-blue-500 mr-4" />
           <div>
             <p className="text-sm text-gray-500">Total Cars</p>
             <p className="text-3xl font-bold">{carCount}</p>
           </div>
         </div>
-        <div className="bg-white p-6 rounded-lg shadow-md flex items-center">
+        <div className="bg-secondary p-6 rounded-lg shadow-md flex items-center">
           <FaBook size={40} className="text-green-500 mr-4" />
           <div>
             <p className="text-sm text-gray-500">Total Bookings</p>
@@ -86,7 +86,7 @@ function AdminPage() {
 
       {/* Recent Bookings */}
       <h2 className="text-2xl font-bold mb-4 text-gray-800">Recent Bookings</h2>
-      <div className="bg-white p-8 rounded-lg shadow-md">
+      <div className="bg-secondary p-8 rounded-lg shadow-md">
         <table className="w-full text-left">
           <thead>
             <tr className="border-b">

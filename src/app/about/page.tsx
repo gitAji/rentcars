@@ -36,7 +36,7 @@ export default function AboutPage() {
       </section>
 
       {/* Main Content in white */}
-                  <main className="bg-white flex-grow">
+                  <main className="bg-secondary flex-grow">
         <div className="container mx-auto p-8">
           <h2 className="text-3xl font-bold mb-6 text-primary">Who We Are</h2>
           <p className="mb-4 text-neutral-dark">

@@ -95,7 +95,7 @@ function ManageUsersPage() {
     <>
       <h1 className="text-3xl font-bold mb-6 text-gray-800">Manage Users</h1>
       {error && <p className="text-red-500 py-4">{error}</p>}
-      <div className="bg-white p-8 rounded-lg shadow-md">
+      <div className="bg-secondary p-8 rounded-lg shadow-md">
         <table className="w-full text-left">
           <thead>
             <tr className="border-b">

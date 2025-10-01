@@ -95,7 +95,7 @@ export default function HomePage() {
           </div>
         </section>
 
-        <section className="py-24 bg-white text-center">
+        <section className="py-24 bg-secondary text-center">
           <h2 className="text-4xl font-bold mb-12 text-gray-800">Why Choose Us?</h2>
           <div className="container mx-auto grid grid-cols-1 md:grid-cols-3 gap-12">
             <div className="p-8 shadow-lg rounded-lg bg-gray-50 transform transition-transform duration-300 hover:scale-105">
@@ -122,7 +122,7 @@ export default function HomePage() {
           </div>
         </section>
 
-        <section className="py-24 bg-white text-neutral">
+        <section className="py-24 bg-secondary text-neutral">
           <div className="container mx-auto flex flex-col md:flex-row items-center justify-center gap-12 max-w-6xl">
             <div className="md:w-1/2 w-full p-6">
               <h2 className="text-4xl font-bold mb-6 text-gray-800">Explore Bergen</h2>
@@ -148,7 +148,7 @@ export default function HomePage() {
           </div>
         </section>
 
-        <section className="py-24 bg-white text-center">
+        <section className="py-24 bg-secondary text-center">
           <h2 className="text-4xl font-bold mb-12 text-gray-800">What Our Clients Say</h2>
           <div className="container mx-auto max-w-4xl relative">
             {testimonials.map((testimonial, index) => (

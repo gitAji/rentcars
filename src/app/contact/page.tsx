@@ -67,7 +67,7 @@ export default function ContactPage() {
         </h1>
       </section>
 
-                  <main className="bg-white flex-grow">
+                  <main className="bg-secondary flex-grow">
         <div className="container mx-auto p-8">
           <h2 className="text-3xl font-bold mb-6 text-primary">Get in Touch</h2>
           <p className="mb-6 text-neutral-dark">
