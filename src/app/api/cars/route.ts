@@ -5,12 +5,36 @@ export async function GET(request: Request) {
   try {
     const { searchParams } = new URL(request.url);
     const town = searchParams.get('town');
+    const passengers = searchParams.get('passengers');
+    const startDate = searchParams.get('startDate');
+    const endDate = searchParams.get('endDate');
     const carTypes = searchParams.get('carType')?.split(',');
 
     let query = supabase.from('cars').select('*');
 
     if (town) {
       query = query.eq('town', town);
+    }
+
+    if (passengers) {
+      query = query.gte('seats', parseInt(passengers));
+    }
+
+    if (startDate && endDate) {
+      const { data: bookedCars, error: bookedCarsError } = await supabase
+        .from('bookings')
+        .select('car_id')
+        .or(`and(start_date.lte.${endDate},end_date.gte.${startDate})`);
+
+      if (bookedCarsError) {
+        throw bookedCarsError;
+      }
+
+      const bookedCarIds = bookedCars.map(booking => booking.car_id);
+
+      if (bookedCarIds.length > 0) {
+        query = query.not('id', 'in', bookedCarIds);
+      }
     }
 
     if (carTypes && carTypes.length > 0 && carTypes.some(ct => ct !== '')) {
