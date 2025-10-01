@@ -64,6 +64,7 @@ function ManageCarsPage() {
       if (err instanceof Error) {
         setError(err.message);
       } else {
+        console.error("Fetch cars error:", err);
         setError('An unknown error occurred.');
       }
     } finally {
