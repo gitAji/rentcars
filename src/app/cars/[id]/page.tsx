@@ -40,7 +40,7 @@ export default async function CarDetailsPage({ params }: { params: Promise<{ id:
   let error: string | null = null;
 
   try {
-    const res = await fetch(`${process.env.NEXT_PUBLIC_BASE_URL}/api/cars/${id}`, {
+    const res = await fetch(`${process.env.BASE_URL}/api/cars/${id}`, {
       next: { revalidate: 3600 }, // Revalidate every hour
     });
     if (!res.ok) {
