@@ -6,8 +6,7 @@ import { supabase } from '@/lib/supabaseClient';
 interface SearchFormProps {
   onSearch: (filters: {
     town?: string;
-    adults?: number;
-    children?: number;
+    passengers?: number;
     carType?: string;
     startDate?: string;
     endDate?: string;
@@ -18,6 +17,7 @@ export default function SearchForm({ onSearch }: SearchFormProps) {
   const [town, setTown] = useState("");
   const [adults, setAdults] = useState("");
   const [children, setChildren] = useState("");
+  
   const [carType, setCarType] = useState("");
   const [startDate, setStartDate] = useState("");
   const [endDate, setEndDate] = useState("");
@@ -62,10 +62,11 @@ export default function SearchForm({ onSearch }: SearchFormProps) {
       return;
     }
     setError(null);
+    const totalPassengers = (adults ? parseInt(adults) : 0) + (children ? parseInt(children) : 0);
+
     onSearch({
       ...(town && { town }),
-      ...(adults && { adults: parseInt(adults) }),
-      ...(children && { children: parseInt(children) }),
+      ...(totalPassengers > 0 && { passengers: totalPassengers.toString() }),
       ...(carType && { carType }),
       ...(startDate && { startDate }),
       ...(endDate && { endDate }),
