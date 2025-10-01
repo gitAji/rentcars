@@ -96,6 +96,30 @@ function CheckoutPageContent({ car, startDate, endDate, extras, totalPrice, clie
       }
 
       if (paymentIntent && paymentIntent.status === 'succeeded') {
+        const { data: { session } } = await supabase.auth.getSession();
+        const userId = session?.user?.id || null;
+
+        // Save booking to Supabase
+        const { error: bookingError } = await supabase
+          .from('bookings')
+          .insert({
+            id: bookingId,
+            car_id: car.id,
+            user_id: userId,
+            start_date: startDate,
+            end_date: endDate,
+            total_price: totalPrice,
+            customer_name: name,
+            customer_email: email,
+            extras: extras,
+          });
+
+        if (bookingError) {
+          console.error('Error saving booking:', bookingError);
+          setError('Booking confirmed, but failed to save details. Please contact support.');
+          setLoading(false);
+          return;
+        }
         // Send confirmation email
         try {
           const bookingDetails = {
