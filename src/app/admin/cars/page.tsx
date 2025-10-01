@@ -16,7 +16,7 @@ interface Car {
   town: string;
   image_url: string;
   image_urls: string[];
-  car_type: string;
+  
 }
 
 function ManageCarsPage() {
@@ -40,7 +40,7 @@ function ManageCarsPage() {
       const offset = (currentPage - 1) * itemsPerPage;
       const limit = itemsPerPage;
 
-      let query = supabase.from('cars').select('id, make, model, year, price, town, image_url, image_urls, car_type', { count: 'exact' });
+      let query = supabase.from('cars').select('id, make, model, year, price, town, image_url, image_urls', { count: 'exact' });
 
       if (searchTerm) {
         query = query.or(`make.ilike.%${searchTerm}%,model.ilike.%${searchTerm}%`);
@@ -48,9 +48,7 @@ function ManageCarsPage() {
       if (filterTown) {
         query = query.eq('town', filterTown);
       }
-      if (filterCarType) {
-        query = query.eq('car_type', filterCarType);
-      }
+      
 
       const { data, count, error } = await query.range(offset, offset + limit - 1);
 
@@ -85,11 +83,7 @@ function ManageCarsPage() {
         if (townsError) throw townsError;
         setTownOptions(Array.from(new Set(townsData.map(item => item.town).filter(Boolean))));
 
-        const { data: carTypesData, error: carTypesError } = await supabase
-          .from('cars')
-          .select('car_type');
-        if (carTypesError) throw carTypesError;
-        setCarTypeOptions(Array.from(new Set(carTypesData.map(item => item.car_type).filter(Boolean))));
+        
 
       } catch (err: unknown) {
         if (err instanceof Error) {
@@ -167,16 +161,7 @@ function ManageCarsPage() {
             <option key={town} value={town}>{town}</option>
           ))}
         </select>
-        <select
-          value={filterCarType}
-          onChange={(e) => setFilterCarType(e.target.value)}
-          className="p-2 border rounded-md"
-        >
-          <option value="">All Car Types</option>
-          {carTypeOptions.map(type => (
-            <option key={type} value={type}>{type}</option>
-          ))}
-        </select>
+        
       </div>
 
       <div className="bg-secondary p-8 rounded-lg shadow-md">
