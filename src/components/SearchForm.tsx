@@ -158,7 +158,7 @@ export default function SearchForm({ onSearch }: SearchFormProps) {
 
       <button
         type="submit"
-        className="w-full bg-[#ff5757] text-white p-3 rounded-md hover:bg-[#e64d4d] focus:outline-none focus:ring-2 focus:ring-[#ff5757] focus:ring-offset-2 cursor-pointer"
+        className="btn-primary w-full"
       >
         Search Cars
       </button>

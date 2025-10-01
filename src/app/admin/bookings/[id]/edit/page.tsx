@@ -174,7 +174,7 @@ function EditBookingPage() {
         <button
           type="submit"
           disabled={loadingSubmit}
-          className="w-full px-4 py-3 font-bold text-white bg-red-500 rounded-md hover:bg-red-600 disabled:opacity-50 cursor-pointer"
+          className="btn-primary w-full"
         >
           {loadingSubmit ? 'Updating Booking...' : 'Save Changes'}
         </button>

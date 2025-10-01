@@ -284,7 +284,7 @@ function NewCarPage() {
         <button
           type="submit"
           disabled={loading}
-          className="w-full px-4 py-3 font-bold text-white bg-red-500 rounded-md hover:bg-red-600 disabled:opacity-50 cursor-pointer"
+          className="btn-primary w-full"
         >
           {loading ? 'Adding Car...' : 'Add Car'}
         </button>

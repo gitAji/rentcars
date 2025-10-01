@@ -8,6 +8,7 @@
   --color-secondary: #ffffff;
   --color-accent: #ff5757; /* Changed from #f5a623 to match the button color */
   --color-accent-dark: #e64d4d; /* Darker version of the new accent color */
+  --button-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
   --color-neutral: #424242;
   --color-neutral-dark: #212121;
   --color-neutral-light: #bdbdbd;
@@ -20,7 +21,7 @@
 
                     --color-primary: #0070f3;
     --color-secondary: #0a0a0a;
-    --color-accent: #ff5757;
+    --color-accent: #ff6b6b;
     --color-accent-dark: #e64d4d;
     --color-neutral: #888888; /* Darker neutral for dark mode */
     --color-neutral-dark: #666666; /* Even darker neutral for dark mode */
@@ -31,4 +32,17 @@
 body {
   background: var(--background);
   color: var(--foreground);
+}
+
+.btn-primary {
+  @apply bg-accent text-white px-8 py-3 rounded-xl text-lg font-semibold transition-all duration-300 ease-in-out;
+  &:hover {
+    @apply bg-accent-dark shadow-lg transform scale-105;
+  }
+  &:focus {
+    @apply outline-none ring-2 ring-accent ring-offset-2;
+  }
+  &:disabled {
+    @apply opacity-50 cursor-not-allowed;
+  }
 }

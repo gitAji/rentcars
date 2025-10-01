@@ -131,7 +131,7 @@ export default function HomePage() {
               </p>
               <button
                 onClick={() => router.push("/cars")}
-                className="bg-[#ff5757] text-white px-8 py-3 rounded-md text-lg hover:bg-[#e64d4d] transition"
+                className="btn-primary"
               >
                 Book Now
               </button>

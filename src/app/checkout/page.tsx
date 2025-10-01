@@ -290,7 +290,7 @@ function CheckoutPageContent({ car, startDate, endDate, extras, totalPrice, clie
                       type="button"
                       onClick={handleStripePayment}
                       disabled={!stripe || !elements || totalPrice === 0 || !name || !email || !phone || loading}
-                      className="w-full bg-red-600 text-white p-3 rounded-md hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-red-600 focus:ring-offset-2 disabled:opacity-50 disabled:cursor-not-allowed cursor-pointer"
+                      className="btn-primary w-full focus:ring-red-600 focus:ring-offset-2 disabled:opacity-50 disabled:cursor-not-allowed cursor-pointer"
                     >
                       Pay
                     </button>
