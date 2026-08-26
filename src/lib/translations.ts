@@ -188,6 +188,7 @@ export const translations = {
     cardetails_no_image: 'Ingen bilde tilgjengelig',
     cardetails_prev_image: 'Forrige bilde',
     cardetails_next_image: 'Neste bilde',
+    cardetails_dates_unavailable: 'De valgte datoene er ikke tilgjengelige for denne bilen.',
   },
   en: {
     // Header / nav
@@ -374,6 +375,7 @@ export const translations = {
     cardetails_no_image: 'No Image Available',
     cardetails_prev_image: 'Previous image',
     cardetails_next_image: 'Next image',
+    cardetails_dates_unavailable: 'The selected dates are unavailable for this car.',
   },
 } as const satisfies Record<Language, Record<string, string>>;
 

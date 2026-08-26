@@ -1,11 +1,19 @@
 'use client';
 
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useCallback } from 'react';
 import { useRouter, useParams } from 'next/navigation';
 import { supabase } from '@/lib/supabaseClient';
 import withAdminAuth from '@/components/withAdminAuth';
 import Loading from '@/components/loading';
 import Image from 'next/image';
+import { FaTrash, FaExclamationTriangle, FaCalendarTimes } from 'react-icons/fa';
+
+interface BlockedDate {
+  id: number;
+  start_date: string;
+  end_date: string;
+  reason: string | null;
+}
 
 function EditCarPage() {
   const router = useRouter();
@@ -36,6 +44,13 @@ function EditCarPage() {
   const [loadingData, setLoadingData] = useState(true);
   const [loadingSubmit, setLoadingSubmit] = useState(false);
   const [error, setError] = useState<string | null>(null);
+
+  const [blockedDates, setBlockedDates] = useState<BlockedDate[]>([]);
+  const [blockedDatesError, setBlockedDatesError] = useState<string | null>(null);
+  const [newBlockStart, setNewBlockStart] = useState('');
+  const [newBlockEnd, setNewBlockEnd] = useState('');
+  const [newBlockReason, setNewBlockReason] = useState('');
+  const [addingBlock, setAddingBlock] = useState(false);
 
   const norwegianTowns = ["Oslo", "Bergen", "Stavanger", "Trondheim", "Tromsø", "Kristiansand", "Fredrikstad", "Sandnes", "Drammen", "Porsgrunn"];
   const passengerOptions = [2, 4, 5, 7];
@@ -86,6 +101,64 @@ function EditCarPage() {
 
     fetchCar();
   }, [carId]);
+
+  const fetchBlockedDates = useCallback(async () => {
+    const { data, error: fetchError } = await supabase
+      .from('car_unavailability')
+      .select('id, start_date, end_date, reason')
+      .eq('car_id', carId)
+      .order('start_date', { ascending: true });
+
+    if (fetchError) {
+      // The car_unavailability table may not exist yet -- this feature needs a
+      // one-time SQL migration (see supabase/car_unavailability.sql).
+      setBlockedDatesError(fetchError.message);
+    } else {
+      setBlockedDatesError(null);
+      setBlockedDates(data || []);
+    }
+  }, [carId]);
+
+  useEffect(() => {
+    fetchBlockedDates();
+  }, [fetchBlockedDates]);
+
+  const handleAddBlock = async (e: React.FormEvent) => {
+    e.preventDefault();
+    if (!newBlockStart || !newBlockEnd) return;
+    if (newBlockEnd < newBlockStart) {
+      setBlockedDatesError('End date must be on or after the start date.');
+      return;
+    }
+
+    setAddingBlock(true);
+    setBlockedDatesError(null);
+    const { error: insertError } = await supabase.from('car_unavailability').insert({
+      car_id: carId,
+      start_date: newBlockStart,
+      end_date: newBlockEnd,
+      reason: newBlockReason || null,
+    });
+
+    if (insertError) {
+      setBlockedDatesError(insertError.message);
+    } else {
+      setNewBlockStart('');
+      setNewBlockEnd('');
+      setNewBlockReason('');
+      await fetchBlockedDates();
+    }
+    setAddingBlock(false);
+  };
+
+  const handleDeleteBlock = async (blockId: number) => {
+    const { error: deleteError } = await supabase.from('car_unavailability').delete().eq('id', blockId);
+    if (deleteError) {
+      setBlockedDatesError(deleteError.message);
+    } else {
+      setBlockedDates((prev) => prev.filter((b) => b.id !== blockId));
+    }
+  };
 
   const handleFeatureChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { value, checked } = e.target;
@@ -344,6 +417,93 @@ function EditCarPage() {
           {loadingSubmit ? 'Updating Car...' : 'Save Changes'}
         </button>
       </form>
+
+      {/* Blocked Dates */}
+      <div className="mt-8 bg-white p-8 rounded-lg shadow-md">
+        <h2 className="text-2xl font-bold text-gray-800 mb-1">Blocked Dates</h2>
+        <p className="text-sm text-gray-500 mb-6">
+          Manually block off dates this car isn&apos;t available for rent (maintenance, an off-platform
+          booking, etc.). These dates are hidden from search and can&apos;t be selected at checkout,
+          same as a real booking.
+        </p>
+
+        {blockedDatesError && (
+          <div className="flex items-center gap-2 p-4 mb-6 rounded-lg bg-red-50 border border-red-200 text-red-600 text-sm">
+            <FaExclamationTriangle className="shrink-0" />
+            <span>{blockedDatesError}</span>
+          </div>
+        )}
+
+        <form onSubmit={handleAddBlock} className="grid grid-cols-1 md:grid-cols-4 gap-4 mb-6">
+          <div>
+            <label htmlFor="blockStart" className="block text-sm font-medium text-gray-700 mb-1">Start Date</label>
+            <input
+              type="date"
+              id="blockStart"
+              value={newBlockStart}
+              onChange={(e) => setNewBlockStart(e.target.value)}
+              required
+              className="block w-full rounded-md border-gray-300 shadow-sm focus:border-primary focus:ring-primary"
+            />
+          </div>
+          <div>
+            <label htmlFor="blockEnd" className="block text-sm font-medium text-gray-700 mb-1">End Date</label>
+            <input
+              type="date"
+              id="blockEnd"
+              value={newBlockEnd}
+              min={newBlockStart || undefined}
+              onChange={(e) => setNewBlockEnd(e.target.value)}
+              required
+              className="block w-full rounded-md border-gray-300 shadow-sm focus:border-primary focus:ring-primary"
+            />
+          </div>
+          <div>
+            <label htmlFor="blockReason" className="block text-sm font-medium text-gray-700 mb-1">Reason (optional)</label>
+            <input
+              type="text"
+              id="blockReason"
+              value={newBlockReason}
+              onChange={(e) => setNewBlockReason(e.target.value)}
+              placeholder="e.g. Service"
+              className="block w-full rounded-md border-gray-300 shadow-sm focus:border-primary focus:ring-primary"
+            />
+          </div>
+          <div className="flex items-end">
+            <button
+              type="submit"
+              disabled={addingBlock}
+              className="w-full bg-accent text-white px-4 py-2 rounded-md font-semibold text-sm hover:bg-accent-dark transition-colors disabled:opacity-50 disabled:cursor-not-allowed cursor-pointer"
+            >
+              {addingBlock ? 'Adding...' : 'Add Block'}
+            </button>
+          </div>
+        </form>
+
+        {blockedDates.length === 0 ? (
+          <div className="flex flex-col items-center gap-2 py-8 text-gray-400">
+            <FaCalendarTimes size={24} />
+            <p className="text-sm">No blocked dates for this car.</p>
+          </div>
+        ) : (
+          <ul className="divide-y divide-gray-100">
+            {blockedDates.map((block) => (
+              <li key={block.id} className="flex items-center justify-between py-3">
+                <div>
+                  <p className="font-medium text-gray-800">{block.start_date} — {block.end_date}</p>
+                  {block.reason && <p className="text-sm text-gray-500">{block.reason}</p>}
+                </div>
+                <button
+                  onClick={() => handleDeleteBlock(block.id)}
+                  className="flex items-center gap-1.5 text-red-500 hover:underline text-sm font-medium cursor-pointer"
+                >
+                  <FaTrash size={13} /> Remove
+                </button>
+              </li>
+            ))}
+          </ul>
+        )}
+      </div>
     </>
   );
 }
