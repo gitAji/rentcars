@@ -79,15 +79,20 @@ export default function HomePage() {
       <main className="flex-grow min-h-screen">
         {/* Hero Section */}
         <section
-          className="relative h-[calc(100vh-100px)] bg-cover bg-center flex flex-col items-center justify-center text-neutral pt-40 sm:pt-48 md:pt-56"
+          className="relative min-h-[calc(100vh-100px)] bg-cover bg-center flex flex-col items-center justify-center text-neutral pt-40 sm:pt-48 md:pt-56 pb-16 overflow-hidden"
           style={{ backgroundImage: "url('/hero.png')" }}
         >
+          {/* Scrim so the white heading stays readable over a bright photo */}
+          <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-black/40 to-black/20" />
+          <div className="absolute inset-0 bg-gradient-to-b from-black/30 via-transparent to-transparent" />
+
           <div className="relative z-10 text-center p-4 max-w-5xl mx-auto flex flex-col items-center justify-center flex-grow text-white">
+            <span className="inline-block mb-4 px-4 py-1.5 rounded-full bg-white/10 backdrop-blur-sm border border-white/20 text-sm font-semibold tracking-wide uppercase">
+              Car Rental in Bergen
+            </span>
             <h1 className="text-4xl sm:text-5xl md:text-6xl font-extrabold mb-4 drop-shadow-lg text-white">Find Your Perfect Car in Bergen</h1>
-            <p className="text-xl md:text-3xl mb-8 drop-shadow-md text-white">
-              <span>
-                Rent a car for your next adventure
-              </span>
+            <p className="text-xl md:text-2xl mb-8 text-white/90 drop-shadow-md">
+              Rent a car for your next adventure
             </p>
             <div className="relative z-10 w-full flex justify-center">
               <SearchForm onSearch={handleSearch} />

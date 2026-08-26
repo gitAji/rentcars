@@ -6,10 +6,12 @@ import { supabase } from '@/lib/supabaseClient';
 import Link from 'next/link';
 import Header from '@/components/Header';
 import Footer from '@/components/Footer';
+import { FaLock, FaEye, FaEyeSlash, FaExclamationCircle } from 'react-icons/fa';
 
 export default function LoginPage() {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
+  const [showPassword, setShowPassword] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [loading, setLoading] = useState(false);
   const router = useRouter();
@@ -44,43 +46,76 @@ export default function LoginPage() {
           Login
         </h1>
       </section>
-      <main className="flex-grow flex items-center justify-center bg-gray-50 py-12">
-        <div className="w-full max-w-md p-8 space-y-6 bg-secondary rounded-lg shadow-md">
-          <h2 className="text-2xl font-bold text-center text-primary">Welcome Back</h2>
-          <form onSubmit={handleLogin} className="space-y-6">
+      <main className="flex-grow flex items-center justify-center bg-gray-50 py-12 px-4">
+        <div className="w-full max-w-md p-8 space-y-6 bg-secondary rounded-2xl shadow-xl border border-gray-100">
+          <div className="flex flex-col items-center">
+            <div className="flex items-center justify-center w-14 h-14 rounded-full bg-accent/10 text-accent mb-4">
+              <FaLock size={22} />
+            </div>
+            <h2 className="text-2xl font-bold text-center text-primary">Welcome Back</h2>
+            <p className="text-sm text-neutral-light text-center mt-1">
+              Log in to manage your bookings.
+            </p>
+          </div>
+
+          <form onSubmit={handleLogin} className="space-y-5">
             <div>
-              <label htmlFor="email" className="block text-sm font-medium text-neutral-dark">
+              <label htmlFor="email" className="block text-sm font-medium text-neutral-dark mb-1">
                 Email
               </label>
               <input
                 id="email"
                 type="email"
+                autoComplete="email"
+                placeholder="you@example.com"
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
                 required
-                className="w-full px-3 py-2 mt-1 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-primary focus:border-primary"
+                className="w-full px-3 py-2.5 border border-gray-300 rounded-lg shadow-sm text-gray-900 placeholder:text-gray-400 focus:outline-none focus:ring-2 focus:ring-primary focus:border-primary transition-colors"
               />
             </div>
             <div>
-              <label htmlFor="password" className="block text-sm font-medium text-neutral-dark">
+              <label htmlFor="password" className="block text-sm font-medium text-neutral-dark mb-1">
                 Password
               </label>
-              <input
-                id="password"
-                type="password"
-                value={password}
-                onChange={(e) => setPassword(e.target.value)}
-                required
-                className="w-full px-3 py-2 mt-1 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-primary focus:border-primary"
-              />
+              <div className="relative">
+                <input
+                  id="password"
+                  type={showPassword ? 'text' : 'password'}
+                  autoComplete="current-password"
+                  placeholder="••••••••"
+                  value={password}
+                  onChange={(e) => setPassword(e.target.value)}
+                  required
+                  className="w-full px-3 py-2.5 pr-10 border border-gray-300 rounded-lg shadow-sm text-gray-900 placeholder:text-gray-400 focus:outline-none focus:ring-2 focus:ring-primary focus:border-primary transition-colors"
+                />
+                <button
+                  type="button"
+                  onClick={() => setShowPassword((prev) => !prev)}
+                  aria-label={showPassword ? 'Hide password' : 'Show password'}
+                  className="absolute inset-y-0 right-0 flex items-center px-3 text-gray-400 hover:text-gray-600 cursor-pointer"
+                >
+                  {showPassword ? <FaEyeSlash size={16} /> : <FaEye size={16} />}
+                </button>
+              </div>
             </div>
-            {error && <p className="text-sm text-red-500 text-center">{error}</p>}
+
+            {error && (
+              <div className="flex items-start gap-2 p-3 rounded-lg bg-red-50 border border-red-200 text-red-600 text-sm">
+                <FaExclamationCircle className="mt-0.5 shrink-0" />
+                <span>{error}</span>
+              </div>
+            )}
+
             <div>
               <button
                 type="submit"
                 disabled={loading}
-                className="btn-primary w-full focus:ring-red-600 focus:ring-offset-2 disabled:opacity-50 disabled:cursor-not-allowed"
+                className="btn-primary w-full flex items-center justify-center gap-2 focus:ring-red-600 focus:ring-offset-2 disabled:opacity-50 disabled:cursor-not-allowed"
               >
+                {loading && (
+                  <span className="h-4 w-4 border-2 border-white/40 border-t-white rounded-full animate-spin" />
+                )}
                 {loading ? 'Logging in...' : 'Login'}
               </button>
             </div>

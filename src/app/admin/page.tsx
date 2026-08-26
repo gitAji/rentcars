@@ -4,7 +4,7 @@ import { useEffect, useState } from 'react';
 import { supabase } from '@/lib/supabaseClient';
 import withAdminAuth from '@/components/withAdminAuth';
 import Loading from '@/components/loading';
-import { FaCar, FaBook } from 'react-icons/fa';
+import { FaCar, FaBook, FaExclamationTriangle } from 'react-icons/fa';
 
 interface Booking {
   id: number;
@@ -63,50 +63,72 @@ function AdminPage() {
 
   return (
     <>
-      <h1 className="text-3xl font-bold mb-6 text-gray-800">Admin Dashboard</h1>
-      {error && <p className="text-red-500 py-4">{error}</p>}
-      
+      <div className="mb-8">
+        <h1 className="text-3xl font-bold text-gray-800">Admin Dashboard</h1>
+        <p className="text-gray-500 mt-1">Overview of your fleet and bookings.</p>
+      </div>
+
+      {error && (
+        <div className="flex items-center gap-2 p-4 mb-6 rounded-lg bg-red-50 border border-red-200 text-red-600">
+          <FaExclamationTriangle className="shrink-0" />
+          <span>{error}</span>
+        </div>
+      )}
+
       {/* Stat Cards */}
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-8">
-        <div className="bg-secondary p-6 rounded-lg shadow-md flex items-center">
-          <FaCar size={40} className="text-blue-500 mr-4" />
+      <div className="grid grid-cols-1 sm:grid-cols-2 gap-6 mb-10">
+        <div className="bg-white p-6 rounded-xl shadow-sm border border-gray-100 flex items-center gap-4 hover:shadow-md transition-shadow">
+          <div className="flex items-center justify-center w-14 h-14 rounded-full bg-blue-50 text-blue-500 shrink-0">
+            <FaCar size={26} />
+          </div>
           <div>
             <p className="text-sm text-gray-500">Total Cars</p>
-            <p className="text-3xl font-bold">{carCount}</p>
+            <p className="text-3xl font-bold text-gray-800">{carCount}</p>
           </div>
         </div>
-        <div className="bg-secondary p-6 rounded-lg shadow-md flex items-center">
-          <FaBook size={40} className="text-green-500 mr-4" />
+        <div className="bg-white p-6 rounded-xl shadow-sm border border-gray-100 flex items-center gap-4 hover:shadow-md transition-shadow">
+          <div className="flex items-center justify-center w-14 h-14 rounded-full bg-green-50 text-green-500 shrink-0">
+            <FaBook size={26} />
+          </div>
           <div>
             <p className="text-sm text-gray-500">Total Bookings</p>
-            <p className="text-3xl font-bold">{bookingCount}</p>
+            <p className="text-3xl font-bold text-gray-800">{bookingCount}</p>
           </div>
         </div>
       </div>
 
       {/* Recent Bookings */}
       <h2 className="text-2xl font-bold mb-4 text-gray-800">Recent Bookings</h2>
-      <div className="bg-secondary p-8 rounded-lg shadow-md">
-        <table className="w-full text-left">
-          <thead>
-            <tr className="border-b">
-              <th className="p-4">ID</th>
-              <th className="p-4">Customer</th>
-              <th className="p-4">Date</th>
-              <th className="p-4">Total Price</th>
-            </tr>
-          </thead>
-          <tbody>
-            {recentBookings.map(booking => (
-              <tr key={booking.id} className="border-b hover:bg-gray-50">
-                <td className="p-4">{booking.id}</td>
-                <td className="p-4">{booking.customer_name}</td>
-                <td className="p-4">{new Date(booking.created_at).toLocaleDateString()}</td>
-                <td className="p-4">kr{booking.total_price}</td>
-              </tr>
-            ))}
-          </tbody>
-        </table>
+      <div className="bg-white rounded-xl shadow-sm border border-gray-100 overflow-hidden">
+        {recentBookings.length === 0 ? (
+          <p className="p-8 text-center text-gray-500">No bookings yet.</p>
+        ) : (
+          <div className="overflow-x-auto">
+            <table className="w-full text-left border-collapse">
+              <thead>
+                <tr className="bg-gray-50 border-b border-gray-200">
+                  <th className="p-4 text-sm font-semibold text-gray-600">ID</th>
+                  <th className="p-4 text-sm font-semibold text-gray-600">Customer</th>
+                  <th className="p-4 text-sm font-semibold text-gray-600">Date</th>
+                  <th className="p-4 text-sm font-semibold text-gray-600">Total Price</th>
+                </tr>
+              </thead>
+              <tbody>
+                {recentBookings.map((booking, index) => (
+                  <tr
+                    key={booking.id}
+                    className={`border-b border-gray-100 last:border-0 hover:bg-gray-50 transition-colors ${index % 2 === 1 ? 'bg-gray-50/50' : ''}`}
+                  >
+                    <td className="p-4 text-gray-500">#{booking.id}</td>
+                    <td className="p-4 font-medium text-gray-800">{booking.customer_name}</td>
+                    <td className="p-4 text-gray-500">{new Date(booking.created_at).toLocaleDateString()}</td>
+                    <td className="p-4 font-semibold text-gray-800">kr{booking.total_price}</td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
+        )}
       </div>
     </>
   );
