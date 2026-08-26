@@ -46,7 +46,7 @@ export default function CarCard({ car, startDate, endDate }: CarCardProps) {
   const estimatedTotal = days * (Number(car.price) || 0); // Ensure price is a number
 
   return (
-    <Link href={`/cars/${car.id}?startDate=${startDate}&endDate=${endDate}`} className="block border border-gray-200 rounded-lg shadow-md bg-white text-neutral cursor-pointer transform transition-all duration-300 hover:scale-105 hover:shadow-lg overflow-hidden">
+    <Link href={`/cars/${car.id}?startDate=${startDate}&endDate=${endDate}`} className="block border border-gray-200 rounded-lg shadow-md bg-white text-neutral cursor-pointer transform transition-all duration-300 hover:scale-105 hover:shadow-lg active:scale-[0.98] overflow-hidden">
       <Image 
         src={imageSrc} 
         alt={`${car.make || 'Car'} ${car.model || 'Model'}`} 

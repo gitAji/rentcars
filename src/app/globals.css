@@ -33,12 +33,31 @@
 body {
   background: var(--background);
   color: var(--foreground);
+  overscroll-behavior-y: none; /* no rubber-band flash of the page background on iOS/Android */
+  -webkit-tap-highlight-color: transparent; /* no gray flash on tap — feels native */
+}
+
+button,
+a {
+  -webkit-tap-highlight-color: transparent;
+}
+
+/* Keep form fields at 16px+ on small screens so iOS Safari doesn't zoom in on focus */
+@media (max-width: 767px) {
+  input,
+  select,
+  textarea {
+    font-size: 16px;
+  }
 }
 
 .btn-primary {
   @apply bg-accent text-white px-8 py-3 rounded-xl text-lg font-semibold transition-all duration-300 ease-in-out;
   &:hover {
     @apply bg-accent-dark shadow-lg transform scale-105;
+  }
+  &:active {
+    @apply scale-95;
   }
   &:focus {
     @apply outline-none ring-2 ring-accent ring-offset-2;
