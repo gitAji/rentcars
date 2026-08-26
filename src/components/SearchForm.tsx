@@ -2,6 +2,8 @@
 
 import { useState, useEffect } from "react";
 import { supabase } from '@/lib/supabaseClient';
+import { useLanguage } from '@/context/LanguageContext';
+import type { TranslationKey } from '@/lib/translations';
 
 interface SearchFormProps {
   onSearch: (filters: {
@@ -14,6 +16,7 @@ interface SearchFormProps {
 }
 
 export default function SearchForm({ onSearch }: SearchFormProps) {
+  const { t } = useLanguage();
   const [town, setTown] = useState("");
   const [adults, setAdults] = useState("");
   const [children, setChildren] = useState("");
@@ -21,7 +24,7 @@ export default function SearchForm({ onSearch }: SearchFormProps) {
   const [carType, setCarType] = useState("");
   const [startDate, setStartDate] = useState("");
   const [endDate, setEndDate] = useState("");
-  const [error, setError] = useState<string | null>(null);
+  const [error, setError] = useState<TranslationKey | null>(null);
 
   const [townOptions, setTownOptions] = useState<string[]>([]);
   const [carTypeOptions, setCarTypeOptions] = useState<string[]>([]);
@@ -45,11 +48,7 @@ export default function SearchForm({ onSearch }: SearchFormProps) {
 
       } catch (err: unknown) {
         console.error("Error fetching filter options:", err);
-        if (err instanceof Error) {
-          setError("Failed to load filter options." + err.message);
-        } else {
-          setError("Failed to load filter options. An unknown error occurred.");
-        }
+        setError('search_error_loading_options');
       }
     };
     fetchFilterOptions();
@@ -58,7 +57,7 @@ export default function SearchForm({ onSearch }: SearchFormProps) {
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     if (!town || !startDate || !endDate) {
-      setError("Please select a town, start date, and end date.");
+      setError('search_error_required');
       return;
     }
     setError(null);
@@ -80,25 +79,25 @@ export default function SearchForm({ onSearch }: SearchFormProps) {
     >
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 mb-6">
         <div>
-          <label htmlFor="town" className="sr-only">Town</label>
+          <label htmlFor="town" className="sr-only">{t('search_select_town')}</label>
           <select
             id="town"
             value={town}
             onChange={(e) => setTown(e.target.value)}
             className="p-3 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-[#ff5757] text-gray-900 w-full"
           >
-            <option value="">Select Town</option>
+            <option value="">{t('search_select_town')}</option>
             {townOptions.map(option => <option key={option} value={option}>{option}</option>)}
           </select>
         </div>
 
         <div>
-          <label htmlFor="adults" className="sr-only">Adults</label>
+          <label htmlFor="adults" className="sr-only">{t('search_adults_placeholder')}</label>
           <input
             id="adults"
             type="number"
             min="1"
-            placeholder="Adults"
+            placeholder={t('search_adults_placeholder')}
             value={adults}
             onChange={(e) => setAdults(e.target.value)}
             className="p-3 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-[#ff5757] text-gray-900 w-full"
@@ -106,12 +105,12 @@ export default function SearchForm({ onSearch }: SearchFormProps) {
         </div>
 
         <div>
-          <label htmlFor="children" className="sr-only">Children</label>
+          <label htmlFor="children" className="sr-only">{t('search_children_placeholder')}</label>
           <input
             id="children"
             type="number"
             min="0"
-            placeholder="Children"
+            placeholder={t('search_children_placeholder')}
             value={children}
             onChange={(e) => setChildren(e.target.value)}
             className="p-3 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-[#ff5757] text-gray-900 w-full"
@@ -119,20 +118,20 @@ export default function SearchForm({ onSearch }: SearchFormProps) {
         </div>
 
         <div>
-          <label htmlFor="carType" className="sr-only">Car Type</label>
+          <label htmlFor="carType" className="sr-only">{t('search_car_type_placeholder')}</label>
           <select
             id="carType"
             value={carType}
             onChange={(e) => setCarType(e.target.value)}
             className="p-3 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-[#ff5757] text-gray-900 w-full"
           >
-            <option value="">Car Type</option>
+            <option value="">{t('search_car_type_placeholder')}</option>
             {carTypeOptions.map(option => <option key={option} value={option}>{option}</option>)}
           </select>
         </div>
 
         <div>
-          <label htmlFor="startDate" className="sr-only">Start Date</label>
+          <label htmlFor="startDate" className="sr-only">{t('search_start_date')}</label>
           <input
             id="startDate"
             type="date"
@@ -143,7 +142,7 @@ export default function SearchForm({ onSearch }: SearchFormProps) {
         </div>
 
         <div>
-          <label htmlFor="endDate" className="sr-only">End Date</label>
+          <label htmlFor="endDate" className="sr-only">{t('search_end_date')}</label>
           <input
             id="endDate"
             type="date"
@@ -154,13 +153,13 @@ export default function SearchForm({ onSearch }: SearchFormProps) {
         </div>
       </div>
 
-      {error && <p className="text-red-500 text-center mb-4">{error}</p>}
+      {error && <p className="text-red-500 text-center mb-4">{t(error)}</p>}
 
       <button
         type="submit"
         className="btn-primary w-full"
       >
-        Search Cars
+        {t('search_button')}
       </button>
     </form>
   );

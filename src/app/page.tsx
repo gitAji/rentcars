@@ -6,11 +6,13 @@ import Header from "../components/Header";
 import Footer from "../components/Footer";
 import SearchForm from "../components/SearchForm";
 import Loading from "../components/loading"; // Added import
+import { useLanguage } from "../context/LanguageContext";
 
 import Image from 'next/image';
 
 export default function HomePage() {
   const router = useRouter();
+  const { t } = useLanguage();
 
   const [isLoading, setIsLoading] = useState(true); // Added loading state
   const [currentTestimonialIndex, setCurrentTestimonialIndex] = useState(0); // Moved here
@@ -88,11 +90,11 @@ export default function HomePage() {
 
           <div className="relative z-10 text-center p-4 max-w-5xl mx-auto flex flex-col items-center justify-center flex-grow text-white">
             <span className="inline-block mb-4 px-4 py-1.5 rounded-full bg-white/10 backdrop-blur-sm border border-white/20 text-sm font-semibold tracking-wide uppercase">
-              Car Rental in Bergen
+              {t('hero_badge')}
             </span>
-            <h1 className="text-4xl sm:text-5xl md:text-6xl font-extrabold mb-4 drop-shadow-lg text-white">Find Your Perfect Car in Bergen</h1>
+            <h1 className="text-4xl sm:text-5xl md:text-6xl font-extrabold mb-4 drop-shadow-lg text-white">{t('hero_title')}</h1>
             <p className="text-xl md:text-2xl mb-8 text-white/90 drop-shadow-md">
-              Rent a car for your next adventure
+              {t('hero_subtitle')}
             </p>
             <div className="relative z-10 w-full flex justify-center">
               <SearchForm onSearch={handleSearch} />
@@ -101,27 +103,27 @@ export default function HomePage() {
         </section>
 
         <section className="py-24 bg-secondary text-center">
-          <h2 className="text-4xl font-bold mb-12 text-gray-800">Why Choose Us?</h2>
+          <h2 className="text-4xl font-bold mb-12 text-gray-800">{t('why_choose_title')}</h2>
           <div className="container mx-auto grid grid-cols-1 md:grid-cols-3 gap-12">
             <div className="p-8 shadow-lg rounded-lg bg-gray-50 transform transition-transform duration-300 hover:scale-105">
               <div className="text-6xl mb-4 text-accent">🚗</div>
-              <h3 className="text-2xl font-semibold mb-2 text-gray-800">Wide Range of Cars</h3>
+              <h3 className="text-2xl font-semibold mb-2 text-gray-800">{t('why_choose_wide_title')}</h3>
               <p className="text-neutral-light text-lg">
-                We have a wide range of cars to choose from. You can choose the car that best suits your needs.
+                {t('why_choose_wide_desc')}
               </p>
             </div>
             <div className="p-8 shadow-lg rounded-lg bg-gray-50 transform transition-transform duration-300 hover:scale-105">
               <div className="text-6xl mb-4 text-accent">💰</div>
-              <h3 className="text-2xl font-semibold mb-2 text-gray-800">Best Price Guarantee</h3>
+              <h3 className="text-2xl font-semibold mb-2 text-gray-800">{t('why_choose_price_title')}</h3>
               <p className="text-neutral-light text-lg">
-                We offer the best price for our cars. You can be sure that you are getting the best deal.
+                {t('why_choose_price_desc')}
               </p>
             </div>
             <div className="p-8 shadow-lg rounded-lg bg-gray-50 transform transition-transform duration-300 hover:scale-105">
               <div className="text-6xl mb-4 text-accent">⚡</div>
-              <h3 className="text-2xl font-semibold mb-2 text-gray-800">24/7 Customer Support</h3>
+              <h3 className="text-2xl font-semibold mb-2 text-gray-800">{t('why_choose_support_title')}</h3>
               <p className="text-neutral-light text-lg">
-                We are here to help you with any questions you may have. Our customer support is available 24/7.
+                {t('why_choose_support_desc')}
               </p>
             </div>
           </div>
@@ -130,15 +132,15 @@ export default function HomePage() {
         <section className="py-24 bg-secondary text-neutral">
           <div className="container mx-auto flex flex-col md:flex-row items-center justify-center gap-12 max-w-6xl">
             <div className="md:w-1/2 w-full p-6">
-              <h2 className="text-4xl font-bold mb-6 text-gray-800">Explore Bergen</h2>
+              <h2 className="text-4xl font-bold mb-6 text-gray-800">{t('explore_title')}</h2>
               <p className="text-lg text-neutral-dark mb-8">
-                Explore the beautiful city of Bergen and its surroundings with one of our rental cars. We have a wide range of cars to choose from, so you can find the perfect one for your trip.
+                {t('explore_desc')}
               </p>
               <button
                 onClick={() => router.push("/cars")}
                 className="btn-primary"
               >
-                Book Now
+                {t('book_now')}
               </button>
             </div>
             <div className="md:w-1/2 w-full">
@@ -154,7 +156,7 @@ export default function HomePage() {
         </section>
 
         <section className="py-24 bg-secondary text-center">
-          <h2 className="text-4xl font-bold mb-12 text-gray-800">What Our Clients Say</h2>
+          <h2 className="text-4xl font-bold mb-12 text-gray-800">{t('testimonials_title')}</h2>
           <div className="container mx-auto max-w-4xl relative">
             {testimonials.map((testimonial, index) => (
               <blockquote

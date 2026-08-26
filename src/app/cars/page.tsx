@@ -7,6 +7,7 @@ import Footer from "@/components/Footer";
 import Loading from "@/components/loading";
 import CarCard from "@/app/components/CarCard";
 import { FaCar, FaCarSide, FaCarAlt, FaBolt, FaCity, FaTimesCircle, FaFilter } from 'react-icons/fa';
+import { useLanguage } from "@/context/LanguageContext";
 
 // Define interfaces for type safety
 interface Car {
@@ -32,6 +33,7 @@ interface CarType {
 }
 
 function CarsPageContent() {
+  const { t } = useLanguage();
   const [cars, setCars] = useState<Car[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
@@ -153,7 +155,7 @@ function CarsPageContent() {
   if (error) {
     return (
       <div className="flex justify-center items-center min-h-screen">
-        <p className="text-2xl text-red-500">Error: {error}</p>
+        <p className="text-2xl text-red-500">{t('cars_error_prefix')} {error}</p>
       </div>
     );
   }
@@ -167,14 +169,14 @@ function CarsPageContent() {
       >
         <div className="absolute inset-0 bg-gray-800 bg-opacity-40" />
         <h1 className="relative z-10 text-3xl sm:text-4xl md:text-5xl text-white font-bold">
-          Our Cars
+          {t('cars_hero_title')}
         </h1>
       </section>
       <main className="container mx-auto px-4 py-8">
         {/* Filter Bar */}
         <div className="bg-secondary p-4 rounded-lg shadow-md mb-8">
           <div className="flex flex-col md:flex-row justify-between items-center gap-4">
-            <h2 className="text-xl font-bold text-gray-800">Filters</h2>
+            <h2 className="text-xl font-bold text-gray-800">{t('cars_filters_title')}</h2>
             <div className="flex flex-wrap gap-2">
               {town && (
                 <span className="flex items-center px-2 py-0.5 bg-red-100 text-red-700 rounded-full text-xs">
@@ -193,7 +195,7 @@ function CarsPageContent() {
                   onClick={handleClearAllFilters}
                   className="flex items-center px-2 py-0.5 bg-red-600 text-white rounded-full text-xs hover:bg-red-700 transition-colors duration-200"
                 >
-                  <FaTimesCircle className="mr-1" />Clear All
+                  <FaTimesCircle className="mr-1" />{t('cars_clear_all')}
                 </button>
               )}
             </div>
@@ -202,14 +204,14 @@ function CarsPageContent() {
               className="flex items-center px-3 py-1.5 bg-red-600 text-white rounded-md shadow-md hover:bg-red-700 transition-colors duration-200 text-sm"
             >
               <FaFilter className="mr-1.5" />
-              {showFilters ? "Hide Options" : "Show Options"}
+              {showFilters ? t('cars_hide_options') : t('cars_show_options')}
             </button>
           </div>
 
           {showFilters && (
             <div className="mt-6 pt-4 border-t border-gray-200 grid grid-cols-1 lg:grid-cols-2 gap-6">
               <div>
-                <label className="block text-sm font-medium text-gray-700 mb-2">Town</label>
+                <label className="block text-sm font-medium text-gray-700 mb-2">{t('cars_town_label')}</label>
                 <div className="flex flex-wrap gap-1">
                   {availableTowns.map((t) => (
                     <button
@@ -227,7 +229,7 @@ function CarsPageContent() {
                 </div>
               </div>
               <div>
-                <label className="block text-sm font-medium text-gray-700 mb-2">Car Type</label>
+                <label className="block text-sm font-medium text-gray-700 mb-2">{t('cars_car_type_label')}</label>
                 <div className="flex flex-wrap gap-1">
                   {availableCarTypes.map((carType) => (
                     <button

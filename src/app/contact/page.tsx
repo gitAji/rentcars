@@ -4,8 +4,10 @@ import { useState, useEffect } from "react";
 import Header from "../../components/Header";
 import Footer from "../../components/Footer";
 import Loading from "../../components/loading";
+import { useLanguage } from "../../context/LanguageContext";
 
 export default function ContactPage() {
+  const { t } = useLanguage();
   const [isLoading, setIsLoading] = useState(true);
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
@@ -63,21 +65,21 @@ export default function ContactPage() {
         <Header />
         <div className="absolute inset-0 bg-gray-800 bg-opacity-40" />
         <h1 className="relative z-10 text-4xl md:text-5xl text-gray-800 sm:text-white font-bold">
-          Contact Us
+          {t('contact_hero_title')}
         </h1>
       </section>
 
                   <main className="bg-secondary flex-grow">
         <div className="container mx-auto p-8">
-          <h2 className="text-3xl font-bold mb-6 text-primary">Get in Touch</h2>
+          <h2 className="text-3xl font-bold mb-6 text-primary">{t('contact_get_in_touch')}</h2>
           <p className="mb-6 text-neutral-dark">
-            Have questions or need assistance? We’re here to help!
+            {t('contact_intro')}
           </p>
 
           <div className="space-y-6">
             {/* Email */}
             <div>
-              <h3 className="text-xl font-semibold text-primary">Email:</h3>
+              <h3 className="text-xl font-semibold text-primary">{t('contact_email_label')}</h3>
               <p className="text-neutral-dark">info@rentcars.com</p>
             </div>
 
@@ -85,7 +87,7 @@ export default function ContactPage() {
             <form onSubmit={handleSubmit} className="space-y-4">
               <div>
                 <label htmlFor="name" className="block text-neutral-dark mb-1">
-                  Name:
+                  {t('contact_name_label')}
                 </label>
                 <input
                   type="text"
@@ -98,7 +100,7 @@ export default function ContactPage() {
               </div>
               <div>
                 <label htmlFor="email" className="block text-neutral-dark mb-1">
-                  Email:
+                  {t('contact_email_field_label')}
                 </label>
                 <input
                   type="email"
@@ -111,7 +113,7 @@ export default function ContactPage() {
               </div>
               <div>
                 <label htmlFor="subject" className="block text-neutral-dark mb-1">
-                  Subject:
+                  {t('contact_subject_label')}
                 </label>
                 <input
                   type="text"
@@ -124,7 +126,7 @@ export default function ContactPage() {
               </div>
               <div>
                 <label htmlFor="message" className="block text-neutral-dark mb-1">
-                  Message:
+                  {t('contact_message_label')}
                 </label>
                 <textarea
                   id="message"
@@ -140,23 +142,23 @@ export default function ContactPage() {
                 disabled={isSubmitting}
                 className="btn-primary"
               >
-                {isSubmitting ? "Sending..." : "Send Message"}
+                {isSubmitting ? t('contact_sending') : t('contact_send_button')}
               </button>
 
               {submitStatus === "success" && (
                 <p className="text-green-600 mt-4">
-                  Your message has been sent successfully!
+                  {t('contact_success')}
                 </p>
               )}
               {submitStatus === "error" && (
                 <p className="text-red-600 mt-4">
-                  There was an error sending your message. Please try again later.
+                  {t('contact_error')}
                 </p>
               )}
             </form>
           </div>
 
-          <p className="mt-8 text-neutral">We look forward to hearing from you!</p>
+          <p className="mt-8 text-neutral">{t('contact_looking_forward')}</p>
         </div>
       </main>
 

@@ -1,6 +1,12 @@
+'use client';
+
 import Link from "next/link";
+import { useLanguage } from '@/context/LanguageContext';
+import LanguageSwitcher from '@/components/LanguageSwitcher';
 
 export default function Footer() {
+  const { t } = useLanguage();
+
   return (
     <footer className="bg-gray-900 text-gray-300 py-12">
       <div className="container mx-auto px-4">
@@ -9,44 +15,44 @@ export default function Footer() {
           <div>
             <h3 className="text-xl font-semibold text-white mb-4">RentCars</h3>
             <p className="text-sm mb-4">
-              Your premier destination for car rentals. We offer a wide range of vehicles to suit your needs, ensuring a smooth and enjoyable journey.
+              {t('footer_tagline')}
             </p>
-            <p className="text-sm">&copy; {new Date().getFullYear()} RentCars. All rights reserved.</p>
+            <p className="text-sm">{t('footer_rights', { year: new Date().getFullYear() })}</p>
           </div>
 
           {/* Column 2: Quick Links */}
           <div>
-            <h3 className="text-xl font-semibold text-white mb-4">Quick Links</h3>
+            <h3 className="text-xl font-semibold text-white mb-4">{t('footer_quick_links')}</h3>
             <ul>
               <li className="mb-2">
-                <a href="/about" className="hover:text-white transition-colors duration-300">About Us</a>
+                <a href="/about" className="hover:text-white transition-colors duration-300">{t('footer_about_us')}</a>
               </li>
               <li className="mb-2">
-                <a href="/contact" className="hover:text-white transition-colors duration-300">Contact</a>
+                <a href="/contact" className="hover:text-white transition-colors duration-300">{t('footer_contact')}</a>
               </li>
               <li className="mb-2">
-                <Link href="/cars" className="hover:text-white transition-colors duration-300">Our Cars</Link>
+                <Link href="/cars" className="hover:text-white transition-colors duration-300">{t('footer_our_cars')}</Link>
               </li>
             </ul>
           </div>
 
           {/* Column 3: Legal */}
           <div>
-            <h3 className="text-xl font-semibold text-white mb-4">Legal</h3>
+            <h3 className="text-xl font-semibold text-white mb-4">{t('footer_legal')}</h3>
             <ul>
               <li className="mb-2">
-                <a href="/privacy" className="hover:text-white transition-colors duration-300">Privacy Policy</a>
+                <a href="/privacy" className="hover:text-white transition-colors duration-300">{t('footer_privacy')}</a>
               </li>
               <li className="mb-2">
-                <a href="/terms-and-conditions" className="hover:text-white transition-colors duration-300">Terms & Conditions</a>
+                <a href="/terms-and-conditions" className="hover:text-white transition-colors duration-300">{t('footer_terms')}</a>
               </li>
             </ul>
           </div>
 
           {/* Column 4: Follow Us */}
           <div>
-            <h3 className="text-xl font-semibold text-white mb-4">Follow Us</h3>
-            <div className="flex space-x-4">
+            <h3 className="text-xl font-semibold text-white mb-4">{t('footer_follow_us')}</h3>
+            <div className="flex space-x-4 mb-6">
               <a href="#" className="text-gray-400 hover:text-white transition-colors duration-300 cursor-pointer">
                 <svg className="w-6 h-6" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true">
                   <path fillRule="evenodd" d="M22 12c0-5.523-4.477-10-10-10S2 6.477 2 12c0 4.991 3.657 9.128 8.438 9.878v-6.987h-2.54V12h2.54V9.797c0-2.506 1.492-3.89 3.777-3.89 1.094 0 2.238.195 2.238.195v2.46h-1.26c-1.243 0-1.63.771-1.63 1.562V12h2.773l-.443 2.89h-2.33V22C18.343 21.128 22 16.991 22 12z" clipRule="evenodd" />
@@ -58,6 +64,7 @@ export default function Footer() {
                 </svg>
               </a>
             </div>
+            <LanguageSwitcher className="text-gray-400" />
           </div>
         </div>
       </div>
