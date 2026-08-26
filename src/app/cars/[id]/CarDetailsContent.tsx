@@ -6,6 +6,7 @@ import Image from "next/image";
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
 import Link from "next/link";
+import { useLanguage } from "@/context/LanguageContext";
 
 // Define interfaces for type safety
 interface Car {
@@ -35,6 +36,7 @@ interface CarDetailsContentProps {
 }
 
 export default function CarDetailsContent({ car, id }: CarDetailsContentProps) {
+  const { t } = useLanguage();
   const searchParams = useSearchParams();
   const router = useRouter();
 
@@ -110,7 +112,7 @@ export default function CarDetailsContent({ car, id }: CarDetailsContentProps) {
   if (!car) {
     return (
       <div className="flex justify-center items-center min-h-screen">
-        <p className="text-2xl text-neutral-light">Car not found</p>
+        <p className="text-2xl text-neutral-light">{t('cardetails_not_found')}</p>
       </div>
     );
   }
@@ -130,8 +132,8 @@ export default function CarDetailsContent({ car, id }: CarDetailsContentProps) {
       <main className="container mx-auto px-4 py-8">
         <div className="mb-4 font-bold">
           <p className="text-sm text-gray-500">
-            <Link href="/" className="hover:underline">Home</Link> | 
-            <Link href="/cars" className="hover:underline">Cars</Link> | 
+            <Link href="/" className="hover:underline">{t('nav_home')}</Link> |{' '}
+            <Link href="/cars" className="hover:underline">{t('nav_cars')}</Link> |{' '}
             <span>{car.make} {car.model}</span>
           </p>
         </div>
@@ -150,7 +152,7 @@ export default function CarDetailsContent({ car, id }: CarDetailsContentProps) {
                   />
                 ) : (
                   <div className="w-full h-full bg-gray-200 flex items-center justify-center">
-                    <span className="text-gray-500">No Image Available</span>
+                    <span className="text-gray-500">{t('cardetails_no_image')}</span>
                   </div>
                 )}
                 {carImages.length > 1 && (
@@ -158,14 +160,14 @@ export default function CarDetailsContent({ car, id }: CarDetailsContentProps) {
                     <button
                       onClick={goToPrevImage}
                       className="absolute top-1/2 left-4 -translate-y-1/2 bg-black bg-opacity-50 text-white p-3 rounded-full hover:bg-opacity-75 transition-transform transform hover:scale-110"
-                      aria-label="Previous image"
+                      aria-label={t('cardetails_prev_image')}
                     >
                       &#8249;
                     </button>
                     <button
                       onClick={goToNextImage}
                       className="absolute top-1/2 right-4 -translate-y-1/2 bg-black bg-opacity-50 text-white p-3 rounded-full hover:bg-opacity-75 transition-transform transform hover:scale-110"
-                      aria-label="Next image"
+                      aria-label={t('cardetails_next_image')}
                     >
                       &#8250;
                     </button>
@@ -194,12 +196,12 @@ export default function CarDetailsContent({ car, id }: CarDetailsContentProps) {
                 </div>
               )}
 
-            <h2 className="text-2xl font-bold mb-2 text-primary mt-8">Description</h2>
+            <h2 className="text-2xl font-bold mb-2 text-primary mt-8">{t('cardetails_description')}</h2>
             <p className="text-neutral text-base mb-4">
               {car.description ||
                 `Discover the features and comfort of the ${car.make} ${car.model}. This car is an excellent choice for your travel needs, offering a blend of performance and style.`}
             </p>
-            <h2 className="text-2xl font-bold mb-2 text-primary">Included Features</h2>
+            <h2 className="text-2xl font-bold mb-2 text-primary">{t('cardetails_included_features')}</h2>
             <div className="grid grid-cols-2 gap-x-4 gap-y-2 text-neutral text-base mb-4">
               {car.features && car.features.length > 0 ? (
                 car.features.map((feature) => <div key={feature} className="flex items-center"><span className="mr-2 text-accent">•</span>{feature}</div>)
@@ -211,7 +213,7 @@ export default function CarDetailsContent({ car, id }: CarDetailsContentProps) {
                 </>
               )}
             </div>
-            <h2 className="text-2xl font-bold mb-2 text-primary">Terms and Conditions</h2>
+            <h2 className="text-2xl font-bold mb-2 text-primary">{t('cardetails_terms')}</h2>
             <p className="text-neutral text-base mb-4">              {car.terms || `Minimum rental age is 21. Valid driver's license required. Fuel policy: full to full,The vehicle must be returned in the same clean condition as delivered. A cleaning fee may apply if the vehicle requires excessive cleaning upon return.`}
             </p>
           </div>
@@ -225,30 +227,30 @@ export default function CarDetailsContent({ car, id }: CarDetailsContentProps) {
               <p className="text-lg text-gray-600 mb-4">{car.shortDescription}</p>
               <div className="flex items-center justify-between border-t border-b border-gray-200 py-4">
                 <div className="text-center">
-                  <p className="text-sm text-gray-500">Year</p>
+                  <p className="text-sm text-gray-500">{t('cardetails_year')}</p>
                   <p className="text-lg font-semibold">{car.year}</p>
                 </div>
                 <div className="text-center">
-                  <p className="text-sm text-gray-500">Seats</p>
+                  <p className="text-sm text-gray-500">{t('cardetails_seats')}</p>
                   <p className="text-lg font-semibold">{car.seats}</p>
                 </div>
                 <div className="text-center">
-                  <p className="text-sm text-gray-500">Type</p>
+                  <p className="text-sm text-gray-500">{t('cardetails_type')}</p>
                   <p className="text-lg font-semibold">{car.carType.join(", ")}</p>
                 </div>
               </div>
               <p className="text-2xl font-bold text-accent mt-4">
                 kr{car.price.toFixed(2)}
-                <span className="text-sm font-normal text-gray-500"> / day</span>
+                <span className="text-sm font-normal text-gray-500"> {t('cardetails_per_day')}</span>
               </p>
             </div>
 
             <div className="bg-secondary p-6 rounded-lg shadow-md">
-              <h2 className="text-2xl font-bold mb-4">Booking Details</h2>
+              <h2 className="text-2xl font-bold mb-4">{t('cardetails_booking_details')}</h2>
               <div className="space-y-4">
                 <div>
                   <label htmlFor="startDate" className="block font-medium text-gray-700 mb-1">
-                    Start Date
+                    {t('search_start_date')}
                   </label>
                   <input
                     type="date"
@@ -266,7 +268,7 @@ export default function CarDetailsContent({ car, id }: CarDetailsContentProps) {
                 </div>
                 <div>
                   <label htmlFor="endDate" className="block font-medium text-gray-700 mb-1">
-                    End Date
+                    {t('search_end_date')}
                   </label>
                   <input
                     type="date"
@@ -288,7 +290,7 @@ export default function CarDetailsContent({ car, id }: CarDetailsContentProps) {
 
               {extrasOptions.length > 0 && (
                 <div className="mt-6">
-                  <h3 className="text-xl font-bold mb-3">Optional Extras</h3>
+                  <h3 className="text-xl font-bold mb-3">{t('cardetails_optional_extras')}</h3>
                   <div className="space-y-3">
                     {extrasOptions.map((extra) => (
                       <div key={extra.name} className="flex items-center justify-between">
@@ -318,12 +320,12 @@ export default function CarDetailsContent({ car, id }: CarDetailsContentProps) {
 
               <div className="mt-6 pt-6 border-t border-gray-200">
                 <p className="text-3xl font-bold text-primary text-right">
-                  Total: kr{totalPrice.toFixed(2)}
+                  {t('cardetails_total')} kr{totalPrice.toFixed(2)}
                 </p>
                 <button
                   onClick={() => {
                     if (!startDate || !endDate || totalPrice === 0) {
-                      alert("Please select valid dates");
+                      alert(t('cardetails_select_valid_dates_alert'));
                       return;
                     }
                     const query = new URLSearchParams({
@@ -335,10 +337,10 @@ export default function CarDetailsContent({ car, id }: CarDetailsContentProps) {
                     }).toString();
                     router.push(`/checkout?${query}`);
                   }}
-                  className="mt-4 w-full bg-red-600 text-white p-4 rounded-lg font-semibold text-lg hover:bg-red-700 transition-colors duration-300 disabled:opacity-50 disabled:cursor-not-allowed"
+                  className="btn-primary mt-4 w-full disabled:opacity-50 disabled:cursor-not-allowed"
                   disabled={totalPrice === 0}
                 >
-                  Proceed to Checkout
+                  {t('cardetails_proceed_checkout')}
                 </button>
               </div>
             </div>

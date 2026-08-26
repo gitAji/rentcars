@@ -12,6 +12,8 @@ import Header from "@/components/Header";
 import Loading from "@/components/loading";
 import Image from "next/image";
 import Footer from "@/components/Footer";
+import { useLanguage } from "@/context/LanguageContext";
+import { FaExclamationCircle } from "react-icons/fa";
 
 interface Car {
   id: string;
@@ -36,6 +38,7 @@ interface CheckoutPageContentProps {
 }
 
 function CheckoutPageContent({ car, startDate, endDate, extras, totalPrice, clientSecret }: CheckoutPageContentProps) {
+  const { t } = useLanguage();
   const router = useRouter();
   const stripe = useStripe();
   const elements = useElements();
@@ -60,12 +63,12 @@ function CheckoutPageContent({ car, startDate, endDate, extras, totalPrice, clie
     }
 
     if (!name || !email || !phone) {
-      setError("Please fill in all required fields: Full Name, Email, and Phone.");
+      setError(t('checkout_error_required_fields'));
       return;
     }
 
     if (totalPrice === 0) {
-      setError("Please select valid dates to calculate the total price.");
+      setError(t('checkout_error_invalid_dates'));
       return;
     }
 
@@ -180,19 +183,22 @@ function CheckoutPageContent({ car, startDate, endDate, extras, totalPrice, clie
       >
         <div className="absolute inset-0 bg-gray-800 bg-opacity-40" />
         <h1 className="relative z-10 text-4xl md:text-5xl text-white font-bold">
-          Confirm Your Booking
+          {t('checkout_hero_title')}
         </h1>
       </section>
       <main className="bg-secondary flex-grow">
         <div className="container mx-auto p-4 sm:p-6">
           {error && (
-            <div className="text-center p-4 text-red-500 mb-4">Error: {error}</div>
+            <div className="flex items-start gap-2 p-4 mb-6 rounded-lg bg-red-50 border border-red-200 text-red-600 max-w-2xl mx-auto">
+              <FaExclamationCircle className="mt-0.5 shrink-0" />
+              <span>{error}</span>
+            </div>
           )}
           <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
             <div>
-              <div className="bg-secondary p-6 rounded-lg shadow-md mb-4">
+              <div className="bg-white p-6 rounded-xl shadow-sm border border-gray-100 mb-4">
                 <h2 className="text-xl sm:text-2xl font-semibold mb-4 text-primary">
-                  Your Booking Summary
+                  {t('checkout_summary_title')}
                 </h2>
                 <div className="flex items-center mb-4">
                   <Image
@@ -208,11 +214,11 @@ function CheckoutPageContent({ car, startDate, endDate, extras, totalPrice, clie
                   </div>
                 </div>
                 <div className="space-y-2">
-                  <p><span className="font-semibold">Dates:</span> {startDate} to {endDate}</p>
-                  <p><span className="font-semibold">Number of days:</span> {numberOfDays}</p>
-                  <p><span className="font-semibold">Extras:</span> {extras.length > 0 ? extras.join(", ") : "None"}</p>
+                  <p><span className="font-semibold">{t('checkout_dates')}</span> {startDate} to {endDate}</p>
+                  <p><span className="font-semibold">{t('checkout_number_of_days')}</span> {numberOfDays}</p>
+                  <p><span className="font-semibold">{t('checkout_extras')}</span> {extras.length > 0 ? extras.join(", ") : t('confirmation_none')}</p>
                   <p className="text-2xl font-bold mt-4 text-primary">
-                    Total Price: kr{totalPrice.toFixed(2)}
+                    {t('checkout_total_price')} kr{totalPrice.toFixed(2)}
                   </p>
                 </div>
               </div>
@@ -220,10 +226,10 @@ function CheckoutPageContent({ car, startDate, endDate, extras, totalPrice, clie
             <div>
               <form
                 onSubmit={handleSubmit}
-                className="bg-secondary p-6 rounded-lg shadow-md"
+                className="bg-white p-6 rounded-xl shadow-sm border border-gray-100"
               >
                 <h2 className="text-xl sm:text-2xl font-semibold mb-4 text-primary">
-                  Your Contact Details
+                  {t('checkout_contact_details_title')}
                 </h2>
                 <div className="grid grid-cols-1 gap-4">
                   <div>
@@ -231,7 +237,7 @@ function CheckoutPageContent({ car, startDate, endDate, extras, totalPrice, clie
                       htmlFor="name"
                       className="block text-base font-medium text-neutral-dark"
                     >
-                      Full Name:
+                      {t('checkout_full_name')}
                     </label>
                     <input
                       type="text"
@@ -247,7 +253,7 @@ function CheckoutPageContent({ car, startDate, endDate, extras, totalPrice, clie
                       htmlFor="email"
                       className="block text-base font-medium text-neutral-dark"
                     >
-                      Email:
+                      {t('checkout_email')}
                     </label>
                     <input
                       type="email"
@@ -263,7 +269,7 @@ function CheckoutPageContent({ car, startDate, endDate, extras, totalPrice, clie
                       htmlFor="phone"
                       className="block text-base font-medium text-neutral-dark"
                     >
-                      Phone:
+                      {t('checkout_phone')}
                     </label>
                     <input
                       type="tel"
@@ -279,7 +285,7 @@ function CheckoutPageContent({ car, startDate, endDate, extras, totalPrice, clie
                       htmlFor="driverLicense"
                       className="block text-base font-medium text-neutral-dark"
                     >
-                      Driver License Number (Optional):
+                      {t('checkout_driver_license')}
                     </label>
                     <input
                       type="text"
@@ -294,7 +300,7 @@ function CheckoutPageContent({ car, startDate, endDate, extras, totalPrice, clie
                       htmlFor="instructions"
                       className="block text-base font-medium text-neutral-dark"
                     >
-                      Pickup/Return Instructions (Optional):
+                      {t('checkout_instructions')}
                     </label>
                     <textarea
                       id="instructions"
@@ -306,7 +312,7 @@ function CheckoutPageContent({ car, startDate, endDate, extras, totalPrice, clie
                   </div>
                 </div>
                 <div className="mt-6">
-                  <h3 className="text-lg font-semibold mb-4">Payment</h3>
+                  <h3 className="text-lg font-semibold mb-4">{t('checkout_payment_title')}</h3>
                   <div className="mb-4">
                     <PaymentElement />
                   </div>
@@ -317,7 +323,7 @@ function CheckoutPageContent({ car, startDate, endDate, extras, totalPrice, clie
                       disabled={!stripe || !elements || totalPrice === 0 || !name || !email || !phone || loading}
                       className="btn-primary w-full focus:ring-red-600 focus:ring-offset-2 disabled:opacity-50 disabled:cursor-not-allowed cursor-pointer"
                     >
-                      Pay
+                      {t('checkout_pay_button')}
                     </button>
                   </div>
                 </div>
@@ -332,6 +338,7 @@ function CheckoutPageContent({ car, startDate, endDate, extras, totalPrice, clie
 }
 
 function CheckoutFlow() {
+  const { t } = useLanguage();
   const searchParams = useSearchParams();
   const carId = searchParams.get("carId");
   const startDate = searchParams.get("startDate");
@@ -436,7 +443,7 @@ function CheckoutFlow() {
   if (!car) {
     return (
       <div className="flex justify-center items-center min-h-screen">
-        <p className="text-2xl text-primary">Car not found.</p>
+        <p className="text-2xl text-primary">{t('checkout_car_not_found')}</p>
       </div>
     );
   }
@@ -444,7 +451,7 @@ function CheckoutFlow() {
   if (!clientSecret) {
     return (
       <div className="flex justify-center items-center min-h-screen">
-        <p className="text-2xl text-accent">Payment options not available.</p>
+        <p className="text-2xl text-accent">{t('checkout_payment_unavailable')}</p>
       </div>
     );
   }

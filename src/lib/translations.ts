@@ -126,6 +126,68 @@ export const translations = {
     carcard_total: 'Totalt:',
 
     loading_text: 'Laster...',
+
+    // Dashboard
+    dashboard_hero_title: 'Min side',
+    dashboard_my_bookings: 'Mine bestillinger',
+    dashboard_no_bookings: 'Du har ingen bestillinger ennå.',
+    dashboard_booking_id: 'Bestillings-ID',
+    dashboard_dates: 'Datoer',
+    dashboard_total_price: 'Totalpris',
+
+    // Confirmation
+    confirmation_hero_title: 'Bestilling bekreftet!',
+    confirmation_success_heading: 'Din bilutleie er bekreftet!',
+    confirmation_success_detail:
+      'Du vil snart motta en bekreftelses-e-post med alle detaljene om bestillingen din.',
+    confirmation_booking_id: 'Bestillings-ID:',
+    confirmation_car: 'Bil:',
+    confirmation_customer: 'Kunde:',
+    confirmation_dates: 'Datoer:',
+    confirmation_extras: 'Tillegg:',
+    confirmation_none: 'Ingen',
+    confirmation_total_price: 'Totalpris:',
+    confirmation_go_home: 'Gå til forsiden',
+    confirmation_download_pdf: 'Last ned PDF',
+
+    // Checkout
+    checkout_hero_title: 'Bekreft bestillingen din',
+    checkout_summary_title: 'Sammendrag av bestillingen',
+    checkout_dates: 'Datoer:',
+    checkout_number_of_days: 'Antall dager:',
+    checkout_extras: 'Tillegg:',
+    checkout_total_price: 'Totalpris:',
+    checkout_contact_details_title: 'Dine kontaktopplysninger',
+    checkout_full_name: 'Fullt navn',
+    checkout_email: 'E-post',
+    checkout_phone: 'Telefon',
+    checkout_driver_license: 'Førerkortnummer (valgfritt)',
+    checkout_instructions: 'Instruksjoner for henting/levering (valgfritt)',
+    checkout_payment_title: 'Betaling',
+    checkout_pay_button: 'Betal',
+    checkout_error_required_fields:
+      'Vennligst fyll ut alle obligatoriske felt: fullt navn, e-post og telefon.',
+    checkout_error_invalid_dates: 'Vennligst velg gyldige datoer for å beregne totalprisen.',
+    checkout_car_not_found: 'Bilen ble ikke funnet.',
+    checkout_payment_unavailable: 'Betalingsalternativer er ikke tilgjengelige.',
+
+    // Car details
+    cardetails_description: 'Beskrivelse',
+    cardetails_included_features: 'Inkluderte funksjoner',
+    cardetails_terms: 'Vilkår og betingelser',
+    cardetails_year: 'År',
+    cardetails_seats: 'Seter',
+    cardetails_type: 'Type',
+    cardetails_per_day: '/ dag',
+    cardetails_booking_details: 'Bestillingsdetaljer',
+    cardetails_optional_extras: 'Valgfrie tillegg',
+    cardetails_total: 'Totalt:',
+    cardetails_proceed_checkout: 'Gå til kassen',
+    cardetails_select_valid_dates_alert: 'Vennligst velg gyldige datoer',
+    cardetails_not_found: 'Bilen ble ikke funnet',
+    cardetails_no_image: 'Ingen bilde tilgjengelig',
+    cardetails_prev_image: 'Forrige bilde',
+    cardetails_next_image: 'Neste bilde',
   },
   en: {
     // Header / nav
@@ -250,6 +312,68 @@ export const translations = {
     carcard_total: 'Total:',
 
     loading_text: 'Loading...',
+
+    // Dashboard
+    dashboard_hero_title: 'My Dashboard',
+    dashboard_my_bookings: 'My Bookings',
+    dashboard_no_bookings: 'You have no bookings yet.',
+    dashboard_booking_id: 'Booking ID',
+    dashboard_dates: 'Dates',
+    dashboard_total_price: 'Total Price',
+
+    // Confirmation
+    confirmation_hero_title: 'Booking Confirmed!',
+    confirmation_success_heading: 'Your car rental has been successfully confirmed!',
+    confirmation_success_detail:
+      'You will receive a confirmation email shortly with all the details of your booking.',
+    confirmation_booking_id: 'Booking ID:',
+    confirmation_car: 'Car:',
+    confirmation_customer: 'Customer:',
+    confirmation_dates: 'Dates:',
+    confirmation_extras: 'Extras:',
+    confirmation_none: 'None',
+    confirmation_total_price: 'Total Price:',
+    confirmation_go_home: 'Go to Home',
+    confirmation_download_pdf: 'Download PDF',
+
+    // Checkout
+    checkout_hero_title: 'Confirm Your Booking',
+    checkout_summary_title: 'Your Booking Summary',
+    checkout_dates: 'Dates:',
+    checkout_number_of_days: 'Number of days:',
+    checkout_extras: 'Extras:',
+    checkout_total_price: 'Total Price:',
+    checkout_contact_details_title: 'Your Contact Details',
+    checkout_full_name: 'Full Name',
+    checkout_email: 'Email',
+    checkout_phone: 'Phone',
+    checkout_driver_license: 'Driver License Number (Optional)',
+    checkout_instructions: 'Pickup/Return Instructions (Optional)',
+    checkout_payment_title: 'Payment',
+    checkout_pay_button: 'Pay',
+    checkout_error_required_fields:
+      'Please fill in all required fields: Full Name, Email, and Phone.',
+    checkout_error_invalid_dates: 'Please select valid dates to calculate the total price.',
+    checkout_car_not_found: 'Car not found.',
+    checkout_payment_unavailable: 'Payment options not available.',
+
+    // Car details
+    cardetails_description: 'Description',
+    cardetails_included_features: 'Included Features',
+    cardetails_terms: 'Terms and Conditions',
+    cardetails_year: 'Year',
+    cardetails_seats: 'Seats',
+    cardetails_type: 'Type',
+    cardetails_per_day: '/ day',
+    cardetails_booking_details: 'Booking Details',
+    cardetails_optional_extras: 'Optional Extras',
+    cardetails_total: 'Total:',
+    cardetails_proceed_checkout: 'Proceed to Checkout',
+    cardetails_select_valid_dates_alert: 'Please select valid dates',
+    cardetails_not_found: 'Car not found',
+    cardetails_no_image: 'No Image Available',
+    cardetails_prev_image: 'Previous image',
+    cardetails_next_image: 'Next image',
   },
 } as const satisfies Record<Language, Record<string, string>>;
 

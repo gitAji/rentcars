@@ -3,6 +3,7 @@
 import { useEffect, useState } from 'react';
 import withAdminAuth from '@/components/withAdminAuth';
 import Loading from '@/components/loading';
+import { FaTrash, FaExclamationTriangle, FaUsers } from 'react-icons/fa';
 
 interface UserProfile {
   id: string;
@@ -94,41 +95,66 @@ function ManageUsersPage() {
   return (
     <>
       <h1 className="text-3xl font-bold mb-6 text-gray-800">Manage Users</h1>
-      {error && <p className="text-red-500 py-4">{error}</p>}
-      <div className="bg-secondary p-8 rounded-lg shadow-md">
-        <table className="w-full text-left">
-          <thead>
-            <tr className="border-b">
-              <th className="p-4">ID</th>
-              <th className="p-4">Email</th>
-              <th className="p-4">Full Name</th>
-              <th className="p-4">Role</th>
-              <th className="p-4">Actions</th>
-            </tr>
-          </thead>
-          <tbody>
-            {users.map(user => (
-              <tr key={user.id} className="border-b hover:bg-gray-50">
-                <td className="p-4 text-sm">{user.id}</td>
-                <td className="p-4">{user.email}</td>
-                <td className="p-4">{user.full_name}</td>
-                <td className="p-4">
-                  <select
-                    value={user.role}
-                    onChange={(e) => handleRoleChange(user.id, e.target.value)}
-                    className="p-2 border rounded"
-                  >
-                    <option value="user">User</option>
-                    <option value="admin">Admin</option>
-                  </select>
-                </td>
-                <td className="p-4">
-                  <button onClick={() => handleDeleteUser(user.id)} className="text-red-500 hover:underline">Delete</button>
-                </td>
+
+      {error && (
+        <div className="flex items-center gap-2 p-4 mb-6 rounded-lg bg-red-50 border border-red-200 text-red-600">
+          <FaExclamationTriangle className="shrink-0" />
+          <span>{error}</span>
+        </div>
+      )}
+
+      <div className="bg-white rounded-xl shadow-sm border border-gray-100 overflow-hidden">
+        <div className="overflow-x-auto">
+          <table className="w-full text-left border-collapse">
+            <thead>
+              <tr className="bg-gray-50 border-b border-gray-200">
+                <th className="p-4 text-sm font-semibold text-gray-600">ID</th>
+                <th className="p-4 text-sm font-semibold text-gray-600">Email</th>
+                <th className="p-4 text-sm font-semibold text-gray-600">Full Name</th>
+                <th className="p-4 text-sm font-semibold text-gray-600">Role</th>
+                <th className="p-4 text-sm font-semibold text-gray-600">Actions</th>
               </tr>
-            ))}
-          </tbody>
-        </table>
+            </thead>
+            <tbody>
+              {users.length === 0 ? (
+                <tr>
+                  <td colSpan={5} className="p-12 text-center text-gray-500">
+                    <div className="flex flex-col items-center gap-2">
+                      <FaUsers size={28} className="text-gray-300" />
+                      No users found.
+                    </div>
+                  </td>
+                </tr>
+              ) : (
+                users.map((user, index) => (
+                  <tr
+                    key={user.id}
+                    className={`border-b border-gray-100 last:border-0 hover:bg-gray-50 transition-colors ${index % 2 === 1 ? 'bg-gray-50/50' : ''}`}
+                  >
+                    <td className="p-4 text-xs text-gray-500">{user.id}</td>
+                    <td className="p-4 text-gray-800">{user.email}</td>
+                    <td className="p-4 text-gray-800">{user.full_name}</td>
+                    <td className="p-4">
+                      <select
+                        value={user.role}
+                        onChange={(e) => handleRoleChange(user.id, e.target.value)}
+                        className="p-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-primary focus:border-primary"
+                      >
+                        <option value="user">User</option>
+                        <option value="admin">Admin</option>
+                      </select>
+                    </td>
+                    <td className="p-4">
+                      <button onClick={() => handleDeleteUser(user.id)} className="flex items-center gap-1.5 text-red-500 hover:underline text-sm font-medium cursor-pointer">
+                        <FaTrash size={13} /> Delete
+                      </button>
+                    </td>
+                  </tr>
+                ))
+              )}
+            </tbody>
+          </table>
+        </div>
       </div>
     </>
   );

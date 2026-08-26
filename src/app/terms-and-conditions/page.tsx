@@ -36,8 +36,8 @@ export default function TermsAndConditionsPage() {
           Terms and Conditions
         </h1>
       </section>
-                  <main className="flex-grow container mx-auto p-8 text-gray-800 sm:text-neutral">
-        
+                  <main className="flex-grow bg-white">
+        <div className="max-w-3xl mx-auto p-6 md:p-8 leading-relaxed text-gray-800 sm:text-neutral">
         <p className="mb-4 text-gray-600">
           Please read these terms and conditions carefully before using Our Service.
         </p>
@@ -155,6 +155,7 @@ export default function TermsAndConditionsPage() {
           <li>By email: info@rentcars.no</li>
           <li>By visiting this page on our website: https://www.rentcars.no/contact</li>
         </ul>
+        </div>
       </main>
       <Footer />
     </div>
