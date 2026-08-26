@@ -6,7 +6,7 @@ import { supabase } from '@/lib/supabaseClient';
 interface SearchFormProps {
   onSearch: (filters: {
     town?: string;
-    passengers?: number;
+    passengers?: string;
     carType?: string;
     startDate?: string;
     endDate?: string;
