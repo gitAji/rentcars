@@ -3,8 +3,10 @@
 // components/Loading.tsx
 import Image from 'next/image';
 import React from "react";
+import { useLanguage } from '@/context/LanguageContext';
 
 export default function Loading() {
+  const { t } = useLanguage();
   return (
     <div className="flex flex-col items-center justify-center py-12">
       <div className="relative w-full h-24 overflow-hidden">
@@ -12,7 +14,7 @@ export default function Loading() {
           <Image src="/car-icon.png" alt="Loading Car" width={96} height={96} className="object-contain" />
         </div>
       </div>
-      <p className="mt-4 text-lg font-semibold text-primary">Loading...</p>
+      <p className="mt-4 text-lg font-semibold text-primary">{t('loading_text')}</p>
 
       <style jsx>{`
         @keyframes race {

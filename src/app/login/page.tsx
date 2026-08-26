@@ -7,8 +7,10 @@ import Link from 'next/link';
 import Header from '@/components/Header';
 import Footer from '@/components/Footer';
 import { FaLock, FaEye, FaEyeSlash, FaExclamationCircle } from 'react-icons/fa';
+import { useLanguage } from '@/context/LanguageContext';
 
 export default function LoginPage() {
+  const { t } = useLanguage();
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [showPassword, setShowPassword] = useState(false);
@@ -43,7 +45,7 @@ export default function LoginPage() {
         <Header />
         <div className="absolute inset-0 bg-gray-800 bg-opacity-40" />
         <h1 className="relative z-10 text-4xl text-white font-bold">
-          Login
+          {t('login_hero_title')}
         </h1>
       </section>
       <main className="flex-grow flex items-center justify-center bg-gray-50 py-12 px-4">
@@ -52,16 +54,16 @@ export default function LoginPage() {
             <div className="flex items-center justify-center w-14 h-14 rounded-full bg-accent/10 text-accent mb-4">
               <FaLock size={22} />
             </div>
-            <h2 className="text-2xl font-bold text-center text-primary">Welcome Back</h2>
+            <h2 className="text-2xl font-bold text-center text-primary">{t('login_welcome')}</h2>
             <p className="text-sm text-neutral-light text-center mt-1">
-              Log in to manage your bookings.
+              {t('login_subtitle')}
             </p>
           </div>
 
           <form onSubmit={handleLogin} className="space-y-5">
             <div>
               <label htmlFor="email" className="block text-sm font-medium text-neutral-dark mb-1">
-                Email
+                {t('login_email_label')}
               </label>
               <input
                 id="email"
@@ -76,7 +78,7 @@ export default function LoginPage() {
             </div>
             <div>
               <label htmlFor="password" className="block text-sm font-medium text-neutral-dark mb-1">
-                Password
+                {t('login_password_label')}
               </label>
               <div className="relative">
                 <input
@@ -92,7 +94,7 @@ export default function LoginPage() {
                 <button
                   type="button"
                   onClick={() => setShowPassword((prev) => !prev)}
-                  aria-label={showPassword ? 'Hide password' : 'Show password'}
+                  aria-label={showPassword ? t('login_hide_password') : t('login_show_password')}
                   className="absolute inset-y-0 right-0 flex items-center px-3 text-gray-400 hover:text-gray-600 cursor-pointer"
                 >
                   {showPassword ? <FaEyeSlash size={16} /> : <FaEye size={16} />}
@@ -116,14 +118,14 @@ export default function LoginPage() {
                 {loading && (
                   <span className="h-4 w-4 border-2 border-white/40 border-t-white rounded-full animate-spin" />
                 )}
-                {loading ? 'Logging in...' : 'Login'}
+                {loading ? t('login_logging_in') : t('login_button')}
               </button>
             </div>
           </form>
           <p className="text-sm text-center text-neutral-dark">
-            Don&apos;t have an account?{' '}
+            {t('login_no_account')}{' '}
             <Link href="/signup" className="font-medium text-primary hover:underline">
-              Sign up
+              {t('login_signup_link')}
             </Link>
           </p>
         </div>

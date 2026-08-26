@@ -1,7 +1,8 @@
-'use client';  
+'use client';
 import Link from 'next/link';
 import Image from 'next/image';
 import { useState } from 'react';
+import { useLanguage } from '@/context/LanguageContext';
 
 interface CarCardProps {
   car: {
@@ -20,6 +21,7 @@ interface CarCardProps {
 }
 
 export default function CarCard({ car, startDate, endDate }: CarCardProps) {
+  const { t } = useLanguage();
   const [imageSrc, setImageSrc] = useState(car.image_url || '/default-car-hero.jpg');
 
   const handleImageError = () => {
@@ -44,7 +46,7 @@ export default function CarCard({ car, startDate, endDate }: CarCardProps) {
   const estimatedTotal = days * (Number(car.price) || 0); // Ensure price is a number
 
   return (
-    <Link href={`/cars/${car.id}?startDate=${startDate}&endDate=${endDate}`} className="block border border-gray-200 rounded-lg shadow-md bg-white text-neutral cursor-pointer transform transition-all duration-300 hover:scale-105 hover:shadow-lg overflow-hidden">
+    <Link href={`/cars/${car.id}?startDate=${startDate}&endDate=${endDate}`} className="block border border-gray-200 rounded-lg shadow-md bg-white text-neutral cursor-pointer transform transition-all duration-300 hover:scale-105 hover:shadow-lg active:scale-[0.98] overflow-hidden">
       <Image 
         src={imageSrc} 
         alt={`${car.make || 'Car'} ${car.model || 'Model'}`} 
@@ -64,7 +66,7 @@ export default function CarCard({ car, startDate, endDate }: CarCardProps) {
             <svg className="w-5 h-5 mr-1" fill="currentColor" viewBox="0 0 20 20">
               <path d="M10 9a3 3 0 100-6 3 3 0 000 6zm-7 9a7 7 0 1114 0H3z" clipRule="evenodd" fillRule="evenodd"></path>
             </svg>
-            <span>{car.seats} seats</span>
+            <span>{car.seats} {t('carcard_seats')}</span>
           </div>
           <div className="flex items-center text-neutral-light">
             {car.carType && car.carType.length > 0 && (
@@ -76,11 +78,11 @@ export default function CarCard({ car, startDate, endDate }: CarCardProps) {
         <p className="text-neutral-light text-sm mb-4">{car.shortDescription}</p>
 
         <div className="flex items-baseline justify-between">
-          <p className="text-3xl font-extrabold text-accent">kr{car.price}<span className="text-base font-normal text-neutral-light">/day</span></p>
+          <p className="text-3xl font-extrabold text-accent">kr{car.price}<span className="text-base font-normal text-neutral-light">{t('carcard_per_day')}</span></p>
           {days > 0 && (
             <div className="text-right">
-              <p className="text-neutral text-sm">{days} day{days > 1 ? 's' : ''} selected.</p>
-              <p className="text-xl font-semibold text-primary">Total: kr{estimatedTotal.toFixed(2)}</p>
+              <p className="text-neutral text-sm">{t('carcard_days_selected', { days })}</p>
+              <p className="text-xl font-semibold text-primary">{t('carcard_total')} kr{estimatedTotal.toFixed(2)}</p>
             </div>
           )}
         </div>

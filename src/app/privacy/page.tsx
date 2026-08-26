@@ -40,8 +40,8 @@ export default function PrivacyPolicyPage() {
       </section>
 
       {/* Main Content */}
-                  <main className="flex-grow container mx-auto p-6 md:p-8">
-        
+                  <main className="flex-grow bg-white">
+        <div className="max-w-3xl mx-auto p-6 md:p-8 leading-relaxed">
         <p className="mb-6 text-neutral text-base">
           This Privacy Policy describes Our policies and procedures on the collection, use, and disclosure of Your information when You use the Service and tells You about Your privacy rights and how the law protects You.
         </p>
@@ -238,6 +238,7 @@ export default function PrivacyPolicyPage() {
           <li>By email: <a href="mailto:info@rentcars.no" className="text-accent hover:underline cursor-pointer">info@rentcars.no</a></li>
           <li>By visiting this page on our website: <a href="https://www.rentcars.no/contact" className="text-accent hover:underline cursor-pointer" target="_blank" rel="noopener noreferrer">https://www.rentcars.no/contact</a></li>
         </ul>
+        </div>
       </main>
 
       {/* Footer */}

@@ -5,8 +5,10 @@ import { supabase } from '@/lib/supabaseClient';
 import Link from 'next/link';
 import Header from '@/components/Header';
 import Footer from '@/components/Footer';
+import { useLanguage } from '@/context/LanguageContext';
 
 export default function SignupPage() {
+  const { t } = useLanguage();
   const [fullName, setFullName] = useState('');
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
@@ -47,21 +49,21 @@ export default function SignupPage() {
         <Header />
         <div className="absolute inset-0 bg-gray-800 bg-opacity-40" />
         <h1 className="relative z-10 text-4xl text-white font-bold">
-          Sign Up
+          {t('signup_hero_title')}
         </h1>
       </section>
       <main className="flex-grow flex items-center justify-center bg-gray-50 py-12">
         <div className="w-full max-w-md p-8 space-y-6 bg-secondary rounded-lg shadow-md">
-          <h2 className="text-2xl font-bold text-center text-primary">Create an Account</h2>
+          <h2 className="text-2xl font-bold text-center text-primary">{t('signup_create_account')}</h2>
           {success ? (
             <p className="text-center text-green-500">
-              Please check your email to confirm your account.
+              {t('signup_success')}
             </p>
           ) : (
             <form onSubmit={handleSignup} className="space-y-6">
               <div>
                 <label htmlFor="fullName" className="block text-sm font-medium text-neutral-dark">
-                  Full Name
+                  {t('signup_full_name_label')}
                 </label>
                 <input
                   id="fullName"
@@ -74,7 +76,7 @@ export default function SignupPage() {
               </div>
               <div>
                 <label htmlFor="email" className="block text-sm font-medium text-neutral-dark">
-                  Email
+                  {t('signup_email_label')}
                 </label>
                 <input
                   id="email"
@@ -87,7 +89,7 @@ export default function SignupPage() {
               </div>
               <div>
                 <label htmlFor="password" className="block text-sm font-medium text-neutral-dark">
-                  Password
+                  {t('signup_password_label')}
                 </label>
                 <input
                   id="password"
@@ -105,15 +107,15 @@ export default function SignupPage() {
                   disabled={loading}
                   className="btn-primary w-full focus:ring-red-500 focus:ring-offset-2 disabled:opacity-50 disabled:cursor-not-allowed"
                 >
-                  {loading ? 'Signing up...' : 'Sign Up'}
+                  {loading ? t('signup_signing_up') : t('signup_button')}
                 </button>
               </div>
             </form>
           )}
           <p className="text-sm text-center text-neutral-dark">
-            Already have an account?{' '}
+            {t('signup_already_have_account')}{' '}
             <Link href="/login" className="font-medium text-primary hover:underline">
-              Log in
+              {t('signup_login_link')}
             </Link>
           </p>
         </div>

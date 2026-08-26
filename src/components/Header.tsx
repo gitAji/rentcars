@@ -7,8 +7,11 @@ import { supabase } from '@/lib/supabaseClient';
 import type { User } from '@supabase/supabase-js';
 import Image from 'next/image';
 import { FaUserCircle } from 'react-icons/fa';
+import { useLanguage } from '@/context/LanguageContext';
+import LanguageSwitcher from '@/components/LanguageSwitcher';
 
 export default function Header() {
+  const { t } = useLanguage();
   const [isOpen, setIsOpen] = useState(false);
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
   const [user, setUser] = useState<User | null>(null);
@@ -57,10 +60,10 @@ export default function Header() {
           </div>
         </Link>
         <nav className="hidden md:flex gap-8 items-center" role="navigation">
-          <Link href="/" className="hover:text-gray-300 font-semibold cursor-pointer">Home</Link>
-          <Link href="/about" className="hover:text-gray-300 font-semibold cursor-pointer">About</Link>
-          <Link href="/cars" className="hover:text-gray-300 font-semibold cursor-pointer">Cars</Link>
-          <Link href="/contact" className="hover:text-gray-300 font-semibold cursor-pointer">Contact</Link>
+          <Link href="/" className="hover:text-gray-300 font-semibold cursor-pointer">{t('nav_home')}</Link>
+          <Link href="/about" className="hover:text-gray-300 font-semibold cursor-pointer">{t('nav_about')}</Link>
+          <Link href="/cars" className="hover:text-gray-300 font-semibold cursor-pointer">{t('nav_cars')}</Link>
+          <Link href="/contact" className="hover:text-gray-300 font-semibold cursor-pointer">{t('nav_contact')}</Link>
           {user ? (
             <div className="relative" ref={dropdownRef}>
               <button onClick={() => setIsDropdownOpen(!isDropdownOpen)} className="flex items-center hover:text-gray-300 font-semibold cursor-pointer">
@@ -68,22 +71,24 @@ export default function Header() {
               </button>
               {isDropdownOpen && (
                 <div className="absolute right-0 mt-2 w-48 bg-white rounded-md shadow-lg py-1 text-black">
-                  <Link href="/dashboard" className="block px-4 py-2 text-sm hover:bg-gray-100">Dashboard</Link>
-                  <button onClick={handleLogout} className="block w-full text-left px-4 py-2 text-sm hover:bg-gray-100">Logout</button>
+                  <Link href="/dashboard" className="block px-4 py-2 text-sm hover:bg-gray-100">{t('nav_dashboard')}</Link>
+                  <button onClick={handleLogout} className="block w-full text-left px-4 py-2 text-sm hover:bg-gray-100">{t('nav_logout')}</button>
                 </div>
               )}
             </div>
           ) : (
-            <Link href="/login" className="hover:text-gray-300 font-semibold cursor-pointer">Login</Link>
+            <Link href="/login" className="hover:text-gray-300 font-semibold cursor-pointer">{t('nav_login')}</Link>
           )}
+          <LanguageSwitcher />
         </nav>
-        <div className="md:hidden">
+        <div className="flex items-center gap-3 md:hidden">
+          <LanguageSwitcher />
           <button
             onClick={() => setIsOpen(!isOpen)}
-            aria-label="Open menu"
+            aria-label={t('nav_open_menu')}
             aria-expanded={isOpen}
             aria-controls="mobile-menu"
-            className="cursor-pointer"
+            className="cursor-pointer p-2 -m-2"
           >
             <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M4 6h16M4 12h16m-7 6h7"></path>
@@ -95,27 +100,27 @@ export default function Header() {
             <button
               onClick={() => setIsOpen(false)}
               className="absolute top-4 right-4 text-white cursor-pointer"
-              aria-label="Close menu"
+              aria-label={t('nav_close_menu')}
             >
               <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M6 18L18 6M6 6l12 12"></path>
               </svg>
             </button>
             <nav className="flex flex-col items-center gap-8" role="navigation">
-              <Link href="/" className="text-2xl text-white hover:text-gray-300 font-semibold cursor-pointer" onClick={() => setIsOpen(false)}>Home</Link>
-              <Link href="/about" className="text-2xl text-white hover:text-gray-300 font-semibold cursor-pointer" onClick={() => setIsOpen(false)}>About</Link>
-              <Link href="/cars" className="text-2xl text-white hover:text-gray-300 font-semibold cursor-pointer" onClick={() => setIsOpen(false)}>Cars</Link>
-              <Link href="/contact" className="text-2xl text-white hover:text-gray-300 font-semibold cursor-pointer" onClick={() => setIsOpen(false)}>Contact</Link>
+              <Link href="/" className="text-2xl text-white hover:text-gray-300 font-semibold cursor-pointer" onClick={() => setIsOpen(false)}>{t('nav_home')}</Link>
+              <Link href="/about" className="text-2xl text-white hover:text-gray-300 font-semibold cursor-pointer" onClick={() => setIsOpen(false)}>{t('nav_about')}</Link>
+              <Link href="/cars" className="text-2xl text-white hover:text-gray-300 font-semibold cursor-pointer" onClick={() => setIsOpen(false)}>{t('nav_cars')}</Link>
+              <Link href="/contact" className="text-2xl text-white hover:text-gray-300 font-semibold cursor-pointer" onClick={() => setIsOpen(false)}>{t('nav_contact')}</Link>
               {user ? (
                 <>
                   <Link href="/dashboard" className="text-2xl text-white hover:text-gray-300 font-semibold cursor-pointer flex items-center" onClick={() => setIsOpen(false)}>
                     <FaUserCircle className="mr-2" />
-                    Dashboard
+                    {t('nav_dashboard')}
                   </Link>
-                  <button onClick={handleLogout} className="text-2xl text-white hover:text-gray-300 font-semibold cursor-pointer">Logout</button>
+                  <button onClick={handleLogout} className="text-2xl text-white hover:text-gray-300 font-semibold cursor-pointer">{t('nav_logout')}</button>
                 </>
               ) : (
-                <Link href="/login" className="text-2xl text-white hover:text-gray-300 font-semibold cursor-pointer" onClick={() => setIsOpen(false)}>Login</Link>
+                <Link href="/login" className="text-2xl text-white hover:text-gray-300 font-semibold cursor-pointer" onClick={() => setIsOpen(false)}>{t('nav_login')}</Link>
               )}
             </nav>
           </div>
