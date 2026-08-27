@@ -2,6 +2,7 @@ import { NextResponse } from 'next/server';
 import { PDFDocument, rgb, StandardFonts, PageSizes, PDFFont } from 'pdf-lib';
 import fs from 'fs/promises';
 import path from 'path';
+import { getErrorMessage } from '@/lib/errorMessage';
 
 export async function POST(req: Request) {
   try {
@@ -196,7 +197,6 @@ export async function POST(req: Request) {
     if (error instanceof Error && error.stack) {
       console.error('Error stack:', error.stack);
     }
-    const message = error instanceof Error ? error.message : String(error);
-    return NextResponse.json({ error: 'Failed to generate PDF', details: message }, { status: 500 });
+    return NextResponse.json({ error: 'Failed to generate PDF', details: getErrorMessage(error) }, { status: 500 });
   }
 }

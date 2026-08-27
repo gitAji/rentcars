@@ -6,6 +6,7 @@ import withAdminAuth from '@/components/withAdminAuth';
 import Loading from '@/components/loading';
 import Link from 'next/link';
 import { FaCar, FaBook, FaExclamationTriangle, FaPlus, FaList } from 'react-icons/fa';
+import { getErrorMessage } from '@/lib/errorMessage';
 
 interface Booking {
   id: number;
@@ -45,11 +46,7 @@ function AdminPage() {
         setRecentBookings(recent || []);
 
       } catch (error: unknown) {
-        if (error instanceof Error) {
-          setError(error.message);
-        } else {
-          setError('An unknown error occurred.');
-        }
+        setError(getErrorMessage(error));
       } finally {
         setLoading(false);
       }

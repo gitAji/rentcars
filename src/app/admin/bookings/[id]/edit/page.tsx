@@ -6,6 +6,7 @@ import { supabase } from '@/lib/supabaseClient';
 import type { PostgrestError } from '@supabase/supabase-js';
 import withAdminAuth from '@/components/withAdminAuth';
 import Loading from '@/components/loading';
+import { getErrorMessage } from '@/lib/errorMessage';
 
 interface Booking {
   id: number;
@@ -98,11 +99,7 @@ function EditBookingPage() {
       router.push('/admin/bookings'); // Redirect to manage bookings page
 
     } catch (error: unknown) {
-      if (error instanceof Error) {
-        setError(error.message);
-      } else {
-        setError('An unknown error occurred.');
-      }
+      setError(getErrorMessage(error));
     } finally {
       setLoadingSubmit(false);
     }

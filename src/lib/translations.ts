@@ -11,6 +11,7 @@ export const translations = {
     nav_contact: 'Kontakt',
     nav_login: 'Logg inn',
     nav_dashboard: 'Min side',
+    nav_admin_panel: 'Adminpanel',
     nav_logout: 'Logg ut',
     nav_open_menu: 'Åpne meny',
     nav_close_menu: 'Lukk meny',
@@ -118,6 +119,13 @@ export const translations = {
     cars_town_label: 'By',
     cars_car_type_label: 'Biltype',
     cars_error_prefix: 'Feil:',
+    cars_no_results_title: 'Ingen biler funnet',
+    cars_no_results_message: 'Vi fant ingen biler som matcher søket ditt. Prøv å endre filtrene eller søk på nytt.',
+
+    // 404 / not found
+    notfound_title: 'Siden ble ikke funnet',
+    notfound_message: 'Beklager, vi finner ikke siden du leter etter. Den kan ha blitt flyttet eller finnes ikke lenger.',
+    notfound_button: 'Gå til forsiden',
 
     // Car card
     carcard_seats: 'seter',
@@ -198,6 +206,7 @@ export const translations = {
     nav_contact: 'Contact',
     nav_login: 'Login',
     nav_dashboard: 'Dashboard',
+    nav_admin_panel: 'Admin Panel',
     nav_logout: 'Logout',
     nav_open_menu: 'Open menu',
     nav_close_menu: 'Close menu',
@@ -305,6 +314,13 @@ export const translations = {
     cars_town_label: 'Town',
     cars_car_type_label: 'Car Type',
     cars_error_prefix: 'Error:',
+    cars_no_results_title: 'No cars found',
+    cars_no_results_message: "We couldn't find any cars matching your search. Try adjusting the filters or search again.",
+
+    // 404 / not found
+    notfound_title: 'Page not found',
+    notfound_message: "Sorry, we can't find the page you're looking for. It may have been moved or no longer exists.",
+    notfound_button: 'Go to Home',
 
     // Car card
     carcard_seats: 'seats',

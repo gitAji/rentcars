@@ -6,7 +6,8 @@ import Header from "@/components/Header";
 import Footer from "@/components/Footer";
 import Loading from "@/components/loading";
 import CarCard from "@/app/components/CarCard";
-import { FaCar, FaCarSide, FaCarAlt, FaBolt, FaCity, FaTimesCircle, FaFilter } from 'react-icons/fa';
+import EmptyState from "@/components/EmptyState";
+import { FaCar, FaCarSide, FaCarAlt, FaBolt, FaCity, FaTimesCircle, FaFilter, FaSearch } from 'react-icons/fa';
 import { useLanguage } from "@/context/LanguageContext";
 
 // Define interfaces for type safety
@@ -251,11 +252,19 @@ function CarsPageContent() {
           )}
         </div>
 
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
-          {cars.map((car) => (
-            <CarCard key={car.id} car={car} startDate={startDate} endDate={endDate} />
-          ))}
-        </div>
+        {cars.length === 0 ? (
+          <EmptyState
+            icon={FaSearch}
+            title={t('cars_no_results_title')}
+            message={t('cars_no_results_message')}
+          />
+        ) : (
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
+            {cars.map((car) => (
+              <CarCard key={car.id} car={car} startDate={startDate} endDate={endDate} />
+            ))}
+          </div>
+        )}
       </main>
       <Footer />
     </div>

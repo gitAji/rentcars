@@ -1,5 +1,6 @@
 import { NextResponse } from 'next/server';
 import { createClient } from '@supabase/supabase-js';
+import { getErrorMessage } from '@/lib/errorMessage';
 
 const supabaseUrl = process.env.SUPABASE_URL;
 const supabaseServiceRoleKey = process.env.SUPABASE_SERVICE_ROLE_KEY;
@@ -37,9 +38,6 @@ export async function GET(_req: Request) { // eslint-disable-line @typescript-es
     return NextResponse.json(mergedUsers);
   } catch (error: unknown) {
     console.error('Error listing users:', error);
-    if (error instanceof Error) {
-      return NextResponse.json({ error: 'Failed to list users', details: error.message }, { status: 500 });
-    }
-    return NextResponse.json({ error: 'Failed to list users', details: 'An unknown error occurred.' }, { status: 500 });
+    return NextResponse.json({ error: 'Failed to list users', details: getErrorMessage(error) }, { status: 500 });
   }
 }

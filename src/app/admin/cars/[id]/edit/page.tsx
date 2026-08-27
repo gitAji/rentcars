@@ -7,6 +7,7 @@ import withAdminAuth from '@/components/withAdminAuth';
 import Loading from '@/components/loading';
 import Image from 'next/image';
 import { FaTrash, FaExclamationTriangle, FaCalendarTimes } from 'react-icons/fa';
+import { getErrorMessage } from '@/lib/errorMessage';
 
 interface BlockedDate {
   id: number;
@@ -258,11 +259,7 @@ function EditCarPage() {
       router.push('/admin/cars'); // Redirect to manage cars page
 
     } catch (error: unknown) {
-      if (error instanceof Error) {
-        setError(error.message);
-      } else {
-        setError('An unknown error occurred.');
-      }
+      setError(getErrorMessage(error));
     } finally {
       setLoadingSubmit(false);
     }

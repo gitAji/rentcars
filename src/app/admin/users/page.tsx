@@ -4,6 +4,7 @@ import { useEffect, useState } from 'react';
 import withAdminAuth from '@/components/withAdminAuth';
 import Loading from '@/components/loading';
 import { FaTrash, FaExclamationTriangle, FaUsers } from 'react-icons/fa';
+import { getErrorMessage } from '@/lib/errorMessage';
 
 interface UserProfile {
   id: string;
@@ -26,11 +27,7 @@ function ManageUsersPage() {
       const data: UserProfile[] = await res.json();
       setUsers(data);
     } catch (err: unknown) {
-      if (err instanceof Error) {
-        setError(err.message);
-      } else {
-        setError('An unknown error occurred.');
-      }
+      setError(getErrorMessage(err));
     } finally {
       setLoading(false);
     }
@@ -56,11 +53,7 @@ function ManageUsersPage() {
         // Update local state
         setUsers(users.map(user => user.id === userId ? { ...user, role: newRole } : user));
       } catch (err: unknown) {
-        if (err instanceof Error) {
-          setError(err.message);
-        } else {
-          setError('An unknown error occurred.');
-        }
+        setError(getErrorMessage(err));
       }
     }
   };
@@ -79,11 +72,7 @@ function ManageUsersPage() {
         // Update local state
         setUsers(users.filter(user => user.id !== userId));
       } catch (err: unknown) {
-        if (err instanceof Error) {
-          setError(err.message);
-        } else {
-          setError('An unknown error occurred.');
-        }
+        setError(getErrorMessage(err));
       }
     }
   };

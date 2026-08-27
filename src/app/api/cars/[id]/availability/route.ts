@@ -1,5 +1,6 @@
 import { NextResponse } from 'next/server';
 import { supabase } from '@/lib/supabaseClient';
+import { getErrorMessage } from '@/lib/errorMessage';
 
 export async function GET(request: Request, context: any) { // eslint-disable-line @typescript-eslint/no-explicit-any
   try {
@@ -29,9 +30,6 @@ export async function GET(request: Request, context: any) { // eslint-disable-li
 
   } catch (error: unknown) {
     console.error('Error checking car availability:', error);
-    if (error instanceof Error) {
-      return NextResponse.json({ error: 'Internal server error', details: error.message }, { status: 500 });
-    }
-    return NextResponse.json({ error: 'Internal server error', details: 'An unknown error occurred.' }, { status: 500 });
+    return NextResponse.json({ error: 'Internal server error', details: getErrorMessage(error) }, { status: 500 });
   }
 }

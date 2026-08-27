@@ -6,6 +6,7 @@ import withAdminAuth from '@/components/withAdminAuth';
 import Loading from '@/components/loading';
 import Link from 'next/link';
 import { FaEdit, FaTrash, FaExclamationTriangle, FaClipboardList } from 'react-icons/fa';
+import { getErrorMessage } from '@/lib/errorMessage';
 
 interface Booking {
   id: number;
@@ -69,11 +70,7 @@ function BookingsPage() {
         setTotalCount(count || 0);
       }
     } catch (err: unknown) {
-      if (err instanceof Error) {
-        setError(err.message);
-      } else {
-        setError('An unknown error occurred.');
-      }
+      setError(getErrorMessage(err));
     } finally {
       setLoading(false);
     }
@@ -93,11 +90,7 @@ function BookingsPage() {
         if (error) throw error;
         setCarOptions(data);
       } catch (err: unknown) {
-        if (err instanceof Error) {
-          console.error("Error fetching car options:", err.message);
-        } else {
-          console.error("Error fetching car options: An unknown error occurred.");
-        }
+        console.error("Error fetching car options:", getErrorMessage(err));
       }
     };
     fetchCarOptions();

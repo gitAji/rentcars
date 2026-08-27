@@ -5,6 +5,7 @@ import { useRouter } from 'next/navigation';
 import { supabase } from '@/lib/supabaseClient';
 import withAdminAuth from '@/components/withAdminAuth';
 import Image from 'next/image';
+import { getErrorMessage } from '@/lib/errorMessage';
 
 function NewCarPage() {
   const router = useRouter();
@@ -135,11 +136,7 @@ function NewCarPage() {
       router.push('/admin');
 
     } catch (error: unknown) {
-      if (error instanceof Error) {
-        setError(error.message);
-      } else {
-        setError('An unknown error occurred.');
-      }
+      setError(getErrorMessage(error));
     } finally {
       setLoading(false);
     }

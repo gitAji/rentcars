@@ -7,6 +7,7 @@ import Loading from '@/components/loading';
 import Image from 'next/image';
 import Link from 'next/link';
 import { FaEdit, FaTrash, FaExclamationTriangle, FaCarSide, FaPlus } from 'react-icons/fa';
+import { getErrorMessage } from '@/lib/errorMessage';
 
 interface Car {
   id: number;
@@ -60,12 +61,8 @@ function ManageCarsPage() {
         setTotalCount(count || 0);
       }
     } catch (err: unknown) {
-      if (err instanceof Error) {
-        setError(err.message);
-      } else {
-        console.error("Fetch cars error:", err);
-        setError('An unknown error occurred.');
-      }
+      console.error("Fetch cars error:", err);
+      setError(getErrorMessage(err));
     } finally {
       setLoading(false);
     }
@@ -87,11 +84,7 @@ function ManageCarsPage() {
         
 
       } catch (err: unknown) {
-        if (err instanceof Error) {
-          console.error("Error fetching filter options:", err.message);
-        } else {
-          console.error("Error fetching filter options: An unknown error occurred.");
-        }
+        console.error("Error fetching filter options:", getErrorMessage(err));
       }
     };
     fetchFilterOptions();
@@ -124,11 +117,7 @@ function ManageCarsPage() {
         fetchCars();
 
       } catch (err: unknown) {
-        if (err instanceof Error) {
-          setError(err.message);
-        } else {
-          setError('An unknown error occurred.');
-        }
+        setError(getErrorMessage(err));
       }
     }
   };

@@ -14,6 +14,7 @@ import Image from "next/image";
 import Footer from "@/components/Footer";
 import { useLanguage } from "@/context/LanguageContext";
 import { FaExclamationCircle } from "react-icons/fa";
+import { getErrorMessage } from "@/lib/errorMessage";
 
 interface Car {
   id: string;
@@ -156,7 +157,7 @@ function CheckoutPageContent({ car, startDate, endDate, extras, totalPrice, clie
 
     } catch (e: unknown) {
       console.error('Stripe payment error:', e);
-      setError(e instanceof Error ? e.message : 'An unexpected error occurred during payment.');
+      setError(getErrorMessage(e, 'An unexpected error occurred during payment.'));
     } finally {
       setLoading(false);
     }
@@ -413,7 +414,7 @@ function CheckoutFlow() {
         setClientSecret(clientSecret);
       } catch (e: unknown) {
         console.error('Error fetching client secret:', e);
-        setClientSecretError(e instanceof Error ? e.message : 'Failed to load payment options.');
+        setClientSecretError(getErrorMessage(e, 'Failed to load payment options.'));
       } finally {
         setLoadingClientSecret(false);
       }

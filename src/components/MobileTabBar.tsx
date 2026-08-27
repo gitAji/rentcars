@@ -3,7 +3,7 @@
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import { useEffect, useState } from 'react';
-import { FaHome, FaCarSide, FaEnvelope, FaUserCircle } from 'react-icons/fa';
+import { FaHome, FaCarSide, FaEnvelope, FaUserCircle, FaCog } from 'react-icons/fa';
 import { supabase } from '@/lib/supabaseClient';
 import type { User } from '@supabase/supabase-js';
 import { useLanguage } from '@/context/LanguageContext';
@@ -12,16 +12,36 @@ export default function MobileTabBar() {
   const { t } = useLanguage();
   const pathname = usePathname();
   const [user, setUser] = useState<User | null>(null);
+  const [isAdmin, setIsAdmin] = useState(false);
 
   useEffect(() => {
+    const checkAdmin = async (userId: string) => {
+      const { data: profile } = await supabase
+        .from('profiles')
+        .select('role')
+        .eq('id', userId)
+        .single();
+      setIsAdmin(profile?.role === 'admin');
+    };
+
     const getSession = async () => {
       const { data: { session } } = await supabase.auth.getSession();
       setUser(session?.user ?? null);
+      if (session?.user) {
+        checkAdmin(session.user.id);
+      } else {
+        setIsAdmin(false);
+      }
     };
     getSession();
 
     const { data: authListener } = supabase.auth.onAuthStateChange((_event, session) => {
       setUser(session?.user ?? null);
+      if (session?.user) {
+        checkAdmin(session.user.id);
+      } else {
+        setIsAdmin(false);
+      }
     });
 
     return () => {
@@ -38,7 +58,9 @@ export default function MobileTabBar() {
     { href: '/', label: t('nav_home'), icon: FaHome, isActive: pathname === '/' },
     { href: '/cars', label: t('nav_cars'), icon: FaCarSide, isActive: pathname === '/cars' || pathname?.startsWith('/cars/') },
     { href: '/contact', label: t('nav_contact'), icon: FaEnvelope, isActive: pathname === '/contact' },
-    user
+    isAdmin
+      ? { href: '/admin', label: t('nav_admin_panel'), icon: FaCog, isActive: pathname === '/admin' }
+      : user
       ? { href: '/dashboard', label: t('nav_dashboard'), icon: FaUserCircle, isActive: pathname === '/dashboard' }
       : { href: '/login', label: t('nav_login'), icon: FaUserCircle, isActive: pathname === '/login' || pathname === '/signup' },
   ];
