@@ -82,7 +82,7 @@ export default function HomePage() {
         {/* Hero Section */}
         <section
           className="relative min-h-[calc(100vh-100px)] bg-cover bg-center flex flex-col items-center justify-center text-neutral pt-40 sm:pt-48 md:pt-56 pb-16 overflow-hidden"
-          style={{ backgroundImage: "url('/hero.png')" }}
+          style={{ backgroundImage: "url('/hero.jpg')" }}
         >
           {/* Scrim so the white heading stays readable over a bright photo */}
           <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-black/40 to-black/20" />
@@ -144,11 +144,11 @@ export default function HomePage() {
               </button>
             </div>
             <div className="md:w-1/2 w-full">
-              <Image 
-                src="/intro.png" 
-                alt="A car" 
-                width={500} 
-                height={300} 
+              <Image
+                src="/intro.png"
+                alt="A car"
+                width={500}
+                height={300}
                 className="rounded-lg shadow-lg w-full h-auto object-cover transform transition-transform duration-300 hover:scale-105"
               />
             </div>
