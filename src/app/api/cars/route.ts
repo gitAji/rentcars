@@ -30,10 +30,26 @@ export async function GET(request: Request) {
         throw bookedCarsError;
       }
 
-      const bookedCarIds = bookedCars.map(booking => booking.car_id);
+      // Cars an admin has manually blocked out (maintenance, an off-platform
+      // rental, etc.) for the requested dates should be excluded too.
+      const { data: blockedCars, error: blockedCarsError } = await supabase
+        .from('car_unavailability')
+        .select('car_id')
+        .or(`and(start_date.lte.${endDate},end_date.gte.${startDate})`);
 
-      if (bookedCarIds.length > 0) {
-        query = query.not('id', 'in', bookedCarIds);
+      if (blockedCarsError) {
+        // The car_unavailability table may not exist yet on older deployments --
+        // don't fail the whole search over it, just skip the extra filter.
+        console.error('Error checking car_unavailability (table missing?):', blockedCarsError);
+      }
+
+      const unavailableCarIds = Array.from(new Set([
+        ...bookedCars.map(booking => booking.car_id),
+        ...(blockedCars || []).map(block => block.car_id),
+      ]));
+
+      if (unavailableCarIds.length > 0) {
+        query = query.not('id', 'in', unavailableCarIds);
       }
     }
 

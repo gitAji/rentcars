@@ -7,6 +7,7 @@ import Header from "@/components/Header";
 import Footer from "@/components/Footer";
 import Link from "next/link";
 import { useLanguage } from "@/context/LanguageContext";
+import { supabase } from "@/lib/supabaseClient";
 
 // Define interfaces for type safety
 interface Car {
@@ -48,6 +49,7 @@ export default function CarDetailsContent({ car, id }: CarDetailsContentProps) {
   const [extrasOptions, setExtrasOptions] = useState<Extra[]>([]);
   const [selectedExtras, setSelectedExtras] = useState<string[]>([]);
   const [totalPrice, setTotalPrice] = useState(0);
+  const [blockedRanges, setBlockedRanges] = useState<{ start_date: string; end_date: string }[]>([]);
 
   const carImages = useMemo(() => {
     return car.imageUrls && car.imageUrls.length > 0
@@ -85,7 +87,37 @@ export default function CarDetailsContent({ car, id }: CarDetailsContentProps) {
   }, []);
 
   useEffect(() => {
-    if (startDate && endDate) {
+    const fetchBlockedRanges = async () => {
+      // car_unavailability may not exist on older deployments -- fail quietly
+      // rather than blocking the whole page if the table isn't there.
+      const { data, error: fetchError } = await supabase
+        .from('car_unavailability')
+        .select('start_date, end_date')
+        .eq('car_id', id);
+      if (fetchError) {
+        console.error('Error fetching blocked dates:', fetchError);
+        return;
+      }
+      setBlockedRanges(data || []);
+    };
+
+    fetchBlockedRanges();
+  }, [id]);
+
+  const datesUnavailable = useMemo(() => {
+    if (!startDate || !endDate) return false;
+    const start = new Date(startDate);
+    const end = new Date(endDate);
+    if (isNaN(start.getTime()) || isNaN(end.getTime())) return false;
+    return blockedRanges.some((range) => {
+      const blockStart = new Date(range.start_date);
+      const blockEnd = new Date(range.end_date);
+      return start <= blockEnd && end >= blockStart;
+    });
+  }, [startDate, endDate, blockedRanges]);
+
+  useEffect(() => {
+    if (startDate && endDate && !datesUnavailable) {
       const start = new Date(startDate);
       const end = new Date(endDate);
       if (isNaN(start.getTime()) || isNaN(end.getTime()) || end < start) {
@@ -105,7 +137,7 @@ export default function CarDetailsContent({ car, id }: CarDetailsContentProps) {
     } else {
       setTotalPrice(0);
     }
-  }, [car, startDate, endDate, selectedExtras, extrasOptions]);
+  }, [car, startDate, endDate, selectedExtras, extrasOptions, datesUnavailable]);
 
   
 
@@ -287,6 +319,9 @@ export default function CarDetailsContent({ car, id }: CarDetailsContentProps) {
               </div>
 
               {error && <p className="text-red-500 mt-4">{error}</p>}
+              {datesUnavailable && (
+                <p className="text-red-500 mt-4">{t('cardetails_dates_unavailable')}</p>
+              )}
 
               {extrasOptions.length > 0 && (
                 <div className="mt-6">

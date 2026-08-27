@@ -4,7 +4,8 @@ import { useEffect, useState } from 'react';
 import { supabase } from '@/lib/supabaseClient';
 import withAdminAuth from '@/components/withAdminAuth';
 import Loading from '@/components/loading';
-import { FaCar, FaBook, FaExclamationTriangle } from 'react-icons/fa';
+import Link from 'next/link';
+import { FaCar, FaBook, FaExclamationTriangle, FaPlus, FaList } from 'react-icons/fa';
 
 interface Booking {
   id: number;
@@ -74,6 +75,28 @@ function AdminPage() {
           <span>{error}</span>
         </div>
       )}
+
+      {/* Quick Actions */}
+      <div className="flex flex-wrap gap-3 mb-8">
+        <Link
+          href="/admin/cars/new"
+          className="flex items-center gap-2 bg-accent text-white px-4 py-2.5 rounded-lg font-semibold text-sm hover:bg-accent-dark transition-colors"
+        >
+          <FaPlus size={12} /> Add New Car
+        </Link>
+        <Link
+          href="/admin/cars"
+          className="flex items-center gap-2 bg-white border border-gray-300 text-gray-700 px-4 py-2.5 rounded-lg font-semibold text-sm hover:bg-gray-50 transition-colors"
+        >
+          <FaCar size={14} /> Manage Fleet
+        </Link>
+        <Link
+          href="/admin/bookings"
+          className="flex items-center gap-2 bg-white border border-gray-300 text-gray-700 px-4 py-2.5 rounded-lg font-semibold text-sm hover:bg-gray-50 transition-colors"
+        >
+          <FaList size={14} /> View All Bookings
+        </Link>
+      </div>
 
       {/* Stat Cards */}
       <div className="grid grid-cols-1 sm:grid-cols-2 gap-6 mb-10">
