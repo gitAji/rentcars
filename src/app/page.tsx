@@ -145,10 +145,10 @@ export default function HomePage() {
             </div>
             <div className="md:w-1/2 w-full">
               <Image
-                src="/intro.jpg"
-                alt="A Tesla parked by the water at sunset"
-                width={2752}
-                height={1536}
+                src="/intro.png"
+                alt="A car"
+                width={500}
+                height={300}
                 className="rounded-lg shadow-lg w-full h-auto object-cover transform transition-transform duration-300 hover:scale-105"
               />
             </div>
