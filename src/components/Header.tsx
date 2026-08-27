@@ -73,6 +73,9 @@ export default function Header() {
 
   return (
     <header className="absolute top-0 left-0 w-full z-50 p-4">
+      {/* Dark gradient behind the nav so its white text/logo stays readable
+          over any hero photo, on every page that floats this header. */}
+      <div className="absolute inset-x-0 top-0 h-28 sm:h-32 -z-10 bg-gradient-to-b from-black/70 via-black/30 to-transparent pointer-events-none" />
       <div className="container mx-auto flex justify-between items-center text-white">
         <Link href="/" className="z-50 cursor-pointer">
           <div className="relative h-16 w-40 sm:h-20 sm:w-48 md:h-24 md:w-64">
