@@ -5,6 +5,7 @@ import withAdminAuth from '@/components/withAdminAuth';
 import Loading from '@/components/loading';
 import { FaTrash, FaExclamationTriangle, FaUsers } from 'react-icons/fa';
 import { getErrorMessage } from '@/lib/errorMessage';
+import { useLanguage } from '@/context/LanguageContext';
 
 interface UserProfile {
   id: string;
@@ -14,6 +15,7 @@ interface UserProfile {
 }
 
 function ManageUsersPage() {
+  const { t } = useLanguage();
   const [users, setUsers] = useState<UserProfile[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
@@ -38,7 +40,7 @@ function ManageUsersPage() {
   }, []);
 
   const handleRoleChange = async (userId: string, newRole: string) => {
-    if (window.confirm(`Are you sure you want to change the role of this user to ${newRole}?`)) {
+    if (window.confirm(t('admin_confirm_role_change', { role: newRole }))) {
       try {
         const res = await fetch(`/api/admin/users/${userId}`,
           {
@@ -59,7 +61,7 @@ function ManageUsersPage() {
   };
 
   const handleDeleteUser = async (userId: string) => {
-    if (window.confirm('Are you sure you want to delete this user?')) {
+    if (window.confirm(t('admin_confirm_delete_user'))) {
       try {
         const res = await fetch(`/api/admin/users/${userId}`,
           {
@@ -83,7 +85,7 @@ function ManageUsersPage() {
 
   return (
     <>
-      <h1 className="text-3xl font-bold mb-6 text-gray-800">Manage Users</h1>
+      <h1 className="text-3xl font-bold mb-6 text-gray-800">{t('admin_manage_users_title')}</h1>
 
       {error && (
         <div className="flex items-center gap-2 p-4 mb-6 rounded-lg bg-red-50 border border-red-200 text-red-600">
@@ -97,11 +99,11 @@ function ManageUsersPage() {
           <table className="w-full text-left border-collapse">
             <thead>
               <tr className="bg-gray-50 border-b border-gray-200">
-                <th className="p-4 text-sm font-semibold text-gray-600">ID</th>
-                <th className="p-4 text-sm font-semibold text-gray-600">Email</th>
-                <th className="p-4 text-sm font-semibold text-gray-600">Full Name</th>
-                <th className="p-4 text-sm font-semibold text-gray-600">Role</th>
-                <th className="p-4 text-sm font-semibold text-gray-600">Actions</th>
+                <th className="p-4 text-sm font-semibold text-gray-600">{t('admin_th_id')}</th>
+                <th className="p-4 text-sm font-semibold text-gray-600">{t('admin_th_email')}</th>
+                <th className="p-4 text-sm font-semibold text-gray-600">{t('admin_th_full_name')}</th>
+                <th className="p-4 text-sm font-semibold text-gray-600">{t('admin_th_role')}</th>
+                <th className="p-4 text-sm font-semibold text-gray-600">{t('admin_th_actions')}</th>
               </tr>
             </thead>
             <tbody>
@@ -110,7 +112,7 @@ function ManageUsersPage() {
                   <td colSpan={5} className="p-12 text-center text-gray-500">
                     <div className="flex flex-col items-center gap-2">
                       <FaUsers size={28} className="text-gray-300" />
-                      No users found.
+                      {t('admin_no_users_found')}
                     </div>
                   </td>
                 </tr>
@@ -129,13 +131,13 @@ function ManageUsersPage() {
                         onChange={(e) => handleRoleChange(user.id, e.target.value)}
                         className="p-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-primary focus:border-primary"
                       >
-                        <option value="user">User</option>
-                        <option value="admin">Admin</option>
+                        <option value="user">{t('admin_role_user')}</option>
+                        <option value="admin">{t('admin_role_admin')}</option>
                       </select>
                     </td>
                     <td className="p-4">
                       <button onClick={() => handleDeleteUser(user.id)} className="flex items-center gap-1.5 text-red-500 hover:underline text-sm font-medium cursor-pointer">
-                        <FaTrash size={13} /> Delete
+                        <FaTrash size={13} /> {t('admin_delete')}
                       </button>
                     </td>
                   </tr>

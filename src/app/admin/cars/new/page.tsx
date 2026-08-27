@@ -6,8 +6,10 @@ import { supabase } from '@/lib/supabaseClient';
 import withAdminAuth from '@/components/withAdminAuth';
 import Image from 'next/image';
 import { getErrorMessage } from '@/lib/errorMessage';
+import { useLanguage } from '@/context/LanguageContext';
 
 function NewCarPage() {
+  const { t } = useLanguage();
   const router = useRouter();
   const [make, setMake] = useState('');
   const [model, setModel] = useState('');
@@ -43,8 +45,6 @@ function NewCarPage() {
   const currentYear = new Date().getFullYear();
   const yearOptions = Array.from({ length: 20 }, (_, i) => currentYear - i);
   const doorOptions = [2, 3, 4, 5];
-  const transmissionOptions = ["Automatic", "Manual"];
-  const fuelTypeOptions = ["Petrol", "Diesel", "Electric", "Hybrid"];
 
   const handleFeatureChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { value, checked } = e.target;
@@ -80,7 +80,7 @@ function NewCarPage() {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!mainImage) {
-      setError('Please select a main image.');
+      setError(t('admin_please_select_main_image'));
       return;
     }
 
@@ -144,7 +144,7 @@ function NewCarPage() {
 
       if (insertError) throw insertError;
 
-      alert('Car added successfully!');
+      alert(t('admin_car_added_alert'));
       router.push('/admin');
 
     } catch (error: unknown) {
@@ -156,135 +156,139 @@ function NewCarPage() {
 
   return (
     <>
-      <h1 className="text-3xl font-bold mb-6 text-gray-800">Add a New Car</h1>
+      <h1 className="text-3xl font-bold mb-6 text-gray-800">{t('admin_add_car_page_title')}</h1>
       <form onSubmit={handleSubmit} className="space-y-6 bg-white p-8 rounded-lg shadow-md">
         <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
           <div>
-            <label htmlFor="make" className="block text-sm font-medium text-gray-700">Make</label>
+            <label htmlFor="make" className="block text-sm font-medium text-gray-700">{t('admin_field_make')}</label>
             <input type="text" id="make" value={make} onChange={(e) => setMake(e.target.value)} required className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-primary focus:ring-primary" />
           </div>
           <div>
-            <label htmlFor="model" className="block text-sm font-medium text-gray-700">Model</label>
+            <label htmlFor="model" className="block text-sm font-medium text-gray-700">{t('admin_field_model')}</label>
             <input type="text" id="model" value={model} onChange={(e) => setModel(e.target.value)} required className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-primary focus:ring-primary" />
           </div>
           <div>
-            <label htmlFor="year" className="block text-sm font-medium text-gray-700">Year</label>
+            <label htmlFor="year" className="block text-sm font-medium text-gray-700">{t('admin_field_year')}</label>
             <select id="year" value={year} onChange={(e) => setYear(Number(e.target.value))} required className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-primary focus:ring-primary">
-              <option value="">Select Year</option>
+              <option value="">{t('admin_select_year')}</option>
               {yearOptions.map(y => <option key={y} value={y}>{y}</option>)}
             </select>
           </div>
           <div>
-            <label htmlFor="price" className="block text-sm font-medium text-gray-700">Price (per day)</label>
+            <label htmlFor="price" className="block text-sm font-medium text-gray-700">{t('admin_field_price')}</label>
             <input type="number" id="price" value={price} onChange={(e) => setPrice(Number(e.target.value))} required className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-primary focus:ring-primary" />
           </div>
           <div>
-            <label htmlFor="town" className="block text-sm font-medium text-gray-700">Town/Location</label>
+            <label htmlFor="town" className="block text-sm font-medium text-gray-700">{t('admin_field_town')}</label>
             <select id="town" value={town} onChange={(e) => setTown(e.target.value)} required className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-primary focus:ring-primary">
-              <option value="">Select Town</option>
-              {norwegianTowns.map(t => <option key={t} value={t}>{t}</option>)}
+              <option value="">{t('admin_select_town')}</option>
+              {norwegianTowns.map(tw => <option key={tw} value={tw}>{tw}</option>)}
             </select>
           </div>
           <div>
-            <label htmlFor="passengers" className="block text-sm font-medium text-gray-700">Passengers</label>
+            <label htmlFor="passengers" className="block text-sm font-medium text-gray-700">{t('admin_field_passengers')}</label>
             <select id="passengers" value={passengers} onChange={(e) => setPassengers(Number(e.target.value))} required className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-primary focus:ring-primary">
-              <option value="">Select Passengers</option>
+              <option value="">{t('admin_select_passengers')}</option>
               {passengerOptions.map(p => <option key={p} value={p}>{p}</option>)}
             </select>
           </div>
           <div>
-            <label htmlFor="carType" className="block text-sm font-medium text-gray-700">Car Type</label>
+            <label htmlFor="carType" className="block text-sm font-medium text-gray-700">{t('admin_field_car_type')}</label>
             <select id="carType" value={carType} onChange={(e) => setCarType(e.target.value)} required className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-primary focus:ring-primary">
-              <option value="">Select Car Type</option>
-              <option value="Sedan">Sedan</option>
-              <option value="SUV">SUV</option>
-              <option value="Hatchback">Hatchback</option>
-              <option value="Electric">Electric</option>
-              <option value="Van">Van</option>
-              <option value="Compact">Compact</option>
+              <option value="">{t('admin_select_car_type')}</option>
+              <option value="Sedan">{t('admin_cartype_sedan')}</option>
+              <option value="SUV">{t('admin_cartype_suv')}</option>
+              <option value="Hatchback">{t('admin_cartype_hatchback')}</option>
+              <option value="Electric">{t('admin_cartype_electric')}</option>
+              <option value="Van">{t('admin_cartype_van')}</option>
+              <option value="Compact">{t('admin_cartype_compact')}</option>
             </select>
           </div>
           <div>
-            <label htmlFor="seats" className="block text-sm font-medium text-gray-700">Seats</label>
+            <label htmlFor="seats" className="block text-sm font-medium text-gray-700">{t('admin_field_seats')}</label>
             <select id="seats" value={seats} onChange={(e) => setSeats(Number(e.target.value))} required className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-primary focus:ring-primary">
-              <option value="">Select Seats</option>
+              <option value="">{t('admin_select_seats')}</option>
               {passengerOptions.map(s => <option key={s} value={s}>{s}</option>)}
             </select>
           </div>
           <div>
-            <label htmlFor="transmission" className="block text-sm font-medium text-gray-700">Transmission</label>
+            <label htmlFor="transmission" className="block text-sm font-medium text-gray-700">{t('admin_field_transmission')}</label>
             <select id="transmission" value={transmission} onChange={(e) => setTransmission(e.target.value)} required className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-primary focus:ring-primary">
-              <option value="">Select Transmission</option>
-              {transmissionOptions.map(t => <option key={t} value={t}>{t}</option>)}
+              <option value="">{t('admin_select_transmission')}</option>
+              <option value="Automatic">{t('admin_transmission_automatic')}</option>
+              <option value="Manual">{t('admin_transmission_manual')}</option>
             </select>
           </div>
           <div>
-            <label htmlFor="fuelType" className="block text-sm font-medium text-gray-700">Fuel Type</label>
+            <label htmlFor="fuelType" className="block text-sm font-medium text-gray-700">{t('admin_field_fuel_type')}</label>
             <select id="fuelType" value={fuelType} onChange={(e) => setFuelType(e.target.value)} required className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-primary focus:ring-primary">
-              <option value="">Select Fuel Type</option>
-              {fuelTypeOptions.map(f => <option key={f} value={f}>{f}</option>)}
+              <option value="">{t('admin_select_fuel_type')}</option>
+              <option value="Petrol">{t('admin_fuel_petrol')}</option>
+              <option value="Diesel">{t('admin_fuel_diesel')}</option>
+              <option value="Electric">{t('admin_fuel_electric')}</option>
+              <option value="Hybrid">{t('admin_fuel_hybrid')}</option>
             </select>
           </div>
           <div>
-            <label htmlFor="color" className="block text-sm font-medium text-gray-700">Color</label>
+            <label htmlFor="color" className="block text-sm font-medium text-gray-700">{t('admin_field_color')}</label>
             <input type="text" id="color" value={color} onChange={(e) => setColor(e.target.value)} required className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-primary focus:ring-primary" />
           </div>
           <div>
-            <label htmlFor="doors" className="block text-sm font-medium text-gray-700">Doors</label>
+            <label htmlFor="doors" className="block text-sm font-medium text-gray-700">{t('admin_field_doors')}</label>
             <select id="doors" value={doors} onChange={(e) => setDoors(Number(e.target.value))} required className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-primary focus:ring-primary">
-              <option value="">Select Doors</option>
+              <option value="">{t('admin_select_doors')}</option>
               {doorOptions.map(d => <option key={d} value={d}>{d}</option>)}
             </select>
           </div>
         </div>
         <div>
-          <label htmlFor="shortDescription" className="block text-sm font-medium text-gray-700">Short Description</label>
+          <label htmlFor="shortDescription" className="block text-sm font-medium text-gray-700">{t('admin_field_short_description')}</label>
           <textarea id="shortDescription" value={shortDescription} onChange={(e) => setShortDescription(e.target.value)} rows={2} className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-primary focus:ring-primary"></textarea>
         </div>
         <div>
-          <label htmlFor="description" className="block text-sm font-medium text-gray-700">Full Description</label>
+          <label htmlFor="description" className="block text-sm font-medium text-gray-700">{t('admin_field_description')}</label>
           <textarea id="description" value={description} onChange={(e) => setDescription(e.target.value)} rows={4} className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-primary focus:ring-primary"></textarea>
         </div>
         <div>
-          <label htmlFor="terms" className="block text-sm font-medium text-gray-700">Terms</label>
+          <label htmlFor="terms" className="block text-sm font-medium text-gray-700">{t('admin_field_terms')}</label>
           <textarea id="terms" value={terms} onChange={(e) => setTerms(e.target.value)} rows={3} className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-primary focus:ring-primary"></textarea>
         </div>
 
         <div className="border-t border-gray-200 pt-6">
-          <h2 className="text-lg font-semibold text-gray-800 mb-1">Rental Policies &amp; Extra Charges</h2>
-          <p className="text-sm text-gray-500 mb-4">Shown to customers on the car&apos;s details page. Leave blank to hide a field.</p>
+          <h2 className="text-lg font-semibold text-gray-800 mb-1">{t('admin_policies_section_title')}</h2>
+          <p className="text-sm text-gray-500 mb-4">{t('admin_policies_section_subtitle')}</p>
           <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
             <div>
-              <label htmlFor="extraKmCharge" className="block text-sm font-medium text-gray-700">Extra Km Charge (kr/km)</label>
+              <label htmlFor="extraKmCharge" className="block text-sm font-medium text-gray-700">{t('admin_field_extra_km_charge')}</label>
               <input type="number" min="0" step="0.01" id="extraKmCharge" value={extraKmCharge} onChange={(e) => setExtraKmCharge(e.target.value === '' ? '' : Number(e.target.value))} className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-primary focus:ring-primary" />
             </div>
             <div>
-              <label htmlFor="fuelMissingCharge" className="block text-sm font-medium text-gray-700">Fuel Missing Charge (kr)</label>
+              <label htmlFor="fuelMissingCharge" className="block text-sm font-medium text-gray-700">{t('admin_field_fuel_missing_charge')}</label>
               <input type="number" min="0" step="0.01" id="fuelMissingCharge" value={fuelMissingCharge} onChange={(e) => setFuelMissingCharge(e.target.value === '' ? '' : Number(e.target.value))} className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-primary focus:ring-primary" />
             </div>
             <div>
-              <label htmlFor="scratchCharge" className="block text-sm font-medium text-gray-700">Scratch Charge (kr)</label>
+              <label htmlFor="scratchCharge" className="block text-sm font-medium text-gray-700">{t('admin_field_scratch_charge')}</label>
               <input type="number" min="0" step="0.01" id="scratchCharge" value={scratchCharge} onChange={(e) => setScratchCharge(e.target.value === '' ? '' : Number(e.target.value))} className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-primary focus:ring-primary" />
             </div>
           </div>
           <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mt-6">
             <div>
-              <label htmlFor="damagePolicy" className="block text-sm font-medium text-gray-700">Damage Policy</label>
-              <textarea id="damagePolicy" value={damagePolicy} onChange={(e) => setDamagePolicy(e.target.value)} rows={3} placeholder="How larger damage beyond scratches is assessed and charged." className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-primary focus:ring-primary"></textarea>
+              <label htmlFor="damagePolicy" className="block text-sm font-medium text-gray-700">{t('admin_field_damage_policy')}</label>
+              <textarea id="damagePolicy" value={damagePolicy} onChange={(e) => setDamagePolicy(e.target.value)} rows={3} placeholder={t('admin_placeholder_damage_policy')} className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-primary focus:ring-primary"></textarea>
             </div>
             <div>
-              <label htmlFor="accidentProcedure" className="block text-sm font-medium text-gray-700">Accident Procedure</label>
-              <textarea id="accidentProcedure" value={accidentProcedure} onChange={(e) => setAccidentProcedure(e.target.value)} rows={3} placeholder="What the renter must do if they're in an accident." className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-primary focus:ring-primary"></textarea>
+              <label htmlFor="accidentProcedure" className="block text-sm font-medium text-gray-700">{t('admin_field_accident_procedure')}</label>
+              <textarea id="accidentProcedure" value={accidentProcedure} onChange={(e) => setAccidentProcedure(e.target.value)} rows={3} placeholder={t('admin_placeholder_accident_procedure')} className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-primary focus:ring-primary"></textarea>
             </div>
             <div>
-              <label htmlFor="glassCoverPolicy" className="block text-sm font-medium text-gray-700">Glass Cover</label>
-              <textarea id="glassCoverPolicy" value={glassCoverPolicy} onChange={(e) => setGlassCoverPolicy(e.target.value)} rows={3} placeholder="What windshield/glass damage this car's cover includes." className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-primary focus:ring-primary"></textarea>
+              <label htmlFor="glassCoverPolicy" className="block text-sm font-medium text-gray-700">{t('admin_field_glass_cover')}</label>
+              <textarea id="glassCoverPolicy" value={glassCoverPolicy} onChange={(e) => setGlassCoverPolicy(e.target.value)} rows={3} placeholder={t('admin_placeholder_glass_cover')} className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-primary focus:ring-primary"></textarea>
             </div>
           </div>
         </div>
 
         <div>
-          <label className="block text-sm font-medium text-gray-700">Features</label>
+          <label className="block text-sm font-medium text-gray-700">{t('admin_field_features')}</label>
           <div className="mt-2 grid grid-cols-2 md:grid-cols-4 gap-4">
             {['Air Conditioning', 'GPS Navigation', 'Automatic Transmission', 'Bluetooth Connectivity', 'Apple CarPlay', 'Android Auto', 'Rearview Camera', 'Lane Assist', 'Autopilot', 'Glass Roof', 'Heated Seats', 'Sunroof', 'Parking Sensors', 'Keyless Entry', 'Adaptive Cruise Control', 'Blind Spot Monitoring', 'Leather Seats', 'Panoramic Roof', 'Heated Steering Wheel', 'Ventilated Seats', 'Wireless Charging', 'Heads-Up Display', '360 Camera', 'All-Wheel Drive', 'Sport Package', 'Premium Sound System'].map(feature => (
               <div key={feature} className="flex items-center">
@@ -295,7 +299,7 @@ function NewCarPage() {
           </div>
         </div>
         <div>
-          <label htmlFor="mainImage" className="block text-sm font-medium text-gray-700">Main Image</label>
+          <label htmlFor="mainImage" className="block text-sm font-medium text-gray-700">{t('admin_field_main_image')}</label>
           <input id="mainImage" type="file" onChange={handleMainImageChange} required className="mt-1 block w-full" />
           {mainImagePreview && (
             <div className="mt-2 relative w-32 h-32">
@@ -304,7 +308,7 @@ function NewCarPage() {
           )}
         </div>
         <div>
-          <label htmlFor="otherImages" className="block text-sm font-medium text-gray-700">Other Images</label>
+          <label htmlFor="otherImages" className="block text-sm font-medium text-gray-700">{t('admin_field_other_images')}</label>
           <input id="otherImages" type="file" multiple onChange={handleOtherImagesChange} className="mt-1 block w-full" />
           <div className="mt-2 flex flex-wrap gap-2">
             {otherImagePreviews.map((preview, index) => (
@@ -329,7 +333,7 @@ function NewCarPage() {
           disabled={loading}
           className="btn-primary w-full"
         >
-          {loading ? 'Adding Car...' : 'Add Car'}
+          {loading ? t('admin_adding_car') : t('admin_add_car_submit')}
         </button>
       </form>
     </>

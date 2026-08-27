@@ -5,8 +5,11 @@ import { useRouter } from 'next/navigation';
 import { supabase } from '@/lib/supabaseClient';
 import type { User } from '@supabase/supabase-js';
 import { FaUserCircle } from 'react-icons/fa';
+import { useLanguage } from '@/context/LanguageContext';
+import LanguageSwitcher from '@/components/LanguageSwitcher';
 
 export default function AdminDashboardHeader() {
+  const { t } = useLanguage();
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
   const [user, setUser] = useState<User | null>(null);
   const router = useRouter();
@@ -46,7 +49,8 @@ export default function AdminDashboardHeader() {
   };
 
   return (
-    <header className="bg-white shadow-md p-4 flex justify-end items-center">
+    <header className="bg-white shadow-md p-4 flex justify-end items-center gap-4">
+      <LanguageSwitcher variant="dark" />
       <div className="relative" ref={dropdownRef}>
         <button onClick={() => setIsDropdownOpen(!isDropdownOpen)} className="flex items-center text-gray-600 hover:text-primary">
           <FaUserCircle size={28} />
@@ -58,7 +62,7 @@ export default function AdminDashboardHeader() {
             </div>
             <div className="border-t border-gray-200"></div>
             <button onClick={handleLogout} className="block w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">
-              Logout
+              {t('nav_logout')}
             </button>
           </div>
         )}
