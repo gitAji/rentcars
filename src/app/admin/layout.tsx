@@ -4,12 +4,14 @@ import { useState } from 'react';
 import Link from 'next/link';
 import { FaTachometerAlt, FaCar, FaBook, FaHome, FaBars, FaTimes } from 'react-icons/fa';
 import AdminDashboardHeader from '@/components/AdminDashboardHeader';
+import { useLanguage } from '@/context/LanguageContext';
+import type { TranslationKey } from '@/lib/translations';
 
-const navItems = [
-  { href: '/admin', label: 'Dashboard', icon: FaTachometerAlt },
-  { href: '/admin/cars', label: 'Manage Fleet', icon: FaCar },
-  { href: '/admin/cars/new', label: 'Add Car', icon: FaCar },
-  { href: '/admin/bookings', label: 'View Bookings', icon: FaBook },
+const navItems: { href: string; labelKey: TranslationKey; icon: typeof FaTachometerAlt }[] = [
+  { href: '/admin', labelKey: 'admin_nav_dashboard', icon: FaTachometerAlt },
+  { href: '/admin/cars', labelKey: 'admin_nav_manage_fleet', icon: FaCar },
+  { href: '/admin/cars/new', labelKey: 'admin_nav_add_car', icon: FaCar },
+  { href: '/admin/bookings', labelKey: 'admin_nav_view_bookings', icon: FaBook },
 ];
 
 export default function AdminLayout({
@@ -17,6 +19,7 @@ export default function AdminLayout({
 }: {
   children: React.ReactNode;
 }) {
+  const { t } = useLanguage();
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
 
   return (
@@ -36,10 +39,10 @@ export default function AdminLayout({
         }`}
       >
         <div className="flex items-center justify-between mb-8 border-b border-gray-700 pb-4">
-          <h1 className="text-2xl font-bold">Admin Panel</h1>
+          <h1 className="text-2xl font-bold">{t('nav_admin_panel')}</h1>
           <button
             onClick={() => setIsSidebarOpen(false)}
-            aria-label="Close menu"
+            aria-label={t('admin_aria_close_menu')}
             className="md:hidden text-gray-300 hover:text-white cursor-pointer"
           >
             <FaTimes size={20} />
@@ -47,7 +50,7 @@ export default function AdminLayout({
         </div>
         <nav className="flex flex-col flex-grow">
           <ul>
-            {navItems.map(({ href, label, icon: Icon }) => (
+            {navItems.map(({ href, labelKey, icon: Icon }) => (
               <li key={href} className="mb-2">
                 <Link
                   href={href}
@@ -55,7 +58,7 @@ export default function AdminLayout({
                   className="flex items-center p-2 rounded-lg hover:bg-gray-700 transition-colors"
                 >
                   <Icon className="mr-3 shrink-0" />
-                  {label}
+                  {t(labelKey)}
                 </Link>
               </li>
             ))}
@@ -63,7 +66,7 @@ export default function AdminLayout({
           <div className="mt-auto pt-4 border-t border-gray-700">
             <Link href="/" className="flex items-center p-2 rounded-lg hover:bg-gray-700 transition-colors">
               <FaHome className="mr-3 shrink-0" />
-              Back to Site
+              {t('admin_nav_back_to_site')}
             </Link>
           </div>
         </nav>
@@ -73,19 +76,19 @@ export default function AdminLayout({
         <div className="md:hidden flex items-center gap-3 bg-white shadow-sm px-4 py-3 border-b border-gray-200">
           <button
             onClick={() => setIsSidebarOpen(true)}
-            aria-label="Open menu"
+            aria-label={t('admin_aria_open_menu')}
             className="text-gray-600 hover:text-primary cursor-pointer"
           >
             <FaBars size={20} />
           </button>
-          <span className="font-semibold text-gray-800">Admin Panel</span>
+          <span className="font-semibold text-gray-800">{t('nav_admin_panel')}</span>
         </div>
         <AdminDashboardHeader />
         <main className="flex-grow p-4 sm:p-8">
           {children}
         </main>
         <footer className="text-center text-sm text-gray-500 p-4 border-t border-gray-200">
-          <p>&copy; {new Date().getFullYear()} RentCars. All rights reserved. v1.0.0</p>
+          <p>{t('admin_footer_text', { year: new Date().getFullYear() })}</p>
         </footer>
       </div>
     </div>

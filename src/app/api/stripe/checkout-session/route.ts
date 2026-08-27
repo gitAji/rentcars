@@ -1,5 +1,6 @@
 import { NextResponse } from 'next/server';
 import Stripe from 'stripe';
+import { getErrorMessage } from '@/lib/errorMessage';
 
 export async function POST(req: Request) {
   console.log("--- DEBUG: Inside API route ---");
@@ -45,9 +46,6 @@ export async function POST(req: Request) {
   } catch (error: unknown) { // Explicitly type error as 'unknown' for safer handling
     console.error('Error creating Payment Intent:', error);
     // Always return the error message from Stripe if available, otherwise a generic message
-    if (error instanceof Error) {
-      return NextResponse.json({ error: error.message || 'Failed to create Payment Intent' }, { status: 500 });
-    }
-    return NextResponse.json({ error: 'Failed to create Payment Intent' }, { status: 500 });
+    return NextResponse.json({ error: getErrorMessage(error, 'Failed to create Payment Intent') }, { status: 500 });
   }
 }

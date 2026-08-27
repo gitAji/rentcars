@@ -6,7 +6,7 @@ import { useRouter } from 'next/navigation';
 import { supabase } from '@/lib/supabaseClient';
 import type { User } from '@supabase/supabase-js';
 import Image from 'next/image';
-import { FaUserCircle } from 'react-icons/fa';
+import { FaUserCircle, FaCog } from 'react-icons/fa';
 import { useLanguage } from '@/context/LanguageContext';
 import LanguageSwitcher from '@/components/LanguageSwitcher';
 
@@ -15,18 +15,38 @@ export default function Header() {
   const [isOpen, setIsOpen] = useState(false);
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
   const [user, setUser] = useState<User | null>(null);
+  const [isAdmin, setIsAdmin] = useState(false);
   const router = useRouter();
   const dropdownRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
+    const checkAdmin = async (userId: string) => {
+      const { data: profile } = await supabase
+        .from('profiles')
+        .select('role')
+        .eq('id', userId)
+        .single();
+      setIsAdmin(profile?.role === 'admin');
+    };
+
     const getSession = async () => {
       const { data: { session } } = await supabase.auth.getSession();
       setUser(session?.user ?? null);
+      if (session?.user) {
+        checkAdmin(session.user.id);
+      } else {
+        setIsAdmin(false);
+      }
     };
     getSession();
 
     const { data: authListener } = supabase.auth.onAuthStateChange((_event, session) => {
       setUser(session?.user ?? null);
+      if (session?.user) {
+        checkAdmin(session.user.id);
+      } else {
+        setIsAdmin(false);
+      }
     });
 
     return () => {
@@ -72,6 +92,11 @@ export default function Header() {
               {isDropdownOpen && (
                 <div className="absolute right-0 mt-2 w-48 bg-white rounded-md shadow-lg py-1 text-black">
                   <Link href="/dashboard" className="block px-4 py-2 text-sm hover:bg-gray-100">{t('nav_dashboard')}</Link>
+                  {isAdmin && (
+                    <Link href="/admin" className="flex items-center gap-2 px-4 py-2 text-sm hover:bg-gray-100">
+                      <FaCog size={13} /> {t('nav_admin_panel')}
+                    </Link>
+                  )}
                   <button onClick={handleLogout} className="block w-full text-left px-4 py-2 text-sm hover:bg-gray-100">{t('nav_logout')}</button>
                 </div>
               )}
@@ -117,6 +142,12 @@ export default function Header() {
                     <FaUserCircle className="mr-2" />
                     {t('nav_dashboard')}
                   </Link>
+                  {isAdmin && (
+                    <Link href="/admin" className="text-2xl text-white hover:text-gray-300 font-semibold cursor-pointer flex items-center" onClick={() => setIsOpen(false)}>
+                      <FaCog className="mr-2" />
+                      {t('nav_admin_panel')}
+                    </Link>
+                  )}
                   <button onClick={handleLogout} className="text-2xl text-white hover:text-gray-300 font-semibold cursor-pointer">{t('nav_logout')}</button>
                 </>
               ) : (

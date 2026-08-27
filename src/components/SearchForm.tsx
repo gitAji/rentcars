@@ -75,10 +75,10 @@ export default function SearchForm({ onSearch }: SearchFormProps) {
   return (
     <form
       onSubmit={handleSubmit}
-      className="bg-white backdrop-blur-sm p-10 rounded-2xl shadow-xl w-full max-w-4xl border border-gray-200"
+      className="bg-white backdrop-blur-sm p-4 sm:p-6 lg:p-4 rounded-2xl shadow-xl w-full max-w-4xl lg:max-w-6xl border border-gray-200"
     >
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 mb-6">
-        <div>
+      <div className="flex flex-col lg:flex-row lg:items-stretch gap-3">
+        <div className="flex-1 min-w-0">
           <label htmlFor="town" className="sr-only">{t('search_select_town')}</label>
           <select
             id="town"
@@ -91,7 +91,7 @@ export default function SearchForm({ onSearch }: SearchFormProps) {
           </select>
         </div>
 
-        <div>
+        <div className="flex-1 min-w-0">
           <label htmlFor="adults" className="sr-only">{t('search_adults_placeholder')}</label>
           <input
             id="adults"
@@ -104,7 +104,7 @@ export default function SearchForm({ onSearch }: SearchFormProps) {
           />
         </div>
 
-        <div>
+        <div className="flex-1 min-w-0">
           <label htmlFor="children" className="sr-only">{t('search_children_placeholder')}</label>
           <input
             id="children"
@@ -117,7 +117,7 @@ export default function SearchForm({ onSearch }: SearchFormProps) {
           />
         </div>
 
-        <div>
+        <div className="flex-1 min-w-0">
           <label htmlFor="carType" className="sr-only">{t('search_car_type_placeholder')}</label>
           <select
             id="carType"
@@ -130,7 +130,7 @@ export default function SearchForm({ onSearch }: SearchFormProps) {
           </select>
         </div>
 
-        <div>
+        <div className="flex-1 min-w-0">
           <label htmlFor="startDate" className="sr-only">{t('search_start_date')}</label>
           <input
             id="startDate"
@@ -141,7 +141,7 @@ export default function SearchForm({ onSearch }: SearchFormProps) {
           />
         </div>
 
-        <div>
+        <div className="flex-1 min-w-0">
           <label htmlFor="endDate" className="sr-only">{t('search_end_date')}</label>
           <input
             id="endDate"
@@ -151,16 +151,16 @@ export default function SearchForm({ onSearch }: SearchFormProps) {
             className="p-3 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-[#ff5757] text-gray-900 w-full"
           />
         </div>
+
+        <button
+          type="submit"
+          className="btn-primary w-full lg:w-auto lg:shrink-0 lg:px-8 whitespace-nowrap"
+        >
+          {t('search_button')}
+        </button>
       </div>
 
-      {error && <p className="text-red-500 text-center mb-4">{t(error)}</p>}
-
-      <button
-        type="submit"
-        className="btn-primary w-full"
-      >
-        {t('search_button')}
-      </button>
+      {error && <p className="text-red-500 text-center mt-4">{t(error)}</p>}
     </form>
   );
 }

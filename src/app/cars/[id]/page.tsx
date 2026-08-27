@@ -31,6 +31,12 @@ interface Car {
   seats: number;
   carType: string[];
   shortDescription: string;
+  extra_km_charge?: number | null;
+  fuel_missing_charge?: number | null;
+  scratch_charge?: number | null;
+  damage_policy?: string | null;
+  accident_procedure?: string | null;
+  glass_cover_policy?: string | null;
 }
 
 export default async function CarDetailsPage({ params }: { params: Promise<{ id: string }> }) {

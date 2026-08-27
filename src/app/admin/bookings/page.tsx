@@ -6,6 +6,8 @@ import withAdminAuth from '@/components/withAdminAuth';
 import Loading from '@/components/loading';
 import Link from 'next/link';
 import { FaEdit, FaTrash, FaExclamationTriangle, FaClipboardList } from 'react-icons/fa';
+import { getErrorMessage } from '@/lib/errorMessage';
+import { useLanguage } from '@/context/LanguageContext';
 
 interface Booking {
   id: number;
@@ -25,6 +27,7 @@ interface CarOption {
 }
 
 function BookingsPage() {
+  const { t } = useLanguage();
   const [bookings, setBookings] = useState<Booking[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
@@ -69,11 +72,7 @@ function BookingsPage() {
         setTotalCount(count || 0);
       }
     } catch (err: unknown) {
-      if (err instanceof Error) {
-        setError(err.message);
-      } else {
-        setError('An unknown error occurred.');
-      }
+      setError(getErrorMessage(err));
     } finally {
       setLoading(false);
     }
@@ -93,18 +92,14 @@ function BookingsPage() {
         if (error) throw error;
         setCarOptions(data);
       } catch (err: unknown) {
-        if (err instanceof Error) {
-          console.error("Error fetching car options:", err.message);
-        } else {
-          console.error("Error fetching car options: An unknown error occurred.");
-        }
+        console.error("Error fetching car options:", getErrorMessage(err));
       }
     };
     fetchCarOptions();
   }, []);
 
   const handleDelete = async (id: number) => {
-    if (window.confirm('Are you sure you want to delete this booking?')) {
+    if (window.confirm(t('admin_confirm_delete_booking'))) {
       const { error } = await supabase
         .from('bookings')
         .delete()
@@ -127,7 +122,7 @@ function BookingsPage() {
 
   return (
     <>
-      <h1 className="text-3xl font-bold mb-6 text-gray-800">All Bookings</h1>
+      <h1 className="text-3xl font-bold mb-6 text-gray-800">{t('admin_all_bookings_title')}</h1>
 
       {error && (
         <div className="flex items-center gap-2 p-4 mb-6 rounded-lg bg-red-50 border border-red-200 text-red-600">
@@ -139,7 +134,7 @@ function BookingsPage() {
       <div className="mb-6 p-4 bg-white rounded-xl shadow-sm border border-gray-100 flex flex-col md:flex-row gap-4">
         <input
           type="text"
-          placeholder="Search by Customer Name or Email..."
+          placeholder={t('admin_search_customer_placeholder')}
           value={searchTerm}
           onChange={(e) => setSearchTerm(e.target.value)}
           className="p-2 border border-gray-300 rounded-md flex-grow focus:outline-none focus:ring-2 focus:ring-primary focus:border-primary"
@@ -149,7 +144,7 @@ function BookingsPage() {
           onChange={(e) => setFilterCarId(e.target.value)}
           className="p-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-primary focus:border-primary"
         >
-          <option value="">All Cars</option>
+          <option value="">{t('admin_all_cars')}</option>
           {carOptions.map(car => (
             <option key={car.id} value={car.id}>{car.make} {car.model}</option>
           ))}
@@ -159,14 +154,14 @@ function BookingsPage() {
           value={filterStartDate}
           onChange={(e) => setFilterStartDate(e.target.value)}
           className="p-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-primary focus:border-primary"
-          placeholder="Start Date Filter"
+          placeholder={t('admin_start_date_filter_placeholder')}
         />
         <input
           type="date"
           value={filterEndDate}
           onChange={(e) => setFilterEndDate(e.target.value)}
           className="p-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-primary focus:border-primary"
-          placeholder="End Date Filter"
+          placeholder={t('admin_end_date_filter_placeholder')}
         />
       </div>
 
@@ -175,11 +170,11 @@ function BookingsPage() {
           <table className="w-full text-left border-collapse">
             <thead>
               <tr className="bg-gray-50 border-b border-gray-200">
-                <th className="p-4 text-sm font-semibold text-gray-600">ID</th>
-                <th className="p-4 text-sm font-semibold text-gray-600">Customer</th>
-                <th className="p-4 text-sm font-semibold text-gray-600">Dates</th>
-                <th className="p-4 text-sm font-semibold text-gray-600">Total Price</th>
-                <th className="p-4 text-sm font-semibold text-gray-600">Actions</th>
+                <th className="p-4 text-sm font-semibold text-gray-600">{t('admin_th_id')}</th>
+                <th className="p-4 text-sm font-semibold text-gray-600">{t('admin_th_customer')}</th>
+                <th className="p-4 text-sm font-semibold text-gray-600">{t('admin_th_dates')}</th>
+                <th className="p-4 text-sm font-semibold text-gray-600">{t('admin_th_total_price')}</th>
+                <th className="p-4 text-sm font-semibold text-gray-600">{t('admin_th_actions')}</th>
               </tr>
             </thead>
             <tbody>
@@ -188,7 +183,7 @@ function BookingsPage() {
                   <td colSpan={5} className="p-12 text-center text-gray-500">
                     <div className="flex flex-col items-center gap-2">
                       <FaClipboardList size={28} className="text-gray-300" />
-                      No bookings found.
+                      {t('admin_no_bookings_found')}
                     </div>
                   </td>
                 </tr>
@@ -209,10 +204,10 @@ function BookingsPage() {
                     <td className="p-4">
                       <div className="flex items-center gap-4">
                         <Link href={`/admin/bookings/${booking.id}/edit`} className="flex items-center gap-1.5 text-blue-600 hover:underline text-sm font-medium">
-                          <FaEdit size={13} /> Edit
+                          <FaEdit size={13} /> {t('admin_edit')}
                         </Link>
                         <button onClick={() => handleDelete(booking.id)} className="flex items-center gap-1.5 text-red-500 hover:underline text-sm font-medium cursor-pointer">
-                          <FaTrash size={13} /> Delete
+                          <FaTrash size={13} /> {t('admin_delete')}
                         </button>
                       </div>
                     </td>
@@ -231,7 +226,7 @@ function BookingsPage() {
               disabled={currentPage === 1}
               className="px-4 py-2 border border-gray-300 rounded-md text-sm font-medium text-gray-700 hover:bg-gray-50 disabled:opacity-50 disabled:cursor-not-allowed"
             >
-              Previous
+              {t('admin_previous')}
             </button>
             {[...Array(totalPages)].map((_, index) => (
               <button
@@ -247,7 +242,7 @@ function BookingsPage() {
               disabled={currentPage === totalPages}
               className="px-4 py-2 border border-gray-300 rounded-md text-sm font-medium text-gray-700 hover:bg-gray-50 disabled:opacity-50 disabled:cursor-not-allowed"
             >
-              Next
+              {t('admin_next')}
             </button>
           </div>
         )}

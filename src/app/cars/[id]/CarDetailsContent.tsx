@@ -24,6 +24,12 @@ interface Car {
   seats: number;
   carType: string[];
   shortDescription: string;
+  extra_km_charge?: number | null;
+  fuel_missing_charge?: number | null;
+  scratch_charge?: number | null;
+  damage_policy?: string | null;
+  accident_procedure?: string | null;
+  glass_cover_policy?: string | null;
 }
 
 interface Extra {
@@ -248,6 +254,61 @@ export default function CarDetailsContent({ car, id }: CarDetailsContentProps) {
             <h2 className="text-2xl font-bold mb-2 text-primary">{t('cardetails_terms')}</h2>
             <p className="text-neutral text-base mb-4">              {car.terms || `Minimum rental age is 21. Valid driver's license required. Fuel policy: full to full,The vehicle must be returned in the same clean condition as delivered. A cleaning fee may apply if the vehicle requires excessive cleaning upon return.`}
             </p>
+
+            {(car.extra_km_charge != null ||
+              car.fuel_missing_charge != null ||
+              car.scratch_charge != null ||
+              car.damage_policy ||
+              car.accident_procedure ||
+              car.glass_cover_policy) && (
+              <>
+                <h2 className="text-2xl font-bold mb-2 text-primary">{t('cardetails_policies_title')}</h2>
+                {(car.extra_km_charge != null || car.fuel_missing_charge != null || car.scratch_charge != null) && (
+                  <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 mb-4">
+                    {car.extra_km_charge != null && (
+                      <div className="bg-secondary rounded-lg p-4">
+                        <p className="text-sm text-gray-500">{t('cardetails_extra_km_charge')}</p>
+                        <p className="text-lg font-semibold text-neutral">kr{car.extra_km_charge}/km</p>
+                      </div>
+                    )}
+                    {car.fuel_missing_charge != null && (
+                      <div className="bg-secondary rounded-lg p-4">
+                        <p className="text-sm text-gray-500">{t('cardetails_fuel_missing_charge')}</p>
+                        <p className="text-lg font-semibold text-neutral">kr{car.fuel_missing_charge}</p>
+                      </div>
+                    )}
+                    {car.scratch_charge != null && (
+                      <div className="bg-secondary rounded-lg p-4">
+                        <p className="text-sm text-gray-500">{t('cardetails_scratch_charge')}</p>
+                        <p className="text-lg font-semibold text-neutral">kr{car.scratch_charge}</p>
+                      </div>
+                    )}
+                  </div>
+                )}
+                {(car.damage_policy || car.accident_procedure || car.glass_cover_policy) && (
+                  <div className="space-y-3 mb-4">
+                    {car.damage_policy && (
+                      <div>
+                        <p className="font-semibold text-neutral">{t('cardetails_damage_policy')}</p>
+                        <p className="text-neutral text-base">{car.damage_policy}</p>
+                      </div>
+                    )}
+                    {car.accident_procedure && (
+                      <div>
+                        <p className="font-semibold text-neutral">{t('cardetails_accident_procedure')}</p>
+                        <p className="text-neutral text-base">{car.accident_procedure}</p>
+                      </div>
+                    )}
+                    {car.glass_cover_policy && (
+                      <div>
+                        <p className="font-semibold text-neutral">{t('cardetails_glass_cover')}</p>
+                        <p className="text-neutral text-base">{car.glass_cover_policy}</p>
+                      </div>
+                    )}
+                  </div>
+                )}
+              </>
+            )}
           </div>
 
           {/* Right Column: Booking Details */}

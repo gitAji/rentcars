@@ -6,6 +6,8 @@ import withAdminAuth from '@/components/withAdminAuth';
 import Loading from '@/components/loading';
 import Link from 'next/link';
 import { FaCar, FaBook, FaExclamationTriangle, FaPlus, FaList } from 'react-icons/fa';
+import { getErrorMessage } from '@/lib/errorMessage';
+import { useLanguage } from '@/context/LanguageContext';
 
 interface Booking {
   id: number;
@@ -15,6 +17,7 @@ interface Booking {
 }
 
 function AdminPage() {
+  const { t } = useLanguage();
   const [carCount, setCarCount] = useState(0);
   const [bookingCount, setBookingCount] = useState(0);
   const [recentBookings, setRecentBookings] = useState<Booking[]>([]);
@@ -45,11 +48,7 @@ function AdminPage() {
         setRecentBookings(recent || []);
 
       } catch (error: unknown) {
-        if (error instanceof Error) {
-          setError(error.message);
-        } else {
-          setError('An unknown error occurred.');
-        }
+        setError(getErrorMessage(error));
       } finally {
         setLoading(false);
       }
@@ -65,8 +64,8 @@ function AdminPage() {
   return (
     <>
       <div className="mb-8">
-        <h1 className="text-3xl font-bold text-gray-800">Admin Dashboard</h1>
-        <p className="text-gray-500 mt-1">Overview of your fleet and bookings.</p>
+        <h1 className="text-3xl font-bold text-gray-800">{t('admin_dashboard_title')}</h1>
+        <p className="text-gray-500 mt-1">{t('admin_dashboard_subtitle')}</p>
       </div>
 
       {error && (
@@ -82,19 +81,19 @@ function AdminPage() {
           href="/admin/cars/new"
           className="flex items-center gap-2 bg-accent text-white px-4 py-2.5 rounded-lg font-semibold text-sm hover:bg-accent-dark transition-colors"
         >
-          <FaPlus size={12} /> Add New Car
+          <FaPlus size={12} /> {t('admin_add_new_car')}
         </Link>
         <Link
           href="/admin/cars"
           className="flex items-center gap-2 bg-white border border-gray-300 text-gray-700 px-4 py-2.5 rounded-lg font-semibold text-sm hover:bg-gray-50 transition-colors"
         >
-          <FaCar size={14} /> Manage Fleet
+          <FaCar size={14} /> {t('admin_nav_manage_fleet')}
         </Link>
         <Link
           href="/admin/bookings"
           className="flex items-center gap-2 bg-white border border-gray-300 text-gray-700 px-4 py-2.5 rounded-lg font-semibold text-sm hover:bg-gray-50 transition-colors"
         >
-          <FaList size={14} /> View All Bookings
+          <FaList size={14} /> {t('admin_view_all_bookings')}
         </Link>
       </div>
 
@@ -105,7 +104,7 @@ function AdminPage() {
             <FaCar size={26} />
           </div>
           <div>
-            <p className="text-sm text-gray-500">Total Cars</p>
+            <p className="text-sm text-gray-500">{t('admin_total_cars')}</p>
             <p className="text-3xl font-bold text-gray-800">{carCount}</p>
           </div>
         </div>
@@ -114,26 +113,26 @@ function AdminPage() {
             <FaBook size={26} />
           </div>
           <div>
-            <p className="text-sm text-gray-500">Total Bookings</p>
+            <p className="text-sm text-gray-500">{t('admin_total_bookings')}</p>
             <p className="text-3xl font-bold text-gray-800">{bookingCount}</p>
           </div>
         </div>
       </div>
 
       {/* Recent Bookings */}
-      <h2 className="text-2xl font-bold mb-4 text-gray-800">Recent Bookings</h2>
+      <h2 className="text-2xl font-bold mb-4 text-gray-800">{t('admin_recent_bookings')}</h2>
       <div className="bg-white rounded-xl shadow-sm border border-gray-100 overflow-hidden">
         {recentBookings.length === 0 ? (
-          <p className="p-8 text-center text-gray-500">No bookings yet.</p>
+          <p className="p-8 text-center text-gray-500">{t('admin_no_bookings_yet')}</p>
         ) : (
           <div className="overflow-x-auto">
             <table className="w-full text-left border-collapse">
               <thead>
                 <tr className="bg-gray-50 border-b border-gray-200">
-                  <th className="p-4 text-sm font-semibold text-gray-600">ID</th>
-                  <th className="p-4 text-sm font-semibold text-gray-600">Customer</th>
-                  <th className="p-4 text-sm font-semibold text-gray-600">Date</th>
-                  <th className="p-4 text-sm font-semibold text-gray-600">Total Price</th>
+                  <th className="p-4 text-sm font-semibold text-gray-600">{t('admin_th_id')}</th>
+                  <th className="p-4 text-sm font-semibold text-gray-600">{t('admin_th_customer')}</th>
+                  <th className="p-4 text-sm font-semibold text-gray-600">{t('admin_th_date')}</th>
+                  <th className="p-4 text-sm font-semibold text-gray-600">{t('admin_th_total_price')}</th>
                 </tr>
               </thead>
               <tbody>

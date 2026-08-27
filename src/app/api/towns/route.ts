@@ -1,5 +1,6 @@
 import { NextResponse } from 'next/server';
 import { supabase } from '@/lib/supabaseClient';
+import { getErrorMessage } from '@/lib/errorMessage';
 
 export async function GET() {
   try {
@@ -18,9 +19,6 @@ export async function GET() {
     return NextResponse.json(uniqueTowns);
   } catch (error: unknown) {
     console.error('Error in GET /api/towns:', error);
-    if (error instanceof Error) {
-      return NextResponse.json({ error: 'Internal server error', details: error.message }, { status: 500 });
-    }
-    return NextResponse.json({ error: 'Internal server error', details: 'An unknown error occurred.' }, { status: 500 });
+    return NextResponse.json({ error: 'Internal server error', details: getErrorMessage(error) }, { status: 500 });
   }
 }

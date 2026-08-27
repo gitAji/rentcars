@@ -6,6 +6,8 @@ import { supabase } from '@/lib/supabaseClient';
 import type { PostgrestError } from '@supabase/supabase-js';
 import withAdminAuth from '@/components/withAdminAuth';
 import Loading from '@/components/loading';
+import { getErrorMessage } from '@/lib/errorMessage';
+import { useLanguage } from '@/context/LanguageContext';
 
 interface Booking {
   id: number;
@@ -23,6 +25,7 @@ interface Booking {
 }
 
 function EditBookingPage() {
+  const { t } = useLanguage();
   const router = useRouter();
   const params = useParams();
   const bookingId = params.id as string;
@@ -94,15 +97,11 @@ function EditBookingPage() {
 
       if (updateError) throw updateError;
 
-      alert('Booking updated successfully!');
+      alert(t('admin_booking_updated_alert'));
       router.push('/admin/bookings'); // Redirect to manage bookings page
 
     } catch (error: unknown) {
-      if (error instanceof Error) {
-        setError(error.message);
-      } else {
-        setError('An unknown error occurred.');
-      }
+      setError(getErrorMessage(error));
     } finally {
       setLoadingSubmit(false);
     }
@@ -114,57 +113,57 @@ function EditBookingPage() {
 
   return (
     <>
-      <h1 className="text-3xl font-bold mb-6 text-gray-800">Edit Booking</h1>
+      <h1 className="text-3xl font-bold mb-6 text-gray-800">{t('admin_edit_booking_title')}</h1>
       {error && <p className="text-red-500 py-4">{error}</p>}
       <form onSubmit={handleSubmit} className="space-y-6 bg-white p-8 rounded-lg shadow-md">
         <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
           <div>
-            <label htmlFor="bookingId" className="block text-sm font-medium text-gray-700">Booking ID</label>
+            <label htmlFor="bookingId" className="block text-sm font-medium text-gray-700">{t('admin_field_booking_id')}</label>
             <input type="text" id="bookingId" value={bookingId} disabled className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-primary focus:ring-primary bg-gray-100" />
           </div>
           <div>
-            <label htmlFor="carId" className="block text-sm font-medium text-gray-700">Car ID</label>
+            <label htmlFor="carId" className="block text-sm font-medium text-gray-700">{t('admin_field_car_id')}</label>
             <input type="number" id="carId" value={carId} onChange={(e) => setCarId(Number(e.target.value))} required className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-primary focus:ring-primary" />
           </div>
           <div>
-            <label htmlFor="userId" className="block text-sm font-medium text-gray-700">User ID</label>
+            <label htmlFor="userId" className="block text-sm font-medium text-gray-700">{t('admin_field_user_id')}</label>
             <input type="text" id="userId" value={userId} onChange={(e) => setUserId(e.target.value)} required className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-primary focus:ring-primary" />
           </div>
           <div>
-            <label htmlFor="startDate" className="block text-sm font-medium text-gray-700">Start Date</label>
+            <label htmlFor="startDate" className="block text-sm font-medium text-gray-700">{t('admin_field_start_date')}</label>
             <input type="date" id="startDate" value={startDate} onChange={(e) => setStartDate(e.target.value)} required className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-primary focus:ring-primary" />
           </div>
           <div>
-            <label htmlFor="endDate" className="block text-sm font-medium text-gray-700">End Date</label>
+            <label htmlFor="endDate" className="block text-sm font-medium text-gray-700">{t('admin_field_end_date')}</label>
             <input type="date" id="endDate" value={endDate} onChange={(e) => setEndDate(e.target.value)} required className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-primary focus:ring-primary" />
           </div>
           <div>
-            <label htmlFor="totalPrice" className="block text-sm font-medium text-gray-700">Total Price</label>
+            <label htmlFor="totalPrice" className="block text-sm font-medium text-gray-700">{t('admin_field_total_price')}</label>
             <input type="number" id="totalPrice" value={totalPrice} onChange={(e) => setTotalPrice(Number(e.target.value))} required className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-primary focus:ring-primary" />
           </div>
           <div>
-            <label htmlFor="customerName" className="block text-sm font-medium text-gray-700">Customer Name</label>
+            <label htmlFor="customerName" className="block text-sm font-medium text-gray-700">{t('admin_field_customer_name')}</label>
             <input type="text" id="customerName" value={customerName} onChange={(e) => setCustomerName(e.target.value)} required className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-primary focus:ring-primary" />
           </div>
           <div>
-            <label htmlFor="customerEmail" className="block text-sm font-medium text-gray-700">Customer Email</label>
+            <label htmlFor="customerEmail" className="block text-sm font-medium text-gray-700">{t('admin_field_customer_email')}</label>
             <input type="email" id="customerEmail" value={customerEmail} onChange={(e) => setCustomerEmail(e.target.value)} required className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-primary focus:ring-primary" />
           </div>
           <div>
-            <label htmlFor="customerPhone" className="block text-sm font-medium text-gray-700">Customer Phone</label>
+            <label htmlFor="customerPhone" className="block text-sm font-medium text-gray-700">{t('admin_field_customer_phone')}</label>
             <input type="tel" id="customerPhone" value={customerPhone} onChange={(e) => setCustomerPhone(e.target.value)} className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-primary focus:ring-primary" />
           </div>
           <div>
-            <label htmlFor="driverLicense" className="block text-sm font-medium text-gray-700">Driver License</label>
+            <label htmlFor="driverLicense" className="block text-sm font-medium text-gray-700">{t('admin_field_driver_license')}</label>
             <input type="text" id="driverLicense" value={driverLicense} onChange={(e) => setDriverLicense(e.target.value)} className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-primary focus:ring-primary" />
           </div>
           <div>
-            <label htmlFor="instructions" className="block text-sm font-medium text-gray-700">Instructions</label>
+            <label htmlFor="instructions" className="block text-sm font-medium text-gray-700">{t('admin_field_instructions')}</label>
             <textarea id="instructions" value={instructions} onChange={(e) => setInstructions(e.target.value)} rows={3} className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-primary focus:ring-primary"></textarea>
           </div>
           {/* Extras - will need a more complex component */}
           <div>
-            <label htmlFor="extras" className="block text-sm font-medium text-gray-700">Extras (comma-separated)</label>
+            <label htmlFor="extras" className="block text-sm font-medium text-gray-700">{t('admin_field_extras')}</label>
             <input type="text" id="extras" value={extras.join(', ')} onChange={(e) => setExtras(e.target.value.split(',').map(s => s.trim()))} className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-primary focus:ring-primary" />
           </div>
         </div>
@@ -176,7 +175,7 @@ function EditBookingPage() {
           disabled={loadingSubmit}
           className="btn-primary w-full"
         >
-          {loadingSubmit ? 'Updating Booking...' : 'Save Changes'}
+          {loadingSubmit ? t('admin_updating_booking') : t('admin_save_changes')}
         </button>
       </form>
     </>

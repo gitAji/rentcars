@@ -7,6 +7,8 @@ import Loading from '@/components/loading';
 import Image from 'next/image';
 import Link from 'next/link';
 import { FaEdit, FaTrash, FaExclamationTriangle, FaCarSide, FaPlus } from 'react-icons/fa';
+import { getErrorMessage } from '@/lib/errorMessage';
+import { useLanguage } from '@/context/LanguageContext';
 
 interface Car {
   id: number;
@@ -21,6 +23,7 @@ interface Car {
 }
 
 function ManageCarsPage() {
+  const { t } = useLanguage();
   const [cars, setCars] = useState<Car[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
@@ -60,12 +63,8 @@ function ManageCarsPage() {
         setTotalCount(count || 0);
       }
     } catch (err: unknown) {
-      if (err instanceof Error) {
-        setError(err.message);
-      } else {
-        console.error("Fetch cars error:", err);
-        setError('An unknown error occurred.');
-      }
+      console.error("Fetch cars error:", err);
+      setError(getErrorMessage(err));
     } finally {
       setLoading(false);
     }
@@ -87,18 +86,14 @@ function ManageCarsPage() {
         
 
       } catch (err: unknown) {
-        if (err instanceof Error) {
-          console.error("Error fetching filter options:", err.message);
-        } else {
-          console.error("Error fetching filter options: An unknown error occurred.");
-        }
+        console.error("Error fetching filter options:", getErrorMessage(err));
       }
     };
     fetchFilterOptions();
   }, []);
 
   const handleDelete = async (carToDelete: Car) => {
-    if (window.confirm(`Are you sure you want to delete the ${carToDelete.make} ${carToDelete.model}?`)) {
+    if (window.confirm(t('admin_confirm_delete_car', { car: `${carToDelete.make} ${carToDelete.model}` }))) {
       try {
         if (carToDelete.image_urls && carToDelete.image_urls.length > 0) {
           const filePaths = carToDelete.image_urls.map(url => {
@@ -124,11 +119,7 @@ function ManageCarsPage() {
         fetchCars();
 
       } catch (err: unknown) {
-        if (err instanceof Error) {
-          setError(err.message);
-        } else {
-          setError('An unknown error occurred.');
-        }
+        setError(getErrorMessage(err));
       }
     }
   };
@@ -142,12 +133,12 @@ function ManageCarsPage() {
   return (
     <>
       <div className="flex items-center justify-between mb-6">
-        <h1 className="text-3xl font-bold text-gray-800">Manage Fleet</h1>
+        <h1 className="text-3xl font-bold text-gray-800">{t('admin_nav_manage_fleet')}</h1>
         <Link
           href="/admin/cars/new"
           className="flex items-center gap-2 bg-accent text-white px-4 py-2 rounded-lg font-semibold text-sm hover:bg-accent-dark transition-colors"
         >
-          <FaPlus size={12} /> Add Car
+          <FaPlus size={12} /> {t('admin_nav_add_car')}
         </Link>
       </div>
 
@@ -161,7 +152,7 @@ function ManageCarsPage() {
       <div className="mb-6 p-4 bg-white rounded-xl shadow-sm border border-gray-100 flex flex-col md:flex-row gap-4">
         <input
           type="text"
-          placeholder="Search by Make or Model..."
+          placeholder={t('admin_search_make_model_placeholder')}
           value={searchTerm}
           onChange={(e) => setSearchTerm(e.target.value)}
           className="p-2 border border-gray-300 rounded-md flex-grow focus:outline-none focus:ring-2 focus:ring-primary focus:border-primary"
@@ -171,7 +162,7 @@ function ManageCarsPage() {
           onChange={(e) => setFilterTown(e.target.value)}
           className="p-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-primary focus:border-primary"
         >
-          <option value="">All Towns</option>
+          <option value="">{t('admin_all_towns')}</option>
           {townOptions.map(town => (
             <option key={town} value={town}>{town}</option>
           ))}
@@ -183,12 +174,12 @@ function ManageCarsPage() {
           <table className="w-full text-left border-collapse">
             <thead>
               <tr className="bg-gray-50 border-b border-gray-200">
-                <th className="p-4 text-sm font-semibold text-gray-600">Image</th>
-                <th className="p-4 text-sm font-semibold text-gray-600">Make &amp; Model</th>
-                <th className="p-4 text-sm font-semibold text-gray-600">Year</th>
-                <th className="p-4 text-sm font-semibold text-gray-600">Town</th>
-                <th className="p-4 text-sm font-semibold text-gray-600">Price</th>
-                <th className="p-4 text-sm font-semibold text-gray-600">Actions</th>
+                <th className="p-4 text-sm font-semibold text-gray-600">{t('admin_th_image')}</th>
+                <th className="p-4 text-sm font-semibold text-gray-600">{t('admin_th_make_model')}</th>
+                <th className="p-4 text-sm font-semibold text-gray-600">{t('admin_th_year')}</th>
+                <th className="p-4 text-sm font-semibold text-gray-600">{t('admin_th_town')}</th>
+                <th className="p-4 text-sm font-semibold text-gray-600">{t('admin_th_price')}</th>
+                <th className="p-4 text-sm font-semibold text-gray-600">{t('admin_th_actions')}</th>
               </tr>
             </thead>
             <tbody>
@@ -197,7 +188,7 @@ function ManageCarsPage() {
                   <td colSpan={6} className="p-12 text-center text-gray-500">
                     <div className="flex flex-col items-center gap-2">
                       <FaCarSide size={28} className="text-gray-300" />
-                      No cars found.
+                      {t('admin_no_cars_found')}
                     </div>
                   </td>
                 </tr>
@@ -221,10 +212,10 @@ function ManageCarsPage() {
                     <td className="p-4">
                       <div className="flex items-center gap-4">
                         <Link href={`/admin/cars/${car.id}/edit`} className="flex items-center gap-1.5 text-blue-600 hover:underline text-sm font-medium">
-                          <FaEdit size={13} /> Edit
+                          <FaEdit size={13} /> {t('admin_edit')}
                         </Link>
                         <button onClick={() => handleDelete(car)} className="flex items-center gap-1.5 text-red-500 hover:underline text-sm font-medium cursor-pointer">
-                          <FaTrash size={13} /> Delete
+                          <FaTrash size={13} /> {t('admin_delete')}
                         </button>
                       </div>
                     </td>
@@ -243,7 +234,7 @@ function ManageCarsPage() {
               disabled={currentPage === 1}
               className="px-4 py-2 border border-gray-300 rounded-md text-sm font-medium text-gray-700 hover:bg-gray-50 disabled:opacity-50 disabled:cursor-not-allowed"
             >
-              Previous
+              {t('admin_previous')}
             </button>
             {[...Array(totalPages)].map((_, index) => (
               <button
@@ -259,7 +250,7 @@ function ManageCarsPage() {
               disabled={currentPage === totalPages}
               className="px-4 py-2 border border-gray-300 rounded-md text-sm font-medium text-gray-700 hover:bg-gray-50 disabled:opacity-50 disabled:cursor-not-allowed"
             >
-              Next
+              {t('admin_next')}
             </button>
           </div>
         )}
