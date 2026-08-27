@@ -29,6 +29,12 @@ function NewCarPage() {
   const [fuelType, setFuelType] = useState('');
   const [color, setColor] = useState('');
   const [doors, setDoors] = useState<number | ''>('');
+  const [extraKmCharge, setExtraKmCharge] = useState<number | ''>('');
+  const [fuelMissingCharge, setFuelMissingCharge] = useState<number | ''>('');
+  const [scratchCharge, setScratchCharge] = useState<number | ''>('');
+  const [damagePolicy, setDamagePolicy] = useState('');
+  const [accidentProcedure, setAccidentProcedure] = useState('');
+  const [glassCoverPolicy, setGlassCoverPolicy] = useState('');
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
@@ -128,6 +134,12 @@ function NewCarPage() {
         fuel_type: fuelType,
         color,
         doors,
+        extra_km_charge: extraKmCharge === '' ? null : extraKmCharge,
+        fuel_missing_charge: fuelMissingCharge === '' ? null : fuelMissingCharge,
+        scratch_charge: scratchCharge === '' ? null : scratchCharge,
+        damage_policy: damagePolicy || null,
+        accident_procedure: accidentProcedure || null,
+        glass_cover_policy: glassCoverPolicy || null,
       }]);
 
       if (insertError) throw insertError;
@@ -237,6 +249,40 @@ function NewCarPage() {
           <label htmlFor="terms" className="block text-sm font-medium text-gray-700">Terms</label>
           <textarea id="terms" value={terms} onChange={(e) => setTerms(e.target.value)} rows={3} className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-primary focus:ring-primary"></textarea>
         </div>
+
+        <div className="border-t border-gray-200 pt-6">
+          <h2 className="text-lg font-semibold text-gray-800 mb-1">Rental Policies &amp; Extra Charges</h2>
+          <p className="text-sm text-gray-500 mb-4">Shown to customers on the car&apos;s details page. Leave blank to hide a field.</p>
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+            <div>
+              <label htmlFor="extraKmCharge" className="block text-sm font-medium text-gray-700">Extra Km Charge (kr/km)</label>
+              <input type="number" min="0" step="0.01" id="extraKmCharge" value={extraKmCharge} onChange={(e) => setExtraKmCharge(e.target.value === '' ? '' : Number(e.target.value))} className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-primary focus:ring-primary" />
+            </div>
+            <div>
+              <label htmlFor="fuelMissingCharge" className="block text-sm font-medium text-gray-700">Fuel Missing Charge (kr)</label>
+              <input type="number" min="0" step="0.01" id="fuelMissingCharge" value={fuelMissingCharge} onChange={(e) => setFuelMissingCharge(e.target.value === '' ? '' : Number(e.target.value))} className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-primary focus:ring-primary" />
+            </div>
+            <div>
+              <label htmlFor="scratchCharge" className="block text-sm font-medium text-gray-700">Scratch Charge (kr)</label>
+              <input type="number" min="0" step="0.01" id="scratchCharge" value={scratchCharge} onChange={(e) => setScratchCharge(e.target.value === '' ? '' : Number(e.target.value))} className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-primary focus:ring-primary" />
+            </div>
+          </div>
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mt-6">
+            <div>
+              <label htmlFor="damagePolicy" className="block text-sm font-medium text-gray-700">Damage Policy</label>
+              <textarea id="damagePolicy" value={damagePolicy} onChange={(e) => setDamagePolicy(e.target.value)} rows={3} placeholder="How larger damage beyond scratches is assessed and charged." className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-primary focus:ring-primary"></textarea>
+            </div>
+            <div>
+              <label htmlFor="accidentProcedure" className="block text-sm font-medium text-gray-700">Accident Procedure</label>
+              <textarea id="accidentProcedure" value={accidentProcedure} onChange={(e) => setAccidentProcedure(e.target.value)} rows={3} placeholder="What the renter must do if they're in an accident." className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-primary focus:ring-primary"></textarea>
+            </div>
+            <div>
+              <label htmlFor="glassCoverPolicy" className="block text-sm font-medium text-gray-700">Glass Cover</label>
+              <textarea id="glassCoverPolicy" value={glassCoverPolicy} onChange={(e) => setGlassCoverPolicy(e.target.value)} rows={3} placeholder="What windshield/glass damage this car's cover includes." className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-primary focus:ring-primary"></textarea>
+            </div>
+          </div>
+        </div>
+
         <div>
           <label className="block text-sm font-medium text-gray-700">Features</label>
           <div className="mt-2 grid grid-cols-2 md:grid-cols-4 gap-4">
